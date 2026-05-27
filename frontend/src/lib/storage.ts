@@ -18,6 +18,7 @@ const KEYS = {
   bootSeed: 'bsp.bootSeed.v1',
   auth: 'bsp.auth.v1',
   signinBonus: 'bsp.signinBonus.v1',
+  welcomeSeen: 'bsp.welcomeSeen.v1',
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -75,4 +76,7 @@ export const storage = {
 
   getSigninBonus: (): boolean => read<boolean>(KEYS.signinBonus, false),
   setSigninBonus: (v: boolean) => write(KEYS.signinBonus, v),
+
+  getWelcomeSeen: (): boolean => read<boolean>(KEYS.welcomeSeen, false),
+  setWelcomeSeen: (v: boolean) => write(KEYS.welcomeSeen, v),
 };

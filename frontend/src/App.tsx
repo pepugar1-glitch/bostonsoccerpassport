@@ -1,9 +1,11 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Layout from './components/Layout';
 import Toaster from './components/Toaster';
 import { track, distinctId } from './lib/analytics';
+import { storage } from './lib/storage';
+import { useAppStore } from './lib/store';
 import HomeScreen from './screens/Home';
 import MapScreen from './screens/Map';
 import ScheduleScreen from './screens/Schedule';
@@ -40,6 +42,8 @@ function Page({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { state } = useAppStore();
 
   // Track app open + QR landing on first mount and on each route change
   useEffect(() => {
@@ -58,6 +62,19 @@ export default function App() {
     } else {
       track('app_open', { distinctId: id });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // First-visit welcome: redirect to /login on first session (unless already signed in
+  // or already dismissed as guest). Preserves the originally requested path + UTMs.
+  useEffect(() => {
+    if (location.pathname === '/login') return;
+    if (state.auth) return;
+    if (storage.getWelcomeSeen()) return;
+    navigate('/login', {
+      replace: true,
+      state: { from: location.pathname + location.search },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

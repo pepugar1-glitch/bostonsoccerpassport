@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
+import { ShieldCheck, Loader2, UserRound } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
+import { storage } from '@/lib/storage';
+import { track } from '@/lib/analytics';
 import RevsLogo from '@/components/RevsLogo';
 import type { AuthUser } from '@/types';
 
@@ -50,6 +52,7 @@ export default function Login() {
           signedInAt: new Date().toISOString(),
         };
         signIn(user);
+        storage.setWelcomeSeen(true);
         navigate(redirectTo, { replace: true });
       } catch (e) {
         setError('Could not fetch your Google profile. Please try again.');
@@ -61,6 +64,12 @@ export default function Login() {
       setLoading(false);
     },
   });
+
+  const continueAsGuest = () => {
+    track('welcome_continue_guest', {});
+    storage.setWelcomeSeen(true);
+    navigate(redirectTo, { replace: true });
+  };
 
   if (state.auth) {
     return (
@@ -166,6 +175,25 @@ export default function Login() {
                 Soon
               </span>
             </button>
+
+            <div className="relative flex items-center gap-3 py-1">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-[10px] uppercase tracking-[0.18em] text-ink-500">or</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+
+            <button
+              type="button"
+              onClick={continueAsGuest}
+              data-testid="continue-as-guest"
+              className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] ring-1 ring-white/10 text-ink-100 px-5 py-3 text-[14px] font-semibold transition-colors"
+            >
+              <UserRound size={14} />
+              Continue as guest
+            </button>
+            <p className="text-[11px] text-ink-400 text-center leading-relaxed">
+              You can still explore everything — progress just stays on this device.
+            </p>
           </div>
 
           {/* Trust strip */}
@@ -180,15 +208,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Skip */}
-        <div className="mt-5 text-center">
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 text-xs text-ink-400 hover:text-white transition-colors"
-          >
-            <ArrowLeft size={12} /> Skip for now and explore
-          </Link>
-        </div>
       </motion.div>
     </div>
   );
