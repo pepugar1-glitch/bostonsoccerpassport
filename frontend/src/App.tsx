@@ -15,6 +15,7 @@ import ArchetypeQuiz from './screens/QuizArchetype';
 import TriviaQuiz from './screens/QuizTrivia';
 import AdminScreen from './screens/Admin';
 import QRPosters from './screens/QRPosters';
+import LoginScreen from './screens/Login';
 
 const transition = {
   initial: { opacity: 0, y: 8 },
@@ -79,6 +80,7 @@ export default function App() {
           <Route path="/quiz/trivia" element={<Page><TriviaQuiz /></Page>} />
           <Route path="/admin" element={<Page><AdminScreen /></Page>} />
           <Route path="/qrcodes" element={<Page><QRPosters /></Page>} />
+          <Route path="/login" element={<Page><LoginScreen /></Page>} />
         </Routes>
       </AnimatePresence>
       <Toaster />

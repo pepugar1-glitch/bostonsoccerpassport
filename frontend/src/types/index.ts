@@ -68,7 +68,22 @@ export type ActivityType =
   | 'watch-party'
   | 'revs-match'
   | 'reward-claim'
-  | 'first-visit';
+  | 'first-visit'
+  | 'signin-bonus';
+
+export type AuthProvider = 'google' | 'apple';
+
+export interface AuthUser {
+  provider: AuthProvider;
+  sub: string;
+  email: string;
+  emailVerified: boolean;
+  name: string;
+  givenName?: string;
+  familyName?: string;
+  picture?: string;
+  signedInAt: string;
+}
 
 export interface ActivityEntry {
   id: string;

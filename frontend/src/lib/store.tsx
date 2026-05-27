@@ -12,6 +12,7 @@ import { track } from './analytics';
 import type {
   ActivityEntry,
   ActivityType,
+  AuthUser,
   ClaimedReward,
   FanArchetype,
   Profile,
@@ -35,6 +36,7 @@ interface State {
   checkIns: Record<string, string>;
   archetypeResult: { archetype: FanArchetype; at: string } | null;
   triviaResult: { score: number; total: number; at: string } | null;
+  auth: AuthUser | null;
   toasts: ToastMsg[];
 }
 
@@ -50,6 +52,7 @@ type Action =
   | { type: 'CLAIM_REWARD'; rewardId: string }
   | { type: 'SET_ARCHETYPE'; archetype: FanArchetype }
   | { type: 'SET_TRIVIA'; score: number; total: number }
+  | { type: 'SET_AUTH'; user: AuthUser | null }
   | { type: 'PUSH_TOAST'; toast: ToastMsg }
   | { type: 'DISMISS_TOAST'; id: string };
 
@@ -61,6 +64,7 @@ const initial: State = {
   checkIns: {},
   archetypeResult: null,
   triviaResult: null,
+  auth: null,
   toasts: [],
 };
 
@@ -89,6 +93,7 @@ function initState(): State {
     checkIns: storage.getCheckIns(),
     archetypeResult: storage.getArchetypeResult() as State['archetypeResult'],
     triviaResult: storage.getTriviaResult(),
+    auth: storage.getAuth(),
     toasts: [],
   };
 }
@@ -137,6 +142,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, archetypeResult: { archetype: action.archetype, at: new Date().toISOString() } };
     case 'SET_TRIVIA':
       return { ...state, triviaResult: { score: action.score, total: action.total, at: new Date().toISOString() } };
+    case 'SET_AUTH':
+      return { ...state, auth: action.user };
     case 'PUSH_TOAST':
       return { ...state, toasts: [...state.toasts, action.toast] };
     case 'DISMISS_TOAST':
@@ -159,6 +166,8 @@ interface AppStoreContextValue {
   setProfile: (p: Profile) => void;
   setArchetype: (a: FanArchetype) => void;
   completeTrivia: (score: number, total: number) => void;
+  signIn: (user: AuthUser) => void;
+  signOut: () => void;
   toast: (t: Omit<ToastMsg, 'id'>) => void;
   dismissToast: (id: string) => void;
 }
@@ -186,6 +195,9 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (state.triviaResult) storage.setTriviaResult(state.triviaResult);
   }, [state.triviaResult]);
+  useEffect(() => {
+    storage.setAuth(state.auth);
+  }, [state.auth]);
 
   const points = useMemo(
     () =>
@@ -330,6 +342,52 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     [addPoints, toast]
   );
 
+  const signIn = useCallback(
+    (user: AuthUser) => {
+      dispatch({ type: 'SET_AUTH', user });
+      track('auth_signin', { provider: user.provider, sub: user.sub });
+
+      // Auto-create a Profile if the user doesn't have one yet (uses Google name/picture).
+      if (!state.profile) {
+        const referralCode = `REVS-${user.sub.slice(-6).toUpperCase()}`;
+        const newProfile: Profile = {
+          name: user.name || user.givenName || 'New fan',
+          favoriteCountry: '',
+          favoriteTeam: '',
+          visitor: 'local',
+          zip: '',
+          referralCode,
+          createdAt: new Date().toISOString(),
+        };
+        dispatch({ type: 'SET_PROFILE', profile: newProfile });
+      }
+
+      // One-time +25 welcome bonus.
+      if (!storage.getSigninBonus()) {
+        storage.setSigninBonus(true);
+        const entry: ActivityEntry = {
+          id: uid(),
+          type: 'signin-bonus',
+          delta: 25,
+          label: `Signed in with ${user.provider === 'google' ? 'Google' : 'Apple'}`,
+          meta: user.email,
+          at: new Date().toISOString(),
+        };
+        dispatch({ type: 'ADD_ACTIVITY', entry });
+        toast({ title: `Welcome, ${user.givenName || user.name.split(' ')[0]}`, description: '+25 bonus points', variant: 'reward', points: 25 });
+      } else {
+        toast({ title: `Welcome back, ${user.givenName || user.name.split(' ')[0]}`, variant: 'info' });
+      }
+    },
+    [state.profile, toast]
+  );
+
+  const signOut = useCallback(() => {
+    dispatch({ type: 'SET_AUTH', user: null });
+    track('auth_signout', {});
+    toast({ title: 'Signed out', variant: 'info' });
+  }, [toast]);
+
   const value: AppStoreContextValue = {
     state,
     points,
@@ -343,6 +401,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     setProfile,
     setArchetype,
     completeTrivia,
+    signIn,
+    signOut,
     toast,
     dismissToast,
   };

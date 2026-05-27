@@ -1,5 +1,6 @@
 import type {
   ActivityEntry,
+  AuthUser,
   ClaimedReward,
   Profile,
   ScheduleItem,
@@ -15,6 +16,8 @@ const KEYS = {
   triviaResult: 'bsp.triviaResult.v1',
   adminUnlock: 'bsp.adminUnlock.v1',
   bootSeed: 'bsp.bootSeed.v1',
+  auth: 'bsp.auth.v1',
+  signinBonus: 'bsp.signinBonus.v1',
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -65,4 +68,11 @@ export const storage = {
 
   getBootSeed: (): boolean => read<boolean>(KEYS.bootSeed, false),
   setBootSeed: (v: boolean) => write(KEYS.bootSeed, v),
+
+  getAuth: (): AuthUser | null => read<AuthUser | null>(KEYS.auth, null),
+  setAuth: (v: AuthUser | null) =>
+    v ? write(KEYS.auth, v) : window.localStorage.removeItem(KEYS.auth),
+
+  getSigninBonus: (): boolean => read<boolean>(KEYS.signinBonus, false),
+  setSigninBonus: (v: boolean) => write(KEYS.signinBonus, v),
 };

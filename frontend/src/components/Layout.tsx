@@ -8,6 +8,8 @@ import {
   User,
   ShieldCheck,
   QrCode,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useAppStore } from '@/lib/store';
@@ -24,7 +26,8 @@ const NAV = [
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const { points } = useAppStore();
+  const { points, state, signOut } = useAppStore();
+  const auth = state.auth;
   const location = useLocation();
   const isMap = location.pathname === '/map';
 
@@ -40,7 +43,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </div>
         </Link>
 
-        <div className="px-4 pb-2">
+        <div className="px-4 pb-2 space-y-2">
           <div className="rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-4 py-3">
             <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Your Points</div>
             <div className="mt-1 flex items-baseline gap-2">
@@ -50,6 +53,48 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <span className="text-xs text-ink-400">passport</span>
             </div>
           </div>
+
+          {auth ? (
+            <div
+              data-testid="sidebar-auth-user"
+              className="rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-3 py-2.5 flex items-center gap-3"
+            >
+              {auth.picture ? (
+                <img
+                  src={auth.picture}
+                  alt=""
+                  className="h-9 w-9 rounded-full ring-1 ring-white/10 object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="h-9 w-9 rounded-full bg-revs-500/20 ring-1 ring-revs-500/30 grid place-items-center text-sm font-semibold">
+                  {(auth.givenName || auth.name).slice(0, 1)}
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <div className="text-xs font-semibold truncate">{auth.givenName || auth.name}</div>
+                <div className="text-[10px] text-ink-400 truncate">{auth.email}</div>
+              </div>
+              <button
+                type="button"
+                onClick={signOut}
+                data-testid="sidebar-signout"
+                title="Sign out"
+                className="rounded-full p-1.5 text-ink-400 hover:bg-white/[0.06] hover:text-white transition-colors"
+              >
+                <LogOut size={14} />
+              </button>
+            </div>
+          ) : (
+            <NavLink
+              to="/login"
+              data-testid="sidebar-signin"
+              className="flex items-center justify-center gap-2 rounded-2xl bg-revs-500 hover:bg-revs-400 text-white px-3 py-2.5 text-sm font-semibold transition-colors"
+            >
+              <LogIn size={14} />
+              Sign in to save progress
+            </NavLink>
+          )}
         </div>
 
         <nav className="px-3 pt-2 flex-1">
@@ -116,10 +161,42 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <div className="text-sm font-display font-bold tracking-tight">Soccer Passport</div>
               </div>
             </Link>
-            <div className="flex items-center gap-2 rounded-full bg-white/[0.06] ring-1 ring-white/5 px-3 py-1.5">
-              <Trophy size={14} className="text-revs-400" />
-              <span className="text-sm font-semibold" data-testid="topbar-points">{points.toLocaleString()}</span>
-              <span className="text-[11px] text-ink-400">pts</span>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 rounded-full bg-white/[0.06] ring-1 ring-white/5 px-3 py-1.5">
+                <Trophy size={14} className="text-revs-400" />
+                <span className="text-sm font-semibold" data-testid="topbar-points">{points.toLocaleString()}</span>
+                <span className="text-[11px] text-ink-400">pts</span>
+              </div>
+              {auth ? (
+                <Link
+                  to="/profile"
+                  data-testid="topbar-avatar"
+                  aria-label="Your profile"
+                  className="shrink-0"
+                >
+                  {auth.picture ? (
+                    <img
+                      src={auth.picture}
+                      alt=""
+                      className="h-8 w-8 rounded-full ring-1 ring-white/15 object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="h-8 w-8 rounded-full bg-revs-500/20 ring-1 ring-revs-500/30 grid place-items-center text-xs font-semibold">
+                      {(auth.givenName || auth.name).slice(0, 1)}
+                    </div>
+                  )}
+                </Link>
+              ) : (
+                <Link
+                  to="/login"
+                  data-testid="topbar-signin"
+                  aria-label="Sign in"
+                  className="rounded-full bg-revs-500 hover:bg-revs-400 text-white p-2 transition-colors"
+                >
+                  <LogIn size={14} />
+                </Link>
+              )}
             </div>
           </div>
         </header>

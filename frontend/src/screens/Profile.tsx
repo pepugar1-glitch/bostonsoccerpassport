@@ -11,6 +11,8 @@ import {
   CheckCircle2,
   Sparkles,
   Heart,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { ARCHETYPE_LABELS, ARCHETYPE_DESCRIPTIONS, ARCHETYPE_NEXT_ACTION, REWARDS } from '@/data/content';
@@ -36,7 +38,8 @@ function randomCode() {
 }
 
 export default function ProfileScreen() {
-  const { state, setProfile, points, toast, addPoints } = useAppStore();
+  const { state, setProfile, points, toast, addPoints, signOut } = useAppStore();
+  const auth = state.auth;
   const [form, setForm] = useState<Profile>(EMPTY);
   const [copied, setCopied] = useState(false);
   const archetype = state.archetypeResult?.archetype;
@@ -229,6 +232,56 @@ export default function ProfileScreen() {
             </div>
           </div>
 
+          <div
+            data-testid="profile-connected-accounts"
+            className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card"
+          >
+            <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Connected account</div>
+            {auth ? (
+              <div className="mt-3 flex items-center gap-3">
+                {auth.picture ? (
+                  <img
+                    src={auth.picture}
+                    alt=""
+                    className="h-10 w-10 rounded-full ring-1 ring-white/10 object-cover"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="h-10 w-10 rounded-full bg-revs-500/20 ring-1 ring-revs-500/30 grid place-items-center text-sm font-semibold">
+                    {(auth.givenName || auth.name).slice(0, 1)}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold truncate">{auth.name}</div>
+                  <div className="text-[11px] text-ink-400 truncate flex items-center gap-1.5">
+                    <GoogleG /> {auth.email}
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={signOut}
+                  data-testid="profile-signout"
+                  className="inline-flex items-center gap-1 rounded-full bg-white/[0.04] hover:bg-white/[0.08] ring-1 ring-white/10 px-3 py-1.5 text-xs"
+                >
+                  <LogOut size={12} /> Sign out
+                </button>
+              </div>
+            ) : (
+              <div className="mt-3">
+                <p className="text-xs text-ink-300 leading-relaxed">
+                  Sign in to keep your points, schedule and badges across devices. +25 welcome bonus.
+                </p>
+                <Link
+                  to="/login"
+                  data-testid="profile-signin-cta"
+                  className="mt-3 inline-flex items-center gap-2 rounded-full bg-revs-500 hover:bg-revs-400 text-white px-4 py-2 text-xs font-semibold"
+                >
+                  <LogIn size={12} /> Sign in with Google
+                </Link>
+              </div>
+            )}
+          </div>
+
           <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card">
             <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Badges & saved rewards</div>
             {claimedRewards.length === 0 ? (
@@ -279,5 +332,16 @@ function Stat({ label, value, icon: Icon }: { label: string; value: string; icon
       <div className="mt-1 text-lg font-display font-bold tracking-tight">{value}</div>
       <div className="text-[10px] text-ink-400">{label}</div>
     </div>
+  );
+}
+
+function GoogleG() {
+  return (
+    <svg viewBox="0 0 18 18" width={11} height={11} aria-hidden>
+      <path d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4" />
+      <path d="M9 18c2.43 0 4.47-.81 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.32A9 9 0 009 18z" fill="#34A853" />
+      <path d="M3.97 10.72A5.41 5.41 0 013.68 9c0-.6.1-1.18.29-1.72V4.96H.96A9 9 0 000 9c0 1.45.35 2.82.96 4.04l3.01-2.32z" fill="#FBBC05" />
+      <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.9 11.43 0 9 0A9 9 0 00.96 4.96l3.01 2.32C4.68 5.16 6.66 3.58 9 3.58z" fill="#EA4335" />
+    </svg>
   );
 }
