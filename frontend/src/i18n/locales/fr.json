@@ -133,6 +133,7 @@
     "preTitle": "Ma Journée Football",
     "title": "Construisez votre été football",
     "subtitle": "Planifiez check-ins, watch parties et matchs. Chaque événement ajouté donne +10 points.",
+    "exportIcs": "Exporter vers calendrier",
     "groups": {
       "morning": "Matin",
       "afternoon": "Après-midi",

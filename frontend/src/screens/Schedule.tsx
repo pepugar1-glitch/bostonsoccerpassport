@@ -16,10 +16,12 @@ import {
   CheckCircle2,
   Clock,
   CalendarDays,
+  Download,
 } from 'lucide-react';
 import { EVENTS } from '@/data/content';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
+import { buildIcs, downloadIcs } from '@/lib/ics';
 import type { SoccerEvent } from '@/types';
 
 const MIN_DATE = new Date(2026, 5, 12);
@@ -29,8 +31,35 @@ const BUCKET_ICON = { morning: Sunrise, afternoon: Sun, evening: Moon } as const
 
 export default function Schedule() {
   const [activeDate, setActiveDate] = useState<Date>(MIN_DATE);
-  const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder } = useAppStore();
+  const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder, toast } = useAppStore();
   const { t } = useTranslation();
+
+  const exportToCalendar = () => {
+    if (state.schedule.length === 0) {
+      toast({ title: 'Add events first', description: 'Your soccer day is empty.', variant: 'warn' });
+      return;
+    }
+    const icsEvents = state.schedule
+      .map((s) => {
+        const ev = EVENTS.find((e) => e.id === s.eventId);
+        if (!ev) return null;
+        const [hh, mm] = ev.time.split(':').map(Number);
+        const [y, mo, d] = ev.date.split('-').map(Number);
+        const start = new Date(y, mo - 1, d, hh, mm);
+        return {
+          uid: ev.id,
+          start,
+          durationMin: 120,
+          title: ev.title,
+          location: ev.venueName,
+          description: ev.description,
+        };
+      })
+      .filter((e): e is NonNullable<typeof e> => Boolean(e));
+    const ics = buildIcs(icsEvents);
+    downloadIcs('boston-soccer-passport', ics);
+    toast({ title: 'Calendar file downloaded', description: 'Open it to add to Google / Apple / Outlook calendars.', variant: 'info' });
+  };
 
   const dateOptions = useMemo(() => {
     const out: Date[] = [];
@@ -78,9 +107,19 @@ export default function Schedule() {
           <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('schedule.title')}</h1>
           <p className="mt-1 text-sm text-ink-300">{t('schedule.subtitle')}</p>
         </div>
-        <div className="hidden sm:block rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-4 py-3">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">{t('home.statDays')}</div>
-          <div className="text-2xl font-display font-bold mt-0.5">{state.schedule.length}</div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={exportToCalendar}
+            data-testid="schedule-export-ics"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-2 text-xs font-semibold"
+          >
+            <Download size={13} /> {t('schedule.exportIcs')}
+          </button>
+          <div className="hidden sm:block rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-4 py-3">
+            <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">{t('home.statDays')}</div>
+            <div className="text-2xl font-display font-bold mt-0.5">{state.schedule.length}</div>
+          </div>
         </div>
       </header>
 

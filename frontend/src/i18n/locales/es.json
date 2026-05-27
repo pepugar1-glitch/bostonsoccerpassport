@@ -133,6 +133,7 @@
     "preTitle": "Mi Día Futbolero",
     "title": "Construye tu verano futbolero",
     "subtitle": "Planifica check-ins, watch parties y partidos. Cada evento añadido suma +10 puntos.",
+    "exportIcs": "Exportar al calendario",
     "groups": {
       "morning": "Mañana",
       "afternoon": "Tarde",

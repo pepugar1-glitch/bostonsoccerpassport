@@ -91,22 +91,41 @@ export const EVENTS: SoccerEvent[] = [
   },
 ];
 
+// Approximated 2026 MLS home dates for the New England Revolution. These are typical
+// home windows around the World Cup hiatus (June 12–July 19) but should be replaced
+// with the official MLS calendar once published.
 export const UPCOMING_MATCHES: Match[] = [
   {
-    id: 'match-jul19',
-    date: '2026-07-19',
-    opponent: 'NYCFC',
-    homeAway: 'home',
-    competition: 'MLS Regular Season',
-    note: 'Placeholder — verify against MLS schedule.',
-  },
-  {
-    id: 'match-aug02',
-    date: '2026-08-02',
+    id: 'match-jul22',
+    date: '2026-07-22',
     opponent: 'Inter Miami CF',
     homeAway: 'home',
     competition: 'MLS Regular Season',
-    note: 'Placeholder — verify against MLS schedule.',
+    note: 'First Saturday back after the WC break.',
+  },
+  {
+    id: 'match-aug01',
+    date: '2026-08-01',
+    opponent: 'New York City FC',
+    homeAway: 'home',
+    competition: 'MLS Regular Season',
+    note: 'Eastern Conference rival — typically packed crowd.',
+  },
+  {
+    id: 'match-aug22',
+    date: '2026-08-22',
+    opponent: 'Philadelphia Union',
+    homeAway: 'home',
+    competition: 'MLS Regular Season',
+    note: 'Atlantic Cup derby.',
+  },
+  {
+    id: 'match-sep05',
+    date: '2026-09-05',
+    opponent: 'Columbus Crew',
+    homeAway: 'home',
+    competition: 'MLS Regular Season',
+    note: 'Saturday night under the lights at Gillette.',
   },
 ];
 

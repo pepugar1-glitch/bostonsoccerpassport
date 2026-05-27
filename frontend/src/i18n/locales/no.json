@@ -133,6 +133,7 @@
     "preTitle": "Min Fotballdag",
     "title": "Bygg din fotballsommer",
     "subtitle": "Planlegg check-ins, watch parties og kamper. Hver event lagt til gir +10 poeng.",
+    "exportIcs": "Eksporter til kalender",
     "groups": {
       "morning": "Morgen",
       "afternoon": "Ettermiddag",

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { ARCHETYPE_LABELS, ARCHETYPE_DESCRIPTIONS, ARCHETYPE_NEXT_ACTION, REWARDS } from '@/data/content';
+import { ACHIEVEMENTS } from '@/data/achievements';
 import type { Profile } from '@/types';
 import { cn } from '@/lib/cn';
 
@@ -279,6 +280,68 @@ export default function ProfileScreen() {
                 </Link>
               </div>
             )}
+          </div>
+
+          <div
+            data-testid="profile-achievements"
+            className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card"
+          >
+            <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Achievements</div>
+            {(() => {
+              const ctx = {
+                checkIns: Object.keys(state.checkIns).length,
+                scheduleCount: state.schedule.length,
+                points,
+                archetypeDone: Boolean(state.archetypeResult),
+                triviaDone: Boolean(state.triviaResult),
+                rewardsClaimed: state.claimedRewards.length,
+                signedIn: Boolean(state.auth),
+              };
+              const unlockedCount = ACHIEVEMENTS.filter((a) => a.unlockedBy(ctx)).length;
+              return (
+                <>
+                  <div className="mt-1 text-[11px] text-ink-300">
+                    {unlockedCount} / {ACHIEVEMENTS.length} unlocked
+                  </div>
+                  <div className="mt-3 grid grid-cols-2 gap-2">
+                    {ACHIEVEMENTS.map((a) => {
+                      const unlocked = a.unlockedBy(ctx);
+                      const Icon = a.icon;
+                      return (
+                        <div
+                          key={a.id}
+                          data-testid={`achievement-${a.id}`}
+                          title={a.body}
+                          className={cn(
+                            'rounded-xl ring-1 px-2.5 py-2 flex items-start gap-2 transition-colors',
+                            unlocked
+                              ? 'bg-emerald-500/10 ring-emerald-500/30 text-emerald-100'
+                              : 'bg-white/[0.03] ring-white/5 text-ink-400'
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              'grid place-items-center h-7 w-7 rounded-lg shrink-0',
+                              unlocked
+                                ? 'bg-emerald-500/20 ring-1 ring-emerald-500/30'
+                                : 'bg-white/[0.04] ring-1 ring-white/10'
+                            )}
+                          >
+                            <Icon size={13} />
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-[11px] font-semibold leading-tight">{a.title}</div>
+                            <div className="text-[10px] leading-tight mt-0.5 opacity-80 line-clamp-2">
+                              {a.body}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              );
+            })()}
           </div>
 
           <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card">

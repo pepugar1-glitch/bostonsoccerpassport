@@ -133,6 +133,7 @@
     "preTitle": "My Soccer Day",
     "title": "Build your soccer summer",
     "subtitle": "Plan check-ins, watch parties and matches. Each event added is +10 points.",
+    "exportIcs": "Export to calendar",
     "groups": {
       "morning": "Morning",
       "afternoon": "Afternoon",
