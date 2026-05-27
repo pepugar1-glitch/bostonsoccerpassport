@@ -10,11 +10,14 @@ import {
   Sparkles,
   MapPin,
   CalendarCheck2,
+  Ticket,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import { useAppStore } from '@/lib/store';
 import { UPCOMING_MATCHES } from '@/data/content';
 import { ARCHETYPE_LABELS } from '@/data/content';
+import { buildTicketLink } from '@/lib/utm';
+import { track } from '@/lib/analytics';
 
 const QUICK_CARDS = [
   {
@@ -177,29 +180,44 @@ export default function Home() {
           </Link>
         </div>
         <div className="grid md:grid-cols-2 gap-3 p-4 lg:p-6">
-          {UPCOMING_MATCHES.map((m) => (
-            <div
-              key={m.id}
-              data-testid={`upcoming-match-${m.id}`}
-              className="rounded-2xl bg-navy-800/60 ring-1 ring-white/5 px-4 py-4 flex items-center gap-4"
-            >
-              <div className="grid place-items-center h-12 w-12 rounded-xl bg-revs-500/15 ring-1 ring-revs-500/30">
-                <Trophy size={20} className="text-revs-300" />
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-semibold">Revolution vs {m.opponent}</div>
-                <div className="text-[11px] text-ink-300 mt-0.5">
-                  {format(parseISO(m.date), 'EEE · MMM d, yyyy')} · {m.competition}
+          {UPCOMING_MATCHES.map((m) => {
+            const ticketLink = buildTicketLink({ venueId: m.id, archetype });
+            return (
+              <div
+                key={m.id}
+                data-testid={`upcoming-match-${m.id}`}
+                className="rounded-2xl bg-navy-800/60 ring-1 ring-white/5 px-4 py-4 flex items-center gap-4"
+              >
+                <div className="grid place-items-center h-12 w-12 rounded-xl bg-revs-500/15 ring-1 ring-revs-500/30">
+                  <Trophy size={20} className="text-revs-300" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-semibold">Revolution vs {m.opponent}</div>
+                  <div className="text-[11px] text-ink-300 mt-0.5">
+                    {format(parseISO(m.date), 'EEE · MMM d, yyyy')} · {m.competition}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <a
+                    href={ticketLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => track('revs_ticket_click', { matchId: m.id, archetype, surface: 'home' })}
+                    data-testid={`upcoming-match-tickets-${m.id}`}
+                    className="inline-flex items-center gap-1 rounded-full bg-revs-500 hover:bg-revs-400 text-white px-3 py-1.5 text-xs font-semibold whitespace-nowrap"
+                  >
+                    <Ticket size={11} /> Tickets
+                  </a>
+                  <Link
+                    to="/schedule"
+                    className="text-[11px] text-center rounded-full ring-1 ring-white/10 bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1 transition-colors"
+                  >
+                    Plan
+                  </Link>
                 </div>
               </div>
-              <Link
-                to="/schedule"
-                className="text-xs rounded-full ring-1 ring-white/10 bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1.5 transition-colors"
-              >
-                Plan
-              </Link>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <p className="px-6 lg:px-10 pb-6 text-xs text-ink-400 leading-relaxed">
           The Revolution play through October. Take what you love about the summer of soccer and bring it

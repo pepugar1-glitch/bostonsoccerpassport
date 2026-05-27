@@ -13,10 +13,13 @@ import {
   Star,
   History,
   Trophy,
+  ExternalLink,
 } from 'lucide-react';
 import { REWARDS } from '@/data/content';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
+import { buildTicketLink } from '@/lib/utm';
+import { track } from '@/lib/analytics';
 
 const NEXT_TIERS = [100, 250, 400, 500, 600, 800, 1000];
 
@@ -50,6 +53,7 @@ export default function Rewards() {
   const handleClaim = (id: string, cost: number, title: string) => {
     const result = claimReward(id, cost, title);
     if (result === 'claimed') {
+      track('reward_claim', { rewardId: id, cost });
       confetti({
         particleCount: 80,
         spread: 70,
@@ -65,6 +69,8 @@ export default function Rewards() {
       });
     }
   };
+
+  const archetype = state.archetypeResult?.archetype;
 
   return (
     <div className="space-y-6 pb-2" data-testid="rewards-screen">
@@ -203,6 +209,24 @@ export default function Rewards() {
                     {isClaimed ? 'Claimed' : isLocked ? 'Locked' : r.cta}
                   </button>
                 </div>
+
+                {/* Ticketmaster placeholder CTA — only on rw-400 once claimed */}
+                {/* TODO(integration: Ticketmaster) Swap host with real partner URL. */}
+                {isClaimed && r.id === 'rw-400' && (
+                  <a
+                    href={buildTicketLink({ venueId: 'rw-400-claim', archetype })}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() =>
+                      track('revs_ticket_click', { rewardId: 'rw-400', archetype, surface: 'rewards' })
+                    }
+                    data-testid="rw-400-ticket-cta"
+                    className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white text-navy-900 hover:bg-ink-50 px-3 py-2 text-xs font-semibold transition-colors"
+                  >
+                    <Ticket size={13} /> Open my discounted Revs ticket
+                    <ExternalLink size={12} />
+                  </a>
+                )}
               </div>
             );
           })}

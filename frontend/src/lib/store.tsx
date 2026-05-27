@@ -8,6 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { storage } from './storage';
+import { track } from './analytics';
 import type {
   ActivityEntry,
   ActivityType,
@@ -215,6 +216,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         at: new Date().toISOString(),
       };
       dispatch({ type: 'ADD_ACTIVITY', entry });
+      track('points_change', { type, delta, meta });
     },
     []
   );

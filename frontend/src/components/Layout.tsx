@@ -7,6 +7,7 @@ import {
   Share2,
   User,
   ShieldCheck,
+  QrCode,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { useAppStore } from '@/lib/store';
@@ -72,7 +73,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        <div className="px-3 pb-6">
+        <div className="px-3 pb-6 space-y-1">
           <NavLink
             to="/admin"
             data-testid="sidebar-nav-admin"
@@ -85,6 +86,19 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           >
             <ShieldCheck size={18} />
             <span className="font-medium">Admin Dashboard</span>
+          </NavLink>
+          <NavLink
+            to="/qrcodes"
+            data-testid="sidebar-nav-qrcodes"
+            className={({ isActive }) =>
+              cn(
+                'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors border border-white/5',
+                isActive ? 'bg-revs-500/15 text-white' : 'text-ink-300 hover:bg-white/[0.04] hover:text-white'
+              )
+            }
+          >
+            <QrCode size={18} />
+            <span className="font-medium">QR Poster Studio</span>
           </NavLink>
         </div>
       </aside>

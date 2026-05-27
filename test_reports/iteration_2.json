@@ -1,0 +1,67 @@
+{
+  "summary": "Verified all 3 new surfaces from iteration_2: (1) /qrcodes admin-gated route, (2) Ticketmaster placeholder deep links with UTMs, (3) analytics track() console wiring. All 11 acceptance criteria PASS. No bugs found, no regressions detected on home/admin/rewards.",
+  "tests_executed": {
+    "qrcodes_gate": {
+      "gate_renders_when_locked": "PASS — qrcodes-gate + qrcodes-passcode-input + qrcodes-passcode-submit visible",
+      "wrong_passcode_shows_error": "PASS — 'Incorrect passcode' message rendered",
+      "correct_passcode_revs2026_unlocks": "PASS — qrcodes-screen visible after submit",
+      "inherits_unlock_from_admin": "PASS (verified via shared storage.getAdminUnlock + bsp.adminUnlock.v1 24h TTL in code)"
+    },
+    "qrcodes_dashboard": {
+      "poster_card_count": "PASS — exactly 12 PosterCards rendered",
+      "testids_per_card": "PASS — poster-card-<id>, poster-preview-<id>, poster-download-png-<id>, poster-download-pdf-<id> all present",
+      "qr_url_encodes_correctly": "PASS — verified city-hall-plaza caption contains '/?venue=city-hall-plaza&utm_source=passport&utm_medium=qr&utm_campaign=wc2026&utm_content=city-hall-plaza'",
+      "batch_pdf_button": "PASS — posters-batch-pdf clickable",
+      "print_button": "PASS — posters-print present",
+      "png_download_triggered": "PASS — clicking poster-download-png-city-hall-plaza triggered download 'bsp-poster-city-hall-plaza.png' with no JS exceptions"
+    },
+    "home_tickets_anchor": {
+      "anchor_present": "PASS — 2 upcoming-match-tickets-<matchId> anchors found",
+      "href_exact_match": "PASS — href='https://example.com/revs-tickets?utm_source=passport&utm_medium=qr&utm_campaign=wc2026&utm_content=match-jul19' (no utm_term, archetype unset)",
+      "target_blank": "PASS",
+      "click_does_not_break_spa": "PASS — page.url unchanged after click (target=_blank)"
+    },
+    "rewards_rw400_cta": {
+      "claim_after_400pts": "PASS — injected localStorage 'bsp.activity.v1' [{id, at:ISO, delta:400, label}] → balance shows 400 → claim button enabled → claim succeeded → confetti rendered",
+      "cta_href": "PASS — href='https://example.com/revs-tickets?utm_source=passport&utm_medium=qr&utm_campaign=wc2026&utm_content=rw-400-claim'",
+      "cta_target_blank": "PASS",
+      "cta_text": "PASS — 'Open my discounted Revs ticket'"
+    },
+    "admin_tile_and_sidebar": {
+      "admin_link_qrcodes_tile": "PASS — testid 'admin-link-qrcodes' at top of /admin, href='/qrcodes'",
+      "sidebar_nav_qrcodes": "PASS — testid 'sidebar-nav-qrcodes' present, href='/qrcodes'"
+    },
+    "analytics": {
+      "distinctId_in_localStorage": "PASS — 'bsp.distinctId' = 'bsp_1jhy9bq7_mpoesui3' (matches bsp_* prefix)",
+      "console_events_seen": "PASS — captured: app_open, route_view (/qrcodes, /), admin_unlock (surface:qrcodes), qr_poster_download (venueId:city-hall-plaza, format:png). 14 [analytics] lines total in dev mode."
+    },
+    "regressions": {
+      "admin_passcode_gate": "PASS — visible at /admin",
+      "no_red_screens_or_pageerrors": "PASS on all happy paths"
+    }
+  },
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "mocked_integrations_confirmed": [
+    "Ticketmaster — host 'https://example.com/revs-tickets' (TODO marker present in /app/frontend/src/lib/utm.ts:4)",
+    "PostHog/Mixpanel — track() only console.logs in DEV (TODO marker in /app/frontend/src/lib/analytics.ts:2)",
+    "Admin BI figures (QR Scans, Active Users, etc.) are MOCKED — banner reads 'MOCK ANALYTICS · Mock data — wire to Mixpanel · PostHog · Firebase Analytics'"
+  ],
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Note: Rewards.tsx throws 'Cannot read properties of undefined (reading split)' if an Activity entry is missing the 'at' field. Not a real-world bug (the store always writes valid entries), but consider hardening parseISO(a.at) with a fallback. Discovered only because my initial test injection used wrong schema. Not blocking."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (frontend-only run)", "frontend": "100%"},
+  "seed_data_creation": "Injected 'bsp.activity.v1' = [{id, at:ISO, delta:400, label}] in localStorage to short-circuit point accumulation for rw-400 claim test (per request guidance).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All 3 new surfaces (/qrcodes Studio, Ticketmaster placeholder deep links, analytics wrapper) pass acceptance criteria 100%. When injecting test activity entries, use schema {id, at: ISO string, delta, label} — NOT {ts, kind, title} — otherwise Rewards.tsx crashes on parseISO(undefined).",
+  "rca_of_issue": "No app bugs. One tester-side gotcha documented above."
+}

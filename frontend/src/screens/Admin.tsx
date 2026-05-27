@@ -28,7 +28,9 @@ import {
   Gift,
   Ticket,
   QrCode,
+  ChevronRight,
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { storage } from '@/lib/storage';
 import { TOP_STATS, FUNNEL, SEGMENT, HOTSPOTS, POPULAR_REWARDS, DAILY_USERS } from '@/data/analytics';
 import { useAppStore } from '@/lib/store';
@@ -146,6 +148,32 @@ function Dashboard({ onLock }: { onLock: () => void }) {
           <LogOut size={13} /> Lock
         </button>
       </header>
+
+      {/* Action tiles */}
+      <section className="grid sm:grid-cols-2 gap-3">
+        <Link
+          to="/qrcodes"
+          data-testid="admin-link-qrcodes"
+          className="group flex items-center gap-3 rounded-2xl bg-gradient-to-br from-revs-500/15 to-navy-900 ring-1 ring-revs-500/30 hover:ring-revs-500/60 px-5 py-4 shadow-card transition-all"
+        >
+          <div className="grid place-items-center h-11 w-11 rounded-xl bg-white/10 ring-1 ring-white/15">
+            <QrCode size={20} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold">QR Poster Studio</div>
+            <div className="text-[11px] text-ink-300 mt-0.5">
+              Generate per-venue printable A4 posters with UTM-tagged QR codes.
+            </div>
+          </div>
+          <ChevronRight size={16} className="text-ink-300 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
+        </Link>
+        <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 px-5 py-4 shadow-card">
+          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">UTM template</div>
+          <div className="mt-1 text-[11px] font-mono text-ink-100 leading-relaxed break-all">
+            utm_source=passport · utm_medium=qr · utm_campaign=wc2026 · utm_content={'{venue_id}'} · utm_term={'{archetype}'}
+          </div>
+        </div>
+      </section>
 
       {/* Top stats */}
       <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
