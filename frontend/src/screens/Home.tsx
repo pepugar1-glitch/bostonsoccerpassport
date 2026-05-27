@@ -19,6 +19,7 @@ import { ARCHETYPE_LABELS } from '@/data/content';
 import { buildTicketLink } from '@/lib/utm';
 import { track } from '@/lib/analytics';
 import RevsLogo from '@/components/RevsLogo';
+import { LogIn } from 'lucide-react';
 
 const QUICK_CARDS = [
   {
@@ -127,6 +128,29 @@ export default function Home() {
         <div className="text-sm text-ink-300">
           Welcome back, <span className="text-white font-semibold">{profile.name}</span> · keep building your day.
         </div>
+      )}
+
+      {/* Sign-in nudge (only when not authed) */}
+      {!state.auth && (
+        <Link
+          to="/login"
+          data-testid="home-signin-banner"
+          className="group flex items-center gap-3 rounded-2xl bg-gradient-to-r from-revs-500/15 to-navy-800/40 ring-1 ring-revs-500/30 hover:ring-revs-500/60 px-4 py-3 transition-colors"
+        >
+          <div className="h-9 w-9 rounded-xl bg-revs-500/25 ring-1 ring-revs-500/40 grid place-items-center shrink-0">
+            <LogIn size={16} className="text-revs-200" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-semibold">Sign in to save your progress</div>
+            <div className="text-[11px] text-ink-300 mt-0.5">
+              Keep points, schedule and rewards across devices · +25 welcome bonus
+            </div>
+          </div>
+          <ArrowRight
+            size={14}
+            className="text-ink-300 group-hover:text-white group-hover:translate-x-0.5 transition-transform shrink-0"
+          />
+        </Link>
       )}
 
       {/* Quick cards */}

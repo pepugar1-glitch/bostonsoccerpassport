@@ -28,6 +28,14 @@ interface ToastMsg {
   points?: number;
 }
 
+interface SignInPromptState {
+  open: boolean;
+  title: string;
+  description: string;
+  cta: string;
+  onContinue?: () => void;
+}
+
 interface State {
   profile: Profile | null;
   schedule: ScheduleItem[];
@@ -38,6 +46,7 @@ interface State {
   triviaResult: { score: number; total: number; at: string } | null;
   auth: AuthUser | null;
   toasts: ToastMsg[];
+  signInPrompt: SignInPromptState;
 }
 
 type Action =
@@ -53,8 +62,12 @@ type Action =
   | { type: 'SET_ARCHETYPE'; archetype: FanArchetype }
   | { type: 'SET_TRIVIA'; score: number; total: number }
   | { type: 'SET_AUTH'; user: AuthUser | null }
+  | { type: 'OPEN_SIGNIN_PROMPT'; prompt: Omit<SignInPromptState, 'open'> }
+  | { type: 'CLOSE_SIGNIN_PROMPT' }
   | { type: 'PUSH_TOAST'; toast: ToastMsg }
   | { type: 'DISMISS_TOAST'; id: string };
+
+const CLOSED_PROMPT: SignInPromptState = { open: false, title: '', description: '', cta: '' };
 
 const initial: State = {
   profile: null,
@@ -66,6 +79,7 @@ const initial: State = {
   triviaResult: null,
   auth: null,
   toasts: [],
+  signInPrompt: CLOSED_PROMPT,
 };
 
 function initState(): State {
@@ -95,6 +109,7 @@ function initState(): State {
     triviaResult: storage.getTriviaResult(),
     auth: storage.getAuth(),
     toasts: [],
+    signInPrompt: CLOSED_PROMPT,
   };
 }
 
@@ -144,6 +159,10 @@ function reducer(state: State, action: Action): State {
       return { ...state, triviaResult: { score: action.score, total: action.total, at: new Date().toISOString() } };
     case 'SET_AUTH':
       return { ...state, auth: action.user };
+    case 'OPEN_SIGNIN_PROMPT':
+      return { ...state, signInPrompt: { ...action.prompt, open: true } };
+    case 'CLOSE_SIGNIN_PROMPT':
+      return { ...state, signInPrompt: CLOSED_PROMPT };
     case 'PUSH_TOAST':
       return { ...state, toasts: [...state.toasts, action.toast] };
     case 'DISMISS_TOAST':
@@ -162,12 +181,14 @@ interface AppStoreContextValue {
   updateScheduleStatus: (eventId: string, status: ScheduleStatus) => void;
   toggleReminder: (eventId: string, key: keyof ScheduleItem['reminders']) => Promise<void>;
   checkInVenue: (venueId: string, venueName: string) => boolean;
-  claimReward: (rewardId: string, cost: number, title: string) => 'claimed' | 'insufficient' | 'already';
+  claimReward: (rewardId: string, cost: number, title: string) => 'claimed' | 'insufficient' | 'already' | 'auth-required';
   setProfile: (p: Profile) => void;
   setArchetype: (a: FanArchetype) => void;
   completeTrivia: (score: number, total: number) => void;
   signIn: (user: AuthUser) => void;
   signOut: () => void;
+  requireAuth: (opts: { title: string; description: string; cta: string; action: () => void }) => void;
+  closeSignInPrompt: () => void;
   toast: (t: Omit<ToastMsg, 'id'>) => void;
   dismissToast: (id: string) => void;
 }
@@ -239,18 +260,35 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         toast({ title: 'Already in your day', description: 'This is already on your soccer day.', variant: 'info' });
         return false;
       }
-      const item: ScheduleItem = {
-        eventId,
-        addedAt: new Date().toISOString(),
-        status: 'planned',
-        reminders: { thirtyMin: false, oneHour: false, travelTime: false },
+      const doIt = () => {
+        const item: ScheduleItem = {
+          eventId,
+          addedAt: new Date().toISOString(),
+          status: 'planned',
+          reminders: { thirtyMin: false, oneHour: false, travelTime: false },
+        };
+        dispatch({ type: 'ADD_SCHEDULE', item });
+        addPoints('schedule-add', 10, 'Added to soccer day', eventId);
+        toast({ title: 'Added to your soccer day', points: 10 });
       };
-      dispatch({ type: 'ADD_SCHEDULE', item });
-      addPoints('schedule-add', 10, 'Added to soccer day', eventId);
-      toast({ title: 'Added to your soccer day', points: 10 });
+      if (!state.auth) {
+        dispatch({
+          type: 'OPEN_SIGNIN_PROMPT',
+          prompt: {
+            title: 'Sign in to save your soccer day',
+            description:
+              'Without signing in, this event only lives in this browser. Sign in to keep your schedule across devices.',
+            cta: 'add-schedule',
+            onContinue: doIt,
+          },
+        });
+        track('signin_prompt_shown', { cta: 'add-schedule' });
+        return true;
+      }
+      doIt();
       return true;
     },
-    [state.schedule, addPoints, toast]
+    [state.schedule, state.auth, addPoints, toast]
   );
 
   const removeFromSchedule = useCallback(
@@ -297,24 +335,57 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         toast({ title: 'Already checked in', description: `You have checked in at ${venueName}.`, variant: 'info' });
         return false;
       }
-      dispatch({ type: 'CHECK_IN', venueId });
-      addPoints('check-in', 25, `Checked in at ${venueName}`, venueId);
-      toast({ title: `Checked in at ${venueName}`, points: 25 });
+      const doIt = () => {
+        dispatch({ type: 'CHECK_IN', venueId });
+        addPoints('check-in', 25, `Checked in at ${venueName}`, venueId);
+        toast({ title: `Checked in at ${venueName}`, points: 25 });
+      };
+      if (!state.auth) {
+        dispatch({
+          type: 'OPEN_SIGNIN_PROMPT',
+          prompt: {
+            title: 'Sign in to save your check-in',
+            description: `Sign in with Google to save your check-in at ${venueName} and keep your points across devices.`,
+            cta: 'check-in',
+            onContinue: doIt,
+          },
+        });
+        track('signin_prompt_shown', { cta: 'check-in' });
+        return true;
+      }
+      doIt();
       return true;
     },
-    [state.checkIns, addPoints, toast]
+    [state.checkIns, state.auth, addPoints, toast]
   );
 
   const claimReward = useCallback(
-    (rewardId: string, cost: number, title: string): 'claimed' | 'insufficient' | 'already' => {
+    (rewardId: string, cost: number, title: string): 'claimed' | 'insufficient' | 'already' | 'auth-required' => {
       if (state.claimedRewards.some((r) => r.rewardId === rewardId)) return 'already';
       if (points < cost) return 'insufficient';
+      if (!state.auth) {
+        dispatch({
+          type: 'OPEN_SIGNIN_PROMPT',
+          prompt: {
+            title: 'Sign in to claim this reward',
+            description: `Rewards like "${title}" are saved to your account. Sign in to claim it and keep it in your profile.`,
+            cta: 'claim-reward',
+            onContinue: () => {
+              dispatch({ type: 'CLAIM_REWARD', rewardId });
+              addPoints('reward-claim', -cost, `Claimed: ${title}`, rewardId);
+              toast({ title: `Claimed: ${title}`, description: `-${cost} points · saved locally`, variant: 'reward' });
+            },
+          },
+        });
+        track('signin_prompt_shown', { cta: 'claim-reward' });
+        return 'auth-required';
+      }
       dispatch({ type: 'CLAIM_REWARD', rewardId });
       addPoints('reward-claim', -cost, `Claimed: ${title}`, rewardId);
       toast({ title: `Claimed: ${title}`, description: `-${cost} points · saved to your profile`, variant: 'reward' });
       return 'claimed';
     },
-    [state.claimedRewards, points, addPoints, toast]
+    [state.claimedRewards, points, state.auth, addPoints, toast]
   );
 
   const setProfile = useCallback(
@@ -388,6 +459,30 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     toast({ title: 'Signed out', variant: 'info' });
   }, [toast]);
 
+  const requireAuth = useCallback(
+    (opts: { title: string; description: string; cta: string; action: () => void }) => {
+      if (state.auth) {
+        opts.action();
+        return;
+      }
+      track('signin_prompt_shown', { cta: opts.cta });
+      dispatch({
+        type: 'OPEN_SIGNIN_PROMPT',
+        prompt: {
+          title: opts.title,
+          description: opts.description,
+          cta: opts.cta,
+          onContinue: opts.action,
+        },
+      });
+    },
+    [state.auth]
+  );
+
+  const closeSignInPrompt = useCallback(() => {
+    dispatch({ type: 'CLOSE_SIGNIN_PROMPT' });
+  }, []);
+
   const value: AppStoreContextValue = {
     state,
     points,
@@ -403,6 +498,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     completeTrivia,
     signIn,
     signOut,
+    requireAuth,
+    closeSignInPrompt,
     toast,
     dismissToast,
   };
