@@ -15,6 +15,9 @@ import {
   CalendarPlus,
   CheckCircle2,
   Share2,
+  Search,
+  LocateFixed,
+  Loader2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -45,13 +48,40 @@ function makeIcon(category: VenueCategory) {
   });
 }
 
-function FitBounds({ venues }: { venues: Venue[] }) {
+function haversine(p: { lat: number; lng: number }, v: { lat: number; lng: number }) {
+  const R = 6371; // km
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(v.lat - p.lat);
+  const dLng = toRad(v.lng - p.lng);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(p.lat)) * Math.cos(toRad(v.lat)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function FitBounds({
+  venues,
+  userPos,
+}: {
+  venues: Venue[];
+  userPos?: { lat: number; lng: number } | null;
+}) {
   const map = useMap();
   useEffect(() => {
+    if (userPos) {
+      // Zoom into the 6 nearest venues + the user position so you see your local area.
+      const nearest = venues.slice(0, 6);
+      const pts: [number, number][] = [
+        [userPos.lat, userPos.lng],
+        ...nearest.map((v) => [v.lat, v.lng] as [number, number]),
+      ];
+      map.fitBounds(L.latLngBounds(pts), { padding: [60, 60], maxZoom: 14 });
+      return;
+    }
     if (venues.length === 0) return;
     const bounds = L.latLngBounds(venues.map((v) => [v.lat, v.lng] as [number, number]));
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
-  }, [venues, map]);
+  }, [venues, userPos, map]);
   return null;
 }
 
@@ -64,14 +94,50 @@ export default function MapScreen() {
   const [selected, setSelected] = useState<Venue | null>(null);
   const [showMbta, setShowMbta] = useState(true);
   const [showGillette, setShowGillette] = useState(true);
+  const [query, setQuery] = useState('');
+  const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null);
+  const [locating, setLocating] = useState(false);
 
   const { addToSchedule, checkInVenue, toast } = useAppStore();
   const { t } = useTranslation();
 
   const visible = useMemo(() => {
-    if (active.size === 0) return VENUES;
-    return VENUES.filter((v) => active.has(v.category));
-  }, [active]);
+    let list = VENUES;
+    if (active.size > 0) list = list.filter((v) => active.has(v.category));
+    const q = query.trim().toLowerCase();
+    if (q) {
+      list = list.filter(
+        (v) =>
+          v.name.toLowerCase().includes(q) ||
+          v.neighborhood.toLowerCase().includes(q) ||
+          v.tags.some((tag) => tag.toLowerCase().includes(q))
+      );
+    }
+    if (userPos) {
+      list = [...list].sort((a, b) => haversine(userPos, a) - haversine(userPos, b));
+    }
+    return list;
+  }, [active, query, userPos]);
+
+  const requestLocation = () => {
+    if (!('geolocation' in navigator)) {
+      toast({ title: 'Geolocation not supported', variant: 'warn' });
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserPos({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocating(false);
+        toast({ title: 'Sorted by distance from you', variant: 'info' });
+      },
+      () => {
+        setLocating(false);
+        toast({ title: 'Could not get your location', variant: 'warn' });
+      },
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+    );
+  };
 
   const toggle = (id: VenueCategory) => {
     setActive((prev) => {
@@ -151,6 +217,48 @@ export default function MapScreen() {
               <RouteIcon /> {t('map.gilletteRoutes')}
             </button>
           </div>
+        </div>
+
+        {/* Search + Near me */}
+        <div className="mt-3 flex items-center gap-2">
+          <div className="relative flex-1">
+            <Search size={14} className="absolute start-3 top-1/2 -translate-y-1/2 text-ink-400 pointer-events-none" />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              data-testid="map-search"
+              placeholder={t('map.searchPlaceholder')}
+              className="w-full ps-9 pe-9 py-2.5 rounded-full bg-white/[0.05] ring-1 ring-white/10 focus:ring-revs-400 outline-none text-sm placeholder:text-ink-400"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => setQuery('')}
+                aria-label="Clear search"
+                className="absolute end-2.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-ink-300 hover:text-white hover:bg-white/10"
+              >
+                <X size={13} />
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={userPos ? () => setUserPos(null) : requestLocation}
+            data-testid="map-near-me"
+            disabled={locating}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full ring-1 px-3 py-2.5 text-xs font-medium transition-colors shrink-0',
+              userPos
+                ? 'bg-revs-500 ring-revs-400 text-white'
+                : 'bg-white/[0.05] ring-white/10 text-ink-100 hover:bg-white/[0.1]',
+              locating && 'opacity-70 cursor-wait'
+            )}
+            aria-pressed={Boolean(userPos)}
+          >
+            {locating ? <Loader2 size={13} className="animate-spin" /> : <LocateFixed size={13} />}
+            <span className="hidden sm:inline">{t('map.nearMe')}</span>
+          </button>
         </div>
 
         <div className="mt-3 -mx-4 lg:mx-0 overflow-x-auto no-scrollbar">
@@ -296,7 +404,34 @@ export default function MapScreen() {
                     </Tooltip>
                   </Polyline>
                 ))}
-              <FitBounds venues={visible} />
+              <FitBounds venues={visible} userPos={userPos} />
+              {userPos && (
+                <>
+                  <CircleMarker
+                    center={[userPos.lat, userPos.lng]}
+                    radius={9}
+                    pathOptions={{
+                      color: '#FFFFFF',
+                      weight: 3,
+                      fillColor: '#60A5FA',
+                      fillOpacity: 1,
+                    }}
+                  >
+                    <Tooltip direction="top" offset={[0, -2]}>{t('map.youAreHere')}</Tooltip>
+                  </CircleMarker>
+                  <CircleMarker
+                    center={[userPos.lat, userPos.lng]}
+                    radius={20}
+                    pathOptions={{
+                      color: '#60A5FA',
+                      weight: 1,
+                      fillColor: '#60A5FA',
+                      fillOpacity: 0.18,
+                      interactive: false,
+                    }}
+                  />
+                </>
+              )}
               {visible.map((v) => (
                 <Marker
                   key={v.id}

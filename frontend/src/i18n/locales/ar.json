@@ -104,6 +104,8 @@
   "map": {
     "subway": "المترو",
     "gilletteRoutes": "إلى Gillette",
+    "nearMe": "قربي",
+    "youAreHere": "أنت هنا",
     "filters": {
       "all": "الكل",
       "fanFestival": "مهرجان المشجعين",

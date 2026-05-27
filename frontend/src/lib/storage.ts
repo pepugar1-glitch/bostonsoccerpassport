@@ -19,6 +19,7 @@ const KEYS = {
   auth: 'bsp.auth.v1',
   signinBonus: 'bsp.signinBonus.v1',
   welcomeSeen: 'bsp.welcomeSeen.v1',
+  tourSeen: 'bsp.tourSeen.v1',
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -79,4 +80,7 @@ export const storage = {
 
   getWelcomeSeen: (): boolean => read<boolean>(KEYS.welcomeSeen, false),
   setWelcomeSeen: (v: boolean) => write(KEYS.welcomeSeen, v),
+
+  getTourSeen: (): boolean => read<boolean>(KEYS.tourSeen, false),
+  setTourSeen: (v: boolean) => write(KEYS.tourSeen, v),
 };

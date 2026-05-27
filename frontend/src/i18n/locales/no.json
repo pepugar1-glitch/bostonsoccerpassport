@@ -104,6 +104,8 @@
   "map": {
     "subway": "T-bane",
     "gilletteRoutes": "Til Gillette",
+    "nearMe": "Nær meg",
+    "youAreHere": "Du er her",
     "filters": {
       "all": "Alt",
       "fanFestival": "Fan Festival",

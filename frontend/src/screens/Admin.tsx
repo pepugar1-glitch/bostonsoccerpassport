@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ResponsiveContainer,
@@ -28,7 +28,10 @@ import {
   Ticket,
   QrCode,
   ChevronRight,
+  Download,
+  RotateCcw,
 } from 'lucide-react';
+import { useAppStore } from '@/lib/store';
 import { Link } from 'react-router-dom';
 import { TOP_STATS, FUNNEL, SEGMENT, HOTSPOTS, POPULAR_REWARDS, DAILY_USERS } from '@/data/analytics';
 import { cn } from '@/lib/cn';
@@ -56,15 +59,80 @@ export default function AdminScreen() {
   );
 }
 
+type TimeRange = '24h' | '7d' | '30d' | 'all';
+
+const RANGE_LABEL: Record<TimeRange, string> = {
+  '24h': '24h',
+  '7d': '7d',
+  '30d': '30d',
+  all: 'All',
+};
+
+// Mock multipliers — different time windows would show different totals on a real backend.
+// For the prototype we scale top-stats and funnel values per window.
+const RANGE_MULT: Record<TimeRange, number> = { '24h': 0.04, '7d': 0.22, '30d': 1, all: 1.4 };
+
+function downloadCsv(filename: string, rows: (string | number)[][]) {
+  const escape = (v: string | number) => {
+    const s = String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const csv = rows.map((r) => r.map(escape).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function Dashboard() {
   const { t } = useTranslation();
+  const { toast } = useAppStore();
+  const [range, setRange] = useState<TimeRange>('30d');
+  const mult = RANGE_MULT[range];
+
   const funnelWithRate = useMemo(() => {
     const out: { step: string; value: number; rate: number }[] = [];
-    FUNNEL.forEach((s, i) => {
-      out.push({ ...s, rate: i === 0 ? 100 : Math.round((s.value / FUNNEL[0].value) * 100) });
+    const scaled = FUNNEL.map((s) => ({ ...s, value: Math.round(s.value * mult) }));
+    scaled.forEach((s, i) => {
+      out.push({ ...s, rate: i === 0 ? 100 : Math.round((s.value / scaled[0].value) * 100) });
     });
     return out;
-  }, []);
+  }, [mult]);
+
+  const scaledStats = useMemo(
+    () => TOP_STATS.map((s) => ({ ...s, value: Math.round(s.value * mult) })),
+    [mult]
+  );
+
+  const exportFunnelCsv = () => {
+    downloadCsv(`bsp-funnel-${range}.csv`, [
+      ['step', 'value', 'rate_pct'],
+      ...funnelWithRate.map((s) => [s.step, s.value, s.rate]),
+    ]);
+    toast({ title: 'Funnel CSV downloaded', variant: 'info' });
+  };
+
+  const exportSegmentsCsv = () => {
+    downloadCsv('bsp-segments.csv', [
+      ['segment', 'value'],
+      ...SEGMENT.map((s) => [s.name, s.value]),
+    ]);
+    toast({ title: 'Segments CSV downloaded', variant: 'info' });
+  };
+
+  const resetDemo = () => {
+    if (!confirm('Reset all local app state? This wipes points, schedule, profile, sign-in and check-ins on this device. Use before a demo to start clean.')) return;
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith('bsp.'))
+      .forEach((k) => localStorage.removeItem(k));
+    toast({ title: 'Demo state reset · reloading', variant: 'info' });
+    setTimeout(() => window.location.reload(), 600);
+  };
 
   return (
     <div className="space-y-6 pb-2" data-testid="admin-dashboard">
@@ -102,9 +170,53 @@ function Dashboard() {
         </div>
       </section>
 
+      {/* Demo controls (time range + export + reset) */}
+      <section className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 px-4 py-3 shadow-card flex items-center gap-3 flex-wrap">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Window</div>
+        <div className="inline-flex rounded-full bg-white/[0.04] ring-1 ring-white/10 p-1 text-xs">
+          {(['24h', '7d', '30d', 'all'] as TimeRange[]).map((r) => (
+            <button
+              key={r}
+              onClick={() => setRange(r)}
+              data-testid={`admin-range-${r}`}
+              className={cn(
+                'px-3 py-1 rounded-full transition-colors',
+                range === r ? 'bg-white text-navy-900 font-semibold' : 'text-ink-200 hover:text-white'
+              )}
+            >
+              {RANGE_LABEL[r]}
+            </button>
+          ))}
+        </div>
+        <div className="ml-auto flex items-center gap-2">
+          <button
+            onClick={exportFunnelCsv}
+            data-testid="admin-export-funnel"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-1.5 text-xs"
+          >
+            <Download size={12} /> Funnel CSV
+          </button>
+          <button
+            onClick={exportSegmentsCsv}
+            data-testid="admin-export-segments"
+            className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-1.5 text-xs"
+          >
+            <Download size={12} /> Segments CSV
+          </button>
+          <button
+            onClick={resetDemo}
+            data-testid="admin-reset-demo"
+            className="inline-flex items-center gap-1.5 rounded-full bg-revs-500/15 hover:bg-revs-500/25 ring-1 ring-revs-500/30 text-revs-200 px-3 py-1.5 text-xs"
+            title="Wipe this device's local state to start a clean demo"
+          >
+            <RotateCcw size={12} /> Reset demo
+          </button>
+        </div>
+      </section>
+
       {/* Top stats */}
       <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
-        {TOP_STATS.map((s) => {
+        {scaledStats.map((s) => {
           const Icon = STAT_ICON[s.id] || Activity;
           return (
             <div

@@ -104,6 +104,8 @@
   "map": {
     "subway": "Metro",
     "gilletteRoutes": "A Gillette",
+    "nearMe": "Cerca de mí",
+    "youAreHere": "Estás aquí",
     "filters": {
       "all": "Todo",
       "fanFestival": "Fan Festival",
