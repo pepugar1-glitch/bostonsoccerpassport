@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { GoogleLogin, type CredentialResponse } from '@react-oauth/google';
-import { jwtDecode } from 'jwt-decode';
+import { useGoogleLogin } from '@react-oauth/google';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Loader2 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import RevsLogo from '@/components/RevsLogo';
 import type { AuthUser } from '@/types';
 
-interface GoogleJwt {
+interface GoogleUserInfo {
   sub: string;
   email: string;
   email_verified: boolean;
@@ -23,35 +22,45 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const clientConfigured = Boolean(import.meta.env.VITE_GOOGLE_CLIENT_ID);
   const redirectTo = (location.state as { from?: string } | null)?.from || '/';
 
-  const handleGoogle = (response: CredentialResponse) => {
-    setError(null);
-    if (!response.credential) {
-      setError('Google did not return a credential. Please try again.');
-      return;
-    }
-    try {
-      const decoded = jwtDecode<GoogleJwt>(response.credential);
-      const user: AuthUser = {
-        provider: 'google',
-        sub: decoded.sub,
-        email: decoded.email,
-        emailVerified: decoded.email_verified,
-        name: decoded.name,
-        givenName: decoded.given_name,
-        familyName: decoded.family_name,
-        picture: decoded.picture,
-        signedInAt: new Date().toISOString(),
-      };
-      signIn(user);
-      navigate(redirectTo, { replace: true });
-    } catch (e) {
-      setError('Could not decode the Google response.');
-    }
-  };
+  const googleLogin = useGoogleLogin({
+    flow: 'implicit',
+    onSuccess: async (tokenResponse) => {
+      setError(null);
+      setLoading(true);
+      try {
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        if (!res.ok) throw new Error(`userinfo ${res.status}`);
+        const info: GoogleUserInfo = await res.json();
+        const user: AuthUser = {
+          provider: 'google',
+          sub: info.sub,
+          email: info.email,
+          emailVerified: info.email_verified,
+          name: info.name,
+          givenName: info.given_name,
+          familyName: info.family_name,
+          picture: info.picture,
+          signedInAt: new Date().toISOString(),
+        };
+        signIn(user);
+        navigate(redirectTo, { replace: true });
+      } catch (e) {
+        setError('Could not fetch your Google profile. Please try again.');
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setError('Google sign-in failed. Try again.');
+      setLoading(false);
+    },
+  });
 
   if (state.auth) {
     return (
@@ -107,21 +116,28 @@ export default function Login() {
           {/* Auth section */}
           <div className="relative px-8 pb-7 space-y-3">
             {clientConfigured ? (
-              <div
+              <button
+                type="button"
+                onClick={() => {
+                  setLoading(true);
+                  googleLogin();
+                }}
+                disabled={loading}
                 data-testid="google-login-button"
-                className="flex justify-center [color-scheme:dark]"
+                className="w-full inline-flex items-center justify-center gap-3 rounded-full bg-white hover:bg-ink-50 active:bg-ink-100 text-navy-950 px-5 py-3 text-[14px] font-semibold transition-colors shadow-card disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                <GoogleLogin
-                  onSuccess={handleGoogle}
-                  onError={() => setError('Google sign-in failed. Try again.')}
-                  size="large"
-                  shape="pill"
-                  theme="filled_black"
-                  text="continue_with"
-                  width="320"
-                  logo_alignment="center"
-                />
-              </div>
+                {loading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Connecting to Google…
+                  </>
+                ) : (
+                  <>
+                    <GoogleG />
+                    Continue with Google
+                  </>
+                )}
+              </button>
             ) : (
               <div
                 data-testid="google-login-not-configured"
@@ -142,7 +158,7 @@ export default function Login() {
               type="button"
               disabled
               title="Apple Sign-In requires a paid Apple Developer account. Coming soon."
-              className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/[0.04] ring-1 ring-white/10 text-ink-400 px-5 py-3 text-[13px] font-semibold cursor-not-allowed"
+              className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/[0.04] ring-1 ring-white/10 text-ink-400 px-5 py-3 text-[14px] font-semibold cursor-not-allowed"
             >
               <AppleIcon />
               Continue with Apple
@@ -175,6 +191,17 @@ export default function Login() {
         </div>
       </motion.div>
     </div>
+  );
+}
+
+function GoogleG() {
+  return (
+    <svg viewBox="0 0 18 18" width={18} height={18} aria-hidden>
+      <path d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 01-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.88 2.68-6.62z" fill="#4285F4" />
+      <path d="M9 18c2.43 0 4.47-.81 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.32A9 9 0 009 18z" fill="#34A853" />
+      <path d="M3.97 10.72A5.41 5.41 0 013.68 9c0-.6.1-1.18.29-1.72V4.96H.96A9 9 0 000 9c0 1.45.35 2.82.96 4.04l3.01-2.32z" fill="#FBBC05" />
+      <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.59C13.46.9 11.43 0 9 0A9 9 0 00.96 4.96l3.01 2.32C4.68 5.16 6.66 3.58 9 3.58z" fill="#EA4335" />
+    </svg>
   );
 }
 
