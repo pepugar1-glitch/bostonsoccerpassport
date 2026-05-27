@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
 import {
-  Lock,
   Download,
   FileImage,
   FileText,
@@ -12,74 +11,26 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { storage } from '@/lib/storage';
 import { VENUES, CATEGORY_LABELS, CATEGORY_COLORS } from '@/data/venues';
 import { buildVenueLandingUrl } from '@/lib/utm';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
 import { track } from '@/lib/analytics';
+import AdminGate from '@/components/AdminGate';
 import type { Venue } from '@/types';
 
-const PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || 'revs2026';
-const UNLOCK_TTL = 24 * 60 * 60 * 1000;
-
 export default function QRPosters() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
+  return (
+    <AdminGate surface="qrcodes" title="QR Poster Studio" description="Generate printable QR posters for every venue.">
+      <QRPostersInner />
+    </AdminGate>
+  );
+}
+
+function QRPostersInner() {
   const { toast, state } = useAppStore();
-
-  useEffect(() => {
-    const u = storage.getAdminUnlock();
-    if (u && Date.now() - u.at < UNLOCK_TTL) setUnlocked(true);
-  }, []);
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (code === PASSCODE) {
-      storage.setAdminUnlock({ at: Date.now() });
-      setUnlocked(true);
-      setError('');
-      track('admin_unlock', { surface: 'qrcodes' });
-    } else setError('Incorrect passcode');
-  };
-
-  if (!unlocked) {
-    return (
-      <div className="max-w-md mx-auto mt-12 lg:mt-20" data-testid="qrcodes-gate">
-        <div className="rounded-3xl bg-navy-900/60 ring-1 ring-white/5 shadow-card p-7 text-center">
-          <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl bg-revs-500/15 ring-1 ring-revs-500/30">
-            <Lock size={22} className="text-revs-300" />
-          </div>
-          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">QR Poster Studio</h1>
-          <p className="mt-1 text-sm text-ink-300">
-            Generate printable A4 QR posters for every venue. Same passcode as the admin dashboard.
-          </p>
-          <form onSubmit={onSubmit} className="mt-5 grid gap-3">
-            <input
-              type="password"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              data-testid="qrcodes-passcode-input"
-              placeholder="Passcode"
-              className="rounded-xl bg-white/[0.04] ring-1 ring-white/10 focus:ring-revs-400 outline-none px-3 py-2.5 text-sm text-center tracking-widest"
-            />
-            <button
-              type="submit"
-              data-testid="qrcodes-passcode-submit"
-              className="rounded-xl bg-revs-500 hover:bg-revs-400 text-white px-3 py-2.5 text-sm font-semibold shadow-glow"
-            >
-              Unlock
-            </button>
-            {error && <div className="text-xs text-revs-300">{error}</div>}
-          </form>
-        </div>
-      </div>
-    );
-  }
-
   const archetype = state.archetypeResult?.archetype;
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://boston-rev-passport.preview.emergentagent.com';
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://bostonsoccerpassport.netlify.app';
 
   return (
     <div className="space-y-6 pb-2" data-testid="qrcodes-screen">

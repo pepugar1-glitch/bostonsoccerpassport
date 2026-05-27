@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import {
   ResponsiveContainer,
   BarChart,
@@ -15,9 +15,7 @@ import {
   Legend,
 } from 'recharts';
 import {
-  Lock,
   ShieldCheck,
-  LogOut,
   Activity,
   Users,
   MapPin,
@@ -31,13 +29,10 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { storage } from '@/lib/storage';
 import { TOP_STATS, FUNNEL, SEGMENT, HOTSPOTS, POPULAR_REWARDS, DAILY_USERS } from '@/data/analytics';
-import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
+import AdminGate from '@/components/AdminGate';
 
-const PASSCODE = import.meta.env.VITE_ADMIN_PASSCODE || 'revs2026';
-const UNLOCK_TTL = 24 * 60 * 60 * 1000;
 const PIE_COLORS = ['#C8102E', '#F59E0B', '#8B5CF6', '#3B82F6', '#10B981'];
 
 const STAT_ICON: Record<string, typeof Activity> = {
@@ -53,73 +48,14 @@ const STAT_ICON: Record<string, typeof Activity> = {
 };
 
 export default function AdminScreen() {
-  const [unlocked, setUnlocked] = useState(false);
-  const [code, setCode] = useState('');
-  const [error, setError] = useState('');
-  const { toast } = useAppStore();
-
-  useEffect(() => {
-    const u = storage.getAdminUnlock();
-    if (u && Date.now() - u.at < UNLOCK_TTL) setUnlocked(true);
-  }, []);
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (code === PASSCODE) {
-      storage.setAdminUnlock({ at: Date.now() });
-      setUnlocked(true);
-      setError('');
-      toast({ title: 'Admin unlocked', variant: 'info' });
-    } else {
-      setError('Incorrect passcode');
-    }
-  };
-
-  const onLock = () => {
-    storage.setAdminUnlock(null);
-    setUnlocked(false);
-    setCode('');
-  };
-
-  if (!unlocked) {
-    return (
-      <div className="max-w-md mx-auto mt-12 lg:mt-20" data-testid="admin-gate">
-        <div className="rounded-3xl bg-navy-900/60 ring-1 ring-white/5 shadow-card p-7 text-center">
-          <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl bg-revs-500/15 ring-1 ring-revs-500/30">
-            <Lock size={22} className="text-revs-300" />
-          </div>
-          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">Admin Dashboard</h1>
-          <p className="mt-1 text-sm text-ink-300">Enter the passcode to view analytics.</p>
-          <form onSubmit={onSubmit} className="mt-5 grid gap-3">
-            <input
-              type="password"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              data-testid="admin-passcode-input"
-              placeholder="Passcode"
-              className="rounded-xl bg-white/[0.04] ring-1 ring-white/10 focus:ring-revs-400 outline-none px-3 py-2.5 text-sm text-center tracking-widest"
-            />
-            <button
-              type="submit"
-              data-testid="admin-passcode-submit"
-              className="rounded-xl bg-revs-500 hover:bg-revs-400 text-white px-3 py-2.5 text-sm font-semibold shadow-glow"
-            >
-              Unlock
-            </button>
-            {error && <div className="text-xs text-revs-300">{error}</div>}
-          </form>
-          <div className="mt-4 text-[11px] text-ink-400">
-            Stored locally, expires after 24 hours. Hint: <code>revs2026</code>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return <Dashboard onLock={onLock} />;
+  return (
+    <AdminGate surface="admin" title="Admin Dashboard">
+      <Dashboard />
+    </AdminGate>
+  );
 }
 
-function Dashboard({ onLock }: { onLock: () => void }) {
+function Dashboard() {
   const funnelWithRate = useMemo(() => {
     const out: { step: string; value: number; rate: number }[] = [];
     FUNNEL.forEach((s, i) => {
@@ -130,23 +66,14 @@ function Dashboard({ onLock }: { onLock: () => void }) {
 
   return (
     <div className="space-y-6 pb-2" data-testid="admin-dashboard">
-      <header className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400 inline-flex items-center gap-2">
-            <ShieldCheck size={12} className="text-revs-300" /> Admin · Mock analytics
-          </div>
-          <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Boston Soccer Passport — BI</h1>
-          <p className="mt-1 text-sm text-ink-300">
-            Mock data — wire to Mixpanel · PostHog · Firebase Analytics. Refresh logic pending integration.
-          </p>
+      <header>
+        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400 inline-flex items-center gap-2">
+          <ShieldCheck size={12} className="text-revs-300" /> Admin · Mock analytics
         </div>
-        <button
-          onClick={onLock}
-          data-testid="admin-lock"
-          className="inline-flex items-center gap-2 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-1.5 text-xs"
-        >
-          <LogOut size={13} /> Lock
-        </button>
+        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Boston Soccer Passport — BI</h1>
+        <p className="mt-1 text-sm text-ink-300">
+          Mock data — wire to Mixpanel · PostHog · Firebase Analytics. Refresh logic pending integration.
+        </p>
       </header>
 
       {/* Action tiles */}
