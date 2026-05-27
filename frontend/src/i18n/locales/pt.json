@@ -102,6 +102,7 @@
     }
   },
   "map": {
+    "subway": "Metro",
     "filters": {
       "all": "Tudo",
       "fanFestival": "Fan Festival",

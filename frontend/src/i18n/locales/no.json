@@ -102,6 +102,7 @@
     }
   },
   "map": {
+    "subway": "T-bane",
     "filters": {
       "all": "Alt",
       "fanFestival": "Fan Festival",

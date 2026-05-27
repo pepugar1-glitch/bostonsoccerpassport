@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import {
   Tent,
@@ -20,6 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { VENUES, CATEGORY_LABELS, CATEGORY_COLORS } from '@/data/venues';
 import { EVENTS } from '@/data/content';
+import { MBTA_LINES } from '@/data/mbta';
 import type { Venue, VenueCategory } from '@/types';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
@@ -61,6 +62,7 @@ export default function MapScreen() {
     new Set(initialFilter ? [initialFilter] : [])
   );
   const [selected, setSelected] = useState<Venue | null>(null);
+  const [showMbta, setShowMbta] = useState(true);
 
   const { addToSchedule, checkInVenue, toast } = useAppStore();
   const { t } = useTranslation();
@@ -116,7 +118,23 @@ export default function MapScreen() {
     <div className="min-h-[calc(100vh-3.5rem)] lg:min-h-screen flex flex-col" data-testid="map-screen">
       {/* Header */}
       <div className="px-4 lg:px-10 pt-4 lg:pt-8">
-        <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
+          <button
+            type="button"
+            onClick={() => setShowMbta((v) => !v)}
+            data-testid="map-toggle-mbta"
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full ring-1 px-3 py-1.5 text-xs font-medium transition-colors',
+              showMbta
+                ? 'bg-white/[0.08] ring-white/20 text-white'
+                : 'bg-white/[0.03] ring-white/10 text-ink-300 hover:bg-white/[0.06]'
+            )}
+            aria-pressed={showMbta}
+          >
+            <SubwayIcon /> {t('map.subway')}
+          </button>
+        </div>
 
         <div className="mt-3 -mx-4 lg:mx-0 overflow-x-auto no-scrollbar">
           <div className="px-4 lg:px-0 flex gap-2 pb-1">
@@ -133,7 +151,7 @@ export default function MapScreen() {
                     : 'bg-white/[0.04] ring-white/10 text-ink-100 hover:bg-white/[0.08]'
                 )}
               >
-                All ({VENUES.length})
+                {t('map.filters.all')} ({VENUES.length})
               </button>
               {CHIPS.map(({ id, label, icon: Icon }) => {
                 const isOn = active.has(id);
@@ -173,6 +191,26 @@ export default function MapScreen() {
                 url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 subdomains="abcd"
               />
+              {showMbta &&
+                MBTA_LINES.flatMap((line) =>
+                  line.paths.map((path, i) => (
+                    <Polyline
+                      key={`${line.id}-${i}`}
+                      positions={path}
+                      pathOptions={{
+                        color: line.color,
+                        weight: 4,
+                        opacity: 0.75,
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                      }}
+                    >
+                      <Tooltip sticky direction="top" opacity={0.95}>
+                        {line.name}
+                      </Tooltip>
+                    </Polyline>
+                  ))
+                )}
               <FitBounds venues={visible} />
               {visible.map((v) => (
                 <Marker
@@ -198,6 +236,22 @@ export default function MapScreen() {
                   </span>
                 </div>
               ))}
+              {showMbta && (
+                <>
+                  <div className="mt-2 pt-2 border-t border-white/10 text-[10px] uppercase tracking-[0.18em] text-ink-400 mb-1.5">
+                    MBTA
+                  </div>
+                  {MBTA_LINES.map((line) => (
+                    <div key={line.id} className="flex items-center gap-2">
+                      <span
+                        className="h-1 w-4 rounded-full"
+                        style={{ backgroundColor: line.color }}
+                      />
+                      <span className="text-ink-100">{line.name}</span>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </div>
       </div>
@@ -317,9 +371,22 @@ export default function MapScreen() {
       <div className="px-4 lg:px-10 pb-4 text-[11px] text-ink-400">
         Tip: tap a pin to add to your day, check in, get directions, or share.
         <span className="inline-flex items-center gap-1 ml-2 text-ink-300">
-          <ChevronRight size={11} /> Showing {visible.length} of {VENUES.length}
+          <ChevronRight size={11} className="rtl:rotate-180" /> Showing {visible.length} of {VENUES.length}
         </span>
       </div>
     </div>
+  );
+}
+
+function SubwayIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width={13} height={13} aria-hidden fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="5" y="3" width="14" height="16" rx="3" />
+      <line x1="8" y1="19" x2="6" y2="22" />
+      <line x1="16" y1="19" x2="18" y2="22" />
+      <circle cx="9" cy="15" r="0.5" fill="currentColor" />
+      <circle cx="15" cy="15" r="0.5" fill="currentColor" />
+      <line x1="5" y1="11" x2="19" y2="11" />
+    </svg>
   );
 }
