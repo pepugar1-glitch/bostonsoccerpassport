@@ -1,11 +1,13 @@
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Layout from './components/Layout';
 import Toaster from './components/Toaster';
 import { track, distinctId } from './lib/analytics';
 import { storage } from './lib/storage';
 import { useAppStore } from './lib/store';
+import { RTL_LANGS, type LangCode } from './i18n';
 import HomeScreen from './screens/Home';
 import MapScreen from './screens/Map';
 import ScheduleScreen from './screens/Schedule';
@@ -44,6 +46,15 @@ export default function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = useAppStore();
+  const { i18n } = useTranslation();
+
+  // Sync <html lang> + dir with current language (RTL for Arabic).
+  useEffect(() => {
+    const lang = i18n.language as LangCode;
+    const dir = RTL_LANGS.includes(lang) ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang || 'en';
+    document.documentElement.dir = dir;
+  }, [i18n.language]);
 
   // Track app open + QR landing on first mount and on each route change
   useEffect(() => {

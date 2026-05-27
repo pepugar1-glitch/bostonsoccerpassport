@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { X, Sparkles } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { track } from '@/lib/analytics';
@@ -11,6 +12,7 @@ export default function SignInPrompt() {
   const prompt = state.signInPrompt;
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!prompt.open) return;
@@ -85,11 +87,13 @@ export default function SignInPrompt() {
             <div className="relative px-7 pt-8 pb-2 text-center">
               <RevsLogo size={48} className="mx-auto drop-shadow" />
               <h2 className="mt-4 text-lg font-display font-bold tracking-tight leading-tight">
-                {prompt.title}
+                {prompt.kind ? t(`signInPrompt.${prompt.kind}.title`, prompt.params) : ''}
               </h2>
-              <p className="mt-2 text-[13px] text-ink-300 leading-relaxed">{prompt.description}</p>
+              <p className="mt-2 text-[13px] text-ink-300 leading-relaxed">
+                {prompt.kind ? t(`signInPrompt.${prompt.kind}.description`, prompt.params) : ''}
+              </p>
               <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-revs-500/15 ring-1 ring-revs-500/30 px-3 py-1 text-[11px] font-semibold text-revs-200">
-                <Sparkles size={11} /> +25 welcome bonus on first sign-in
+                <Sparkles size={11} /> {t('signInPrompt.bonusBadge')}
               </div>
             </div>
 
@@ -100,7 +104,7 @@ export default function SignInPrompt() {
                 data-testid="signin-prompt-accept"
                 className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white hover:bg-ink-50 text-navy-950 px-5 py-3 text-[14px] font-semibold transition-colors shadow-card"
               >
-                <GoogleG /> Sign in with Google
+                <GoogleG /> {t('signInPrompt.accept')}
               </button>
               <button
                 type="button"
@@ -108,7 +112,7 @@ export default function SignInPrompt() {
                 data-testid="signin-prompt-skip"
                 className="w-full text-[12px] text-ink-400 hover:text-white py-2 transition-colors"
               >
-                Continue without saving
+                {t('signInPrompt.skip')}
               </button>
             </div>
           </motion.div>

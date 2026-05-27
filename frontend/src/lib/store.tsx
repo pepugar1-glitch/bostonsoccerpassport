@@ -28,10 +28,12 @@ interface ToastMsg {
   points?: number;
 }
 
+export type SignInPromptKind = 'checkIn' | 'schedule' | 'reward';
+
 interface SignInPromptState {
   open: boolean;
-  title: string;
-  description: string;
+  kind: SignInPromptKind | null;
+  params: Record<string, string>;
   cta: string;
   onContinue?: () => void;
 }
@@ -62,12 +64,12 @@ type Action =
   | { type: 'SET_ARCHETYPE'; archetype: FanArchetype }
   | { type: 'SET_TRIVIA'; score: number; total: number }
   | { type: 'SET_AUTH'; user: AuthUser | null }
-  | { type: 'OPEN_SIGNIN_PROMPT'; prompt: Omit<SignInPromptState, 'open'> }
+  | { type: 'OPEN_SIGNIN_PROMPT'; prompt: { kind: SignInPromptKind; params: Record<string, string>; cta: string; onContinue?: () => void } }
   | { type: 'CLOSE_SIGNIN_PROMPT' }
   | { type: 'PUSH_TOAST'; toast: ToastMsg }
   | { type: 'DISMISS_TOAST'; id: string };
 
-const CLOSED_PROMPT: SignInPromptState = { open: false, title: '', description: '', cta: '' };
+const CLOSED_PROMPT: SignInPromptState = { open: false, kind: null, params: {}, cta: '' };
 
 const initial: State = {
   profile: null,
@@ -187,7 +189,7 @@ interface AppStoreContextValue {
   completeTrivia: (score: number, total: number) => void;
   signIn: (user: AuthUser) => void;
   signOut: () => void;
-  requireAuth: (opts: { title: string; description: string; cta: string; action: () => void }) => void;
+  requireAuth: (opts: { kind: SignInPromptKind; params?: Record<string, string>; cta: string; action: () => void }) => void;
   closeSignInPrompt: () => void;
   toast: (t: Omit<ToastMsg, 'id'>) => void;
   dismissToast: (id: string) => void;
@@ -275,9 +277,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         dispatch({
           type: 'OPEN_SIGNIN_PROMPT',
           prompt: {
-            title: 'Sign in to save your soccer day',
-            description:
-              'Without signing in, this event only lives in this browser. Sign in to keep your schedule across devices.',
+            kind: 'schedule',
+            params: {},
             cta: 'add-schedule',
             onContinue: doIt,
           },
@@ -344,8 +345,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         dispatch({
           type: 'OPEN_SIGNIN_PROMPT',
           prompt: {
-            title: 'Sign in to save your check-in',
-            description: `Sign in with Google to save your check-in at ${venueName} and keep your points across devices.`,
+            kind: 'checkIn',
+            params: { venue: venueName },
             cta: 'check-in',
             onContinue: doIt,
           },
@@ -367,8 +368,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         dispatch({
           type: 'OPEN_SIGNIN_PROMPT',
           prompt: {
-            title: 'Sign in to claim this reward',
-            description: `Rewards like "${title}" are saved to your account. Sign in to claim it and keep it in your profile.`,
+            kind: 'reward',
+            params: { title },
             cta: 'claim-reward',
             onContinue: () => {
               dispatch({ type: 'CLAIM_REWARD', rewardId });
@@ -460,7 +461,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   }, [toast]);
 
   const requireAuth = useCallback(
-    (opts: { title: string; description: string; cta: string; action: () => void }) => {
+    (opts: { kind: SignInPromptKind; params?: Record<string, string>; cta: string; action: () => void }) => {
       if (state.auth) {
         opts.action();
         return;
@@ -469,8 +470,8 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       dispatch({
         type: 'OPEN_SIGNIN_PROMPT',
         prompt: {
-          title: opts.title,
-          description: opts.description,
+          kind: opts.kind,
+          params: opts.params || {},
           cta: opts.cta,
           onContinue: opts.action,
         },

@@ -1,0 +1,340 @@
+{
+  "nav": {
+    "home": "Hjem",
+    "map": "Kart",
+    "schedule": "Plan",
+    "rewards": "Belønninger",
+    "share": "Del",
+    "profile": "Profil",
+    "admin": "Adminpanel",
+    "qrcodes": "QR-studio",
+    "yourPoints": "Dine Poeng",
+    "passport": "pass",
+    "pts": "p",
+    "signInCta": "Logg inn for å lagre fremgang",
+    "signOut": "Logg ut",
+    "language": "Språk"
+  },
+  "footer": {
+    "disclaimer": "Boston Soccer Passport er et lokalt fotballguide-konsept. Offisielle arrangementsdetaljer må bekreftes hos de offisielle arrangørene. Ikke tilknyttet, godkjent eller sponset av FIFA, MLS eller New England Revolution. Prototype laget for Hult International Business Schools konsulent-capstone (MGT-6080)."
+  },
+  "login": {
+    "title": "Logg inn for å beholde passet ditt",
+    "subtitle": "Lagre poeng, plan og belønninger på tvers av enheter.",
+    "bonusBadge": "+25 velkomstpoeng",
+    "googleCta": "Fortsett med Google",
+    "googleConnecting": "Kobler til Google…",
+    "appleCta": "Fortsett med Apple",
+    "appleSoon": "Snart",
+    "or": "eller",
+    "guestCta": "Fortsett som gjest",
+    "guestHint": "Du kan utforske alt — fremgangen lagres kun på denne enheten.",
+    "trust": "Vi lagrer kun navn, e-post og avatar fra din leverandør. Vi selger aldri data. Ikke tilknyttet FIFA, MLS eller New England Revolution.",
+    "errorNoCred": "Google returnerte ingen legitimasjon. Prøv igjen.",
+    "errorFailed": "Google-innlogging mislyktes. Prøv igjen.",
+    "errorProfile": "Kunne ikke hente Google-profilen din. Prøv igjen.",
+    "notConfigured": "Google-innlogging er ikke konfigurert. Sett VITE_GOOGLE_CLIENT_ID og last inn på nytt.",
+    "alreadySignedInTitle": "Du er logget inn",
+    "alreadySignedInBody": "Logget inn som {{email}}.",
+    "alreadySignedInCta": "Gå til profilen din"
+  },
+  "signInPrompt": {
+    "checkIn": {
+      "title": "Logg inn for å lagre check-in",
+      "description": "Logg inn med Google for å lagre check-in på {{venue}} og beholde poeng på tvers av enheter."
+    },
+    "schedule": {
+      "title": "Logg inn for å lagre fotballdagen din",
+      "description": "Uten innlogging finnes dette eventet kun i denne nettleseren. Logg inn for å beholde planen på tvers av enheter."
+    },
+    "reward": {
+      "title": "Logg inn for å hente denne belønningen",
+      "description": "Belønninger som «{{title}}» lagres på kontoen din. Logg inn for å hente den og beholde den i profilen."
+    },
+    "bonusBadge": "+25 velkomstpoeng ved første innlogging",
+    "accept": "Logg inn med Google",
+    "skip": "Fortsett uten å lagre"
+  },
+  "home": {
+    "preTitle": "Sommer 2026 · New England",
+    "title": "Ditt Boston Fotballpass",
+    "subtitle": "Oppdag hvor du kan se, spille, feire og fortsette fotballreisen i New England.",
+    "ctaExplore": "Utforsk Kart",
+    "ctaBuildDay": "Bygg min Fotballdag",
+    "statPoints": "Dine Poeng",
+    "statDays": "Dager i Plan",
+    "statCheckIns": "Check-ins",
+    "statArchetype": "Arketype",
+    "statTakeQuiz": "Ta quiz",
+    "welcomeBack": "Velkommen tilbake, {{name}} · fortsett å bygge dagen din.",
+    "signinBanner": {
+      "title": "Logg inn for å lagre fremgang",
+      "body": "Behold poeng, plan og belønninger på tvers av enheter · +25 bonuspoeng"
+    },
+    "planWeek": "Planlegg uken",
+    "openMap": "Åpne kart",
+    "cards": {
+      "fanFestival": "Fan Festival",
+      "fanFestivalSub": "City Hall Plaza · 12.–27. juni",
+      "watchParties": "Watch Parties",
+      "watchPartiesSub": "12 steder i byen",
+      "cultureHubs": "Kulturhuber",
+      "cultureHubsSub": "East Boston · Cambridge · Allston",
+      "amateur": "Amatørligaer",
+      "amateurSub": "Volo · NEOTHSL · pickup",
+      "rewards": "Revs Belønninger",
+      "rewardsSub": "Tjen poeng · lås opp fordeler"
+    },
+    "revsSection": {
+      "preTitle": "Etter sommeren",
+      "title": "Fortsett sommeren med Revs",
+      "seeRewards": "Se belønninger",
+      "vs": "Revolution vs {{opponent}}",
+      "tickets": "Billetter",
+      "plan": "Plan",
+      "tagline": "Revolution spiller ut oktober. Ta med deg det du elsker fra fotballsommeren til Gillette — uten press."
+    },
+    "quiz": {
+      "archetypeTitle": "Hva slags fotballfan er du?",
+      "archetypeBody": "7 spørsmål · personlig anbefaling · +30 poeng",
+      "archetypeCta": "Ta quizen",
+      "triviaTitle": "Boston & Revs trivia",
+      "triviaBody": "10 spørsmål · fotballkultur + MLS-basics · +30 poeng",
+      "triviaCta": "Test deg selv"
+    }
+  },
+  "map": {
+    "tabPro": "Pro-kart",
+    "tabQuick": "Hurtigkart",
+    "proBadge": "Drevet av Revolution × Volo-aktiveringskartet",
+    "filters": {
+      "all": "Alt",
+      "fanFestival": "Fan Festival",
+      "watchParty": "Watch Parties",
+      "transport": "Transport",
+      "cultureHub": "Kulturhuber",
+      "amateur": "Amatørligaer",
+      "family": "Familie",
+      "revsRewards": "Revs Belønninger"
+    },
+    "searchPlaceholder": "Søk steder, nabolag, tags…",
+    "noResults": "Ingen steder matcher dette filteret.",
+    "card": {
+      "addToSchedule": "Legg til i plan",
+      "checkIn": "Check inn",
+      "checkedIn": "Sjekket inn",
+      "directions": "Veibeskrivelse",
+      "share": "Del",
+      "tags": "Tags",
+      "hours": "Åpningstider",
+      "distance": "Avstand"
+    },
+    "disclaimer": "Bekreft offisielle detaljer med arrangørene."
+  },
+  "schedule": {
+    "preTitle": "Min Fotballdag",
+    "title": "Bygg din fotballsommer",
+    "subtitle": "Planlegg check-ins, watch parties og kamper. Hver event lagt til gir +10 poeng.",
+    "groups": {
+      "morning": "Morgen",
+      "afternoon": "Ettermiddag",
+      "evening": "Kveld"
+    },
+    "empty": "Dagen din er tom. Legg til eventer fra Kartet.",
+    "browseMap": "Bla i kartet",
+    "remindersTitle": "Påminnelser",
+    "reminders": {
+      "thirty": "30 min før",
+      "hour": "1 time før",
+      "travel": "Reisetid"
+    },
+    "status": {
+      "planned": "Planlagt",
+      "attended": "Tilstede",
+      "favorite": "Favoritt"
+    },
+    "remove": "Fjern"
+  },
+  "rewards": {
+    "preTitle": "Pass-poeng",
+    "title": "Belønningskatalog",
+    "subtitle": "Tjen poeng ved å utforske Bostons fotball. Hent fordeler når du når et nivå.",
+    "balanceLabel": "Din saldo",
+    "nextTier": "Neste belønning på {{points}} p",
+    "earnMore": "Tjen mer",
+    "earnTitle": "Hvordan tjene poeng",
+    "earnRules": {
+      "checkIn": "+25 · Check inn på et sted",
+      "schedule": "+10 · Legg event til plan",
+      "referral": "+50 · Inviter en venn",
+      "quiz": "+30 · Fullfør en quiz",
+      "share": "+20 · Del et kort",
+      "partner": "+40 · Besøk en partner-watch party",
+      "match": "+200 · Gå på en Revs-kamp"
+    },
+    "catalogTitle": "Katalog",
+    "activityTitle": "Nylig aktivitet",
+    "noActivity": "Ingen aktivitet ennå. Start å utforske for å tjene poeng.",
+    "claim": "Hent",
+    "claimed": "Hentet",
+    "locked": "Mangler {{points}}",
+    "openTicket": "Åpne min rabatterte Revs-billett"
+  },
+  "share": {
+    "preTitle": "Del",
+    "title": "Del Passet mitt",
+    "subtitle": "Lag et kvadratisk kort til Instagram eller X. Ingen FIFA-merker, ingen offisielle slagord.",
+    "template": "Mal",
+    "templates": {
+      "stop": "Mitt Boston-fotballstopp",
+      "global": "Fra global fotball til New England-fotball",
+      "summer": "Fotballsommer i Boston"
+    },
+    "headline": "Overskrift",
+    "subhead": "Underoverskrift",
+    "palette": "Aksentpalett",
+    "palettes": {
+      "country": "Land",
+      "boston": "Boston",
+      "revs": "Revs"
+    },
+    "stickers": "Klistremerker",
+    "preview": "Forhåndsvisning",
+    "download": "Last ned",
+    "copyCaption": "Kopier tekst",
+    "shareIg": "Del til Instagram",
+    "shareX": "Del til X",
+    "captionCopied": "Tekst kopiert",
+    "downloaded": "Kort lastet ned"
+  },
+  "quiz": {
+    "hubTitle": "Quizer",
+    "hubSubtitle": "Oppdag din arketype og test din kunnskap om Bostons fotball.",
+    "archetypeCard": {
+      "title": "Hva slags fotballfan er du?",
+      "body": "7 spørsmål · personlig anbefaling · +30 poeng",
+      "cta": "Ta quizen"
+    },
+    "triviaCard": {
+      "title": "Boston & Revs trivia",
+      "body": "10 spørsmål · fotballkultur + MLS-basics · +30 poeng",
+      "cta": "Test deg selv"
+    },
+    "next": "Neste",
+    "back": "Tilbake",
+    "finish": "Se resultatet mitt",
+    "questionOf": "Spørsmål {{n}} av {{total}}",
+    "yourArchetype": "Din arketype",
+    "recommended": "Anbefalt neste steg",
+    "retake": "Ta quiz på nytt",
+    "scoreTitle": "Din poengsum",
+    "correctOf": "{{correct}} av {{total}} riktige"
+  },
+  "archetype": {
+    "local-loyalist": "Lokal Lojalist",
+    "global-matchday-fan": "Global Matchdag-fan",
+    "family-soccer-explorer": "Familie-utforsker",
+    "player-fan": "Spiller-fan",
+    "supporter-section-candidate": "Supporter-kandidat",
+    "new-to-soccer": "Ny i Fotball"
+  },
+  "profile": {
+    "preTitle": "Profil",
+    "title": "Din fotballsommer",
+    "hi": "Hei, {{name}}",
+    "intro": "Tilpass passet ditt. Informasjonen din hjelper å personalisere opplevelsen. Du styrer hva du deler.",
+    "name": "Navn",
+    "namePh": "Ditt navn",
+    "country": "Favorittland",
+    "countryPh": "f.eks. Brasil",
+    "team": "Favorittlag",
+    "teamPh": "f.eks. New England Revolution",
+    "visitor": "Er du lokal eller på besøk?",
+    "local": "Lokal",
+    "visiting": "Besøkende",
+    "zip": "Postnummer / nabolag",
+    "zipPh": "02118 eller Back Bay",
+    "save": "Lagre profil",
+    "takeQuiz": "Ta arketype-quizen (+30)",
+    "archetypeLabel": "Din arketype",
+    "noArchetype": "Ta quizen for en personlig anbefaling.",
+    "points": "Poeng",
+    "attended": "Deltatt",
+    "checkInsStat": "Check-ins",
+    "referralCode": "Invitasjonskode",
+    "refer": "Inviter (+50)",
+    "copied": "Kopiert",
+    "badges": "Merker og belønninger",
+    "noBadges": "Ingen belønninger hentet ennå. Tjen poeng og hent fra Belønninger.",
+    "connectedAccount": "Tilknyttet konto",
+    "signInToSync": "Logg inn for å beholde poeng, plan og merker på tvers av enheter. +25 bonuspoeng.",
+    "signInWithGoogle": "Logg inn med Google"
+  },
+  "admin": {
+    "lockTitle": "Adminpanel",
+    "lockSignedOutBody": "Logg inn med en autorisert Google-konto for å fortsette.",
+    "lockSignInCta": "Logg inn med Google",
+    "lockHint": "Begrenset til autorisert Revolution-stab og prosjektledere.",
+    "deniedTitle": "Tilgang nektet",
+    "deniedBody": "Google-kontoen {{email}} er ikke på adminlisten.",
+    "askOwner": "Hvis du burde ha tilgang, be prosjekteier legge til e-posten din.",
+    "goHome": "Til hjem",
+    "authorized": "Autorisert",
+    "signedInAs": "logget inn som {{email}}",
+    "preTitle": "Admin · Mock-analyse",
+    "title": "Boston Soccer Passport — BI",
+    "subtitle": "Mock-data — koble til Mixpanel · PostHog · Firebase Analytics. Refresh-logikk venter.",
+    "qrTile": "QR-studio",
+    "qrTileBody": "Lag utskrivbare A4-postere per sted med UTM-tagget QR.",
+    "utmTemplate": "UTM-mal",
+    "topStats": "Hovedmetrikker",
+    "funnel": "Konverteringstrakt",
+    "segments": "Målgruppesegmenter",
+    "hotspots": "Mest besøkte steder",
+    "popularRewards": "Mest populære belønninger",
+    "dailyUsers": "Daglige aktive brukere"
+  },
+  "qrPosters": {
+    "lockTitle": "QR-studio",
+    "lockBody": "Lag utskrivbare QR-postere for hvert sted.",
+    "preTitle": "Admin · Utskriftsstudio",
+    "title": "QR-studio",
+    "subtitle": "Én utskrivbar A4-poster per sted. QR-en koder URL-en med UTM per sted så hver scan kan attribueres. Last ned PNG eller PDF.",
+    "back": "Admin",
+    "downloadPng": "PNG",
+    "downloadPdf": "PDF",
+    "printAll": "Skriv ut alt",
+    "batchPdf": "Alle postere · PDF",
+    "downloadedOne": "Poster lastet ned · {{name}}"
+  },
+  "toast": {
+    "addedToDay": "Lagt til i dagen din",
+    "alreadyInDay": "Allerede i dagen din",
+    "alreadyInDayBody": "Dette er allerede i fotballdagen din.",
+    "removedFromDay": "Fjernet fra dagen din",
+    "checkedInAt": "Sjekket inn på {{venue}}",
+    "alreadyCheckedIn": "Allerede sjekket inn",
+    "alreadyCheckedInBody": "Du har allerede sjekket inn på {{venue}}.",
+    "claimed": "Hentet: {{title}}",
+    "claimedBody": "-{{cost}} poeng · lagret i profilen din",
+    "claimedBodyLocal": "-{{cost}} poeng · lagret lokalt",
+    "profileSaved": "Profil lagret",
+    "addNameWarn": "Legg til et navn for å lagre profilen.",
+    "reminderSet": "Påminnelse satt",
+    "reminderBody": "Du ser et merke i appen — push er valgfritt.",
+    "triviaComplete": "Trivia fullført · {{score}}/{{total}}",
+    "signedOut": "Logget ut",
+    "welcomeUser": "Velkommen, {{name}}",
+    "welcomeBonus": "+25 bonuspoeng",
+    "welcomeBack": "Velkommen tilbake, {{name}}",
+    "referralCopied": "Invitasjonslenke kopiert"
+  },
+  "common": {
+    "skip": "Hopp over",
+    "close": "Lukk",
+    "cancel": "Avbryt",
+    "confirm": "Bekreft",
+    "save": "Lagre",
+    "loading": "Laster…"
+  }
+}

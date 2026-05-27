@@ -1,0 +1,340 @@
+{
+  "nav": {
+    "home": "Home",
+    "map": "Map",
+    "schedule": "Schedule",
+    "rewards": "Rewards",
+    "share": "Share",
+    "profile": "Profile",
+    "admin": "Admin Dashboard",
+    "qrcodes": "QR Poster Studio",
+    "yourPoints": "Your Points",
+    "passport": "passport",
+    "pts": "pts",
+    "signInCta": "Sign in to save progress",
+    "signOut": "Sign out",
+    "language": "Language"
+  },
+  "footer": {
+    "disclaimer": "Boston Soccer Passport is a local soccer guide concept. Official event details should be confirmed through official event organizers. Not affiliated with, endorsed by, or sponsored by FIFA, MLS, or the New England Revolution. Prototype built for the Hult International Business School consulting capstone (MGT-6080)."
+  },
+  "login": {
+    "title": "Sign in to keep your passport",
+    "subtitle": "Save your points, schedule and rewards across devices.",
+    "bonusBadge": "+25 welcome bonus",
+    "googleCta": "Continue with Google",
+    "googleConnecting": "Connecting to Google…",
+    "appleCta": "Continue with Apple",
+    "appleSoon": "Soon",
+    "or": "or",
+    "guestCta": "Continue as guest",
+    "guestHint": "You can still explore everything — progress just stays on this device.",
+    "trust": "We only store the name, email and avatar your provider returns. We never sell your data. Not affiliated with FIFA, MLS or the New England Revolution.",
+    "errorNoCred": "Google did not return a credential. Please try again.",
+    "errorFailed": "Google sign-in failed. Try again.",
+    "errorProfile": "Could not fetch your Google profile. Please try again.",
+    "notConfigured": "Google sign-in is not configured for this environment. Set VITE_GOOGLE_CLIENT_ID and reload.",
+    "alreadySignedInTitle": "You are signed in",
+    "alreadySignedInBody": "Signed in as {{email}}.",
+    "alreadySignedInCta": "Go to your profile"
+  },
+  "signInPrompt": {
+    "checkIn": {
+      "title": "Sign in to save your check-in",
+      "description": "Sign in with Google to save your check-in at {{venue}} and keep your points across devices."
+    },
+    "schedule": {
+      "title": "Sign in to save your soccer day",
+      "description": "Without signing in, this event only lives in this browser. Sign in to keep your schedule across devices."
+    },
+    "reward": {
+      "title": "Sign in to claim this reward",
+      "description": "Rewards like \"{{title}}\" are saved to your account. Sign in to claim it and keep it in your profile."
+    },
+    "bonusBadge": "+25 welcome bonus on first sign-in",
+    "accept": "Sign in with Google",
+    "skip": "Continue without saving"
+  },
+  "home": {
+    "preTitle": "Summer 2026 · New England",
+    "title": "Your Boston Soccer Passport",
+    "subtitle": "Discover where to watch, play, celebrate, and continue your soccer journey in New England.",
+    "ctaExplore": "Explore Map",
+    "ctaBuildDay": "Build My Soccer Day",
+    "statPoints": "Your Points",
+    "statDays": "Days In Schedule",
+    "statCheckIns": "Check-ins",
+    "statArchetype": "Archetype",
+    "statTakeQuiz": "Take quiz",
+    "welcomeBack": "Welcome back, {{name}} · keep building your day.",
+    "signinBanner": {
+      "title": "Sign in to save your progress",
+      "body": "Keep points, schedule and rewards across devices · +25 welcome bonus"
+    },
+    "planWeek": "Plan your week",
+    "openMap": "Open map",
+    "cards": {
+      "fanFestival": "Fan Festival",
+      "fanFestivalSub": "City Hall Plaza · Jun 12–27",
+      "watchParties": "Watch Parties",
+      "watchPartiesSub": "12 venues across the city",
+      "cultureHubs": "Soccer Culture Hubs",
+      "cultureHubsSub": "East Boston · Cambridge · Allston",
+      "amateur": "Amateur Leagues",
+      "amateurSub": "Volo · NEOTHSL · pickup",
+      "rewards": "Revs Rewards",
+      "rewardsSub": "Earn points · unlock perks"
+    },
+    "revsSection": {
+      "preTitle": "After the summer",
+      "title": "Continue the summer with the Revs",
+      "seeRewards": "See rewards",
+      "vs": "Revolution vs {{opponent}}",
+      "tickets": "Tickets",
+      "plan": "Plan",
+      "tagline": "The Revolution play through October. Take what you love about the summer of soccer and bring it home to Gillette — no hard sell."
+    },
+    "quiz": {
+      "archetypeTitle": "What kind of soccer fan are you?",
+      "archetypeBody": "7 questions · personalized recommendation · +30 points",
+      "archetypeCta": "Take the quiz",
+      "triviaTitle": "Boston & Revs trivia",
+      "triviaBody": "10 questions · soccer culture + MLS basics · +30 points",
+      "triviaCta": "Test yourself"
+    }
+  },
+  "map": {
+    "tabPro": "Pro Map",
+    "tabQuick": "Quick Map",
+    "proBadge": "Powered by the Revolution × Volo activation map",
+    "filters": {
+      "all": "All",
+      "fanFestival": "Fan Festival",
+      "watchParty": "Watch Parties",
+      "transport": "Transportation",
+      "cultureHub": "Culture Hubs",
+      "amateur": "Amateur Leagues",
+      "family": "Family",
+      "revsRewards": "Revs Rewards"
+    },
+    "searchPlaceholder": "Search venues, neighborhoods, tags…",
+    "noResults": "No venues match this filter.",
+    "card": {
+      "addToSchedule": "Add to Schedule",
+      "checkIn": "Check In",
+      "checkedIn": "Checked In",
+      "directions": "Get Directions",
+      "share": "Share",
+      "tags": "Tags",
+      "hours": "Hours",
+      "distance": "Distance"
+    },
+    "disclaimer": "Confirm official event details through the official organizers."
+  },
+  "schedule": {
+    "preTitle": "My Soccer Day",
+    "title": "Build your soccer summer",
+    "subtitle": "Plan check-ins, watch parties and matches. Each event added is +10 points.",
+    "groups": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "empty": "Your soccer day is empty. Add events from the Map.",
+    "browseMap": "Browse the map",
+    "remindersTitle": "Reminders",
+    "reminders": {
+      "thirty": "30 min before",
+      "hour": "1 hour before",
+      "travel": "Travel time"
+    },
+    "status": {
+      "planned": "Planned",
+      "attended": "Attended",
+      "favorite": "Favorite"
+    },
+    "remove": "Remove"
+  },
+  "rewards": {
+    "preTitle": "Passport Points",
+    "title": "Rewards Catalog",
+    "subtitle": "Earn points by exploring Boston soccer. Claim perks when you reach a tier.",
+    "balanceLabel": "Your balance",
+    "nextTier": "Next reward at {{points}} pts",
+    "earnMore": "Earn more",
+    "earnTitle": "How to earn points",
+    "earnRules": {
+      "checkIn": "+25 · Check in at a venue",
+      "schedule": "+10 · Add an event to your schedule",
+      "referral": "+50 · Refer a friend",
+      "quiz": "+30 · Complete a quiz",
+      "share": "+20 · Share a photo card",
+      "partner": "+40 · Visit a partner watch party",
+      "match": "+200 · Attend a Revs match"
+    },
+    "catalogTitle": "Catalog",
+    "activityTitle": "Recent activity",
+    "noActivity": "No activity yet. Start exploring to earn points.",
+    "claim": "Claim",
+    "claimed": "Claimed",
+    "locked": "Need {{points}} more",
+    "openTicket": "Open my discounted Revs ticket"
+  },
+  "share": {
+    "preTitle": "Share",
+    "title": "Share My Soccer Passport",
+    "subtitle": "Create a square card to post on Instagram or X. No FIFA marks, no official slogans.",
+    "template": "Template",
+    "templates": {
+      "stop": "My Boston Soccer Stop",
+      "global": "From Global Soccer to New England Soccer",
+      "summer": "Boston Soccer Summer"
+    },
+    "headline": "Headline",
+    "subhead": "Subhead",
+    "palette": "Accent palette",
+    "palettes": {
+      "country": "Country",
+      "boston": "Boston",
+      "revs": "Revs"
+    },
+    "stickers": "Stickers",
+    "preview": "Preview",
+    "download": "Download Card",
+    "copyCaption": "Copy Caption",
+    "shareIg": "Share to Instagram",
+    "shareX": "Share to X",
+    "captionCopied": "Caption copied",
+    "downloaded": "Card downloaded"
+  },
+  "quiz": {
+    "hubTitle": "Quizzes",
+    "hubSubtitle": "Discover your archetype and test your Boston soccer knowledge.",
+    "archetypeCard": {
+      "title": "What kind of soccer fan are you?",
+      "body": "7 questions · personalized recommendation · +30 points",
+      "cta": "Take the quiz"
+    },
+    "triviaCard": {
+      "title": "Boston & Revs trivia",
+      "body": "10 questions · soccer culture + MLS basics · +30 points",
+      "cta": "Test yourself"
+    },
+    "next": "Next",
+    "back": "Back",
+    "finish": "See my result",
+    "questionOf": "Question {{n}} of {{total}}",
+    "yourArchetype": "Your archetype",
+    "recommended": "Recommended next step",
+    "retake": "Retake quiz",
+    "scoreTitle": "Your score",
+    "correctOf": "{{correct}} of {{total}} correct"
+  },
+  "archetype": {
+    "local-loyalist": "Local Loyalist",
+    "global-matchday-fan": "Global Matchday Fan",
+    "family-soccer-explorer": "Family Soccer Explorer",
+    "player-fan": "Player-Fan",
+    "supporter-section-candidate": "Supporter Section Candidate",
+    "new-to-soccer": "New to Soccer"
+  },
+  "profile": {
+    "preTitle": "Profile",
+    "title": "Your soccer summer",
+    "hi": "Hi, {{name}}",
+    "intro": "Personalize your passport. Your information helps personalize your soccer experience. You control what you share.",
+    "name": "Name",
+    "namePh": "Your name",
+    "country": "Favorite country",
+    "countryPh": "e.g. Brazil",
+    "team": "Favorite team",
+    "teamPh": "e.g. New England Revolution",
+    "visitor": "Are you local or visiting?",
+    "local": "Local",
+    "visiting": "Visitor",
+    "zip": "ZIP / neighborhood",
+    "zipPh": "02118 or Back Bay",
+    "save": "Save profile",
+    "takeQuiz": "Take the archetype quiz (+30)",
+    "archetypeLabel": "Your archetype",
+    "noArchetype": "Take the quiz to get a personalized recommendation.",
+    "points": "Points",
+    "attended": "Attended",
+    "checkInsStat": "Check-ins",
+    "referralCode": "Referral code",
+    "refer": "Refer (+50)",
+    "copied": "Copied",
+    "badges": "Badges & saved rewards",
+    "noBadges": "No rewards claimed yet. Earn points and claim from the Rewards tab.",
+    "connectedAccount": "Connected account",
+    "signInToSync": "Sign in to keep your points, schedule and badges across devices. +25 welcome bonus.",
+    "signInWithGoogle": "Sign in with Google"
+  },
+  "admin": {
+    "lockTitle": "Admin Dashboard",
+    "lockSignedOutBody": "Sign in with an authorized Google account to continue.",
+    "lockSignInCta": "Sign in with Google",
+    "lockHint": "Restricted to authorized Revolution staff and project leads.",
+    "deniedTitle": "Access restricted",
+    "deniedBody": "Your Google account {{email}} is not on the admin allowlist.",
+    "askOwner": "If you should have access, ask the project owner to add your email to the allowlist.",
+    "goHome": "Go to home",
+    "authorized": "Authorized",
+    "signedInAs": "signed in as {{email}}",
+    "preTitle": "Admin · Mock analytics",
+    "title": "Boston Soccer Passport — BI",
+    "subtitle": "Mock data — wire to Mixpanel · PostHog · Firebase Analytics. Refresh logic pending integration.",
+    "qrTile": "QR Poster Studio",
+    "qrTileBody": "Generate per-venue printable A4 posters with UTM-tagged QR codes.",
+    "utmTemplate": "UTM template",
+    "topStats": "Top metrics",
+    "funnel": "Conversion funnel",
+    "segments": "Audience segments",
+    "hotspots": "Location hotspots",
+    "popularRewards": "Most popular rewards",
+    "dailyUsers": "Daily active users"
+  },
+  "qrPosters": {
+    "lockTitle": "QR Poster Studio",
+    "lockBody": "Generate printable QR posters for every venue.",
+    "preTitle": "Admin · Print studio",
+    "title": "QR Poster Studio",
+    "subtitle": "One printable A4 poster per venue. The QR encodes the app URL with a per-venue UTM so every scan is attributable in the funnel. Download PNG or PDF for print, or batch-download all.",
+    "back": "Admin",
+    "downloadPng": "PNG",
+    "downloadPdf": "PDF",
+    "printAll": "Print all",
+    "batchPdf": "All posters · PDF",
+    "downloadedOne": "Downloaded poster · {{name}}"
+  },
+  "toast": {
+    "addedToDay": "Added to your soccer day",
+    "alreadyInDay": "Already in your day",
+    "alreadyInDayBody": "This is already on your soccer day.",
+    "removedFromDay": "Removed from your day",
+    "checkedInAt": "Checked in at {{venue}}",
+    "alreadyCheckedIn": "Already checked in",
+    "alreadyCheckedInBody": "You have checked in at {{venue}}.",
+    "claimed": "Claimed: {{title}}",
+    "claimedBody": "-{{cost}} points · saved to your profile",
+    "claimedBodyLocal": "-{{cost}} points · saved locally",
+    "profileSaved": "Profile saved",
+    "addNameWarn": "Add a name to save your profile.",
+    "reminderSet": "Reminder set",
+    "reminderBody": "You will see an in-app badge — push optional.",
+    "triviaComplete": "Trivia complete · {{score}}/{{total}}",
+    "signedOut": "Signed out",
+    "welcomeUser": "Welcome, {{name}}",
+    "welcomeBonus": "+25 bonus points",
+    "welcomeBack": "Welcome back, {{name}}",
+    "referralCopied": "Referral link copied"
+  },
+  "common": {
+    "skip": "Skip",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "loading": "Loading…"
+  }
+}

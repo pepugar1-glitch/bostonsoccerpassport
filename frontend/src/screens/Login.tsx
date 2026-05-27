@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { ShieldCheck, Loader2, UserRound } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { storage } from '@/lib/storage';
@@ -23,6 +24,7 @@ export default function Login() {
   const { signIn, state } = useAppStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -55,12 +57,12 @@ export default function Login() {
         storage.setWelcomeSeen(true);
         navigate(redirectTo, { replace: true });
       } catch (e) {
-        setError('Could not fetch your Google profile. Please try again.');
+        setError(t('login.errorProfile'));
         setLoading(false);
       }
     },
     onError: () => {
-      setError('Google sign-in failed. Try again.');
+      setError(t('login.errorFailed'));
       setLoading(false);
     },
   });
@@ -76,13 +78,13 @@ export default function Login() {
       <div className="min-h-[60vh] grid place-items-center" data-testid="login-already">
         <div className="max-w-sm w-full rounded-3xl bg-navy-900/60 ring-1 ring-white/5 shadow-card p-8 text-center">
           <RevsLogo size={48} className="mx-auto mb-3" />
-          <h1 className="text-xl font-display font-bold">You are signed in</h1>
-          <p className="text-sm text-ink-300 mt-1">Signed in as {state.auth.email}.</p>
+          <h1 className="text-xl font-display font-bold">{t('login.alreadySignedInTitle')}</h1>
+          <p className="text-sm text-ink-300 mt-1">{t('login.alreadySignedInBody', { email: state.auth.email })}</p>
           <Link
             to="/profile"
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-revs-500 hover:bg-revs-400 text-white px-5 py-2.5 text-sm font-semibold"
           >
-            Go to your profile
+            {t('login.alreadySignedInCta')}
           </Link>
         </div>
       </div>
@@ -111,14 +113,11 @@ export default function Login() {
           <div className="relative px-8 pt-9 pb-6 text-center">
             <RevsLogo size={64} className="mx-auto drop-shadow-lg" />
             <h1 className="mt-5 text-[22px] font-display font-bold tracking-tight leading-tight">
-              Sign in to keep
-              <br /> your passport
+              {t('login.title')}
             </h1>
-            <p className="mt-2 text-[13px] text-ink-300 leading-relaxed">
-              Save your points, schedule and rewards across devices.
-            </p>
+            <p className="mt-2 text-[13px] text-ink-300 leading-relaxed">{t('login.subtitle')}</p>
             <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-revs-500/15 ring-1 ring-revs-500/30 px-3 py-1 text-[11px] font-semibold text-revs-200">
-              +25 welcome bonus
+              {t('login.bonusBadge')}
             </div>
           </div>
 
@@ -138,12 +137,12 @@ export default function Login() {
                 {loading ? (
                   <>
                     <Loader2 size={16} className="animate-spin" />
-                    Connecting to Google…
+                    {t('login.googleConnecting')}
                   </>
                 ) : (
                   <>
                     <GoogleG />
-                    Continue with Google
+                    {t('login.googleCta')}
                   </>
                 )}
               </button>
@@ -152,8 +151,7 @@ export default function Login() {
                 data-testid="google-login-not-configured"
                 className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] px-4 py-3 text-xs leading-relaxed text-amber-200"
               >
-                Google sign-in is not configured for this environment. Set{' '}
-                <code className="text-amber-100">VITE_GOOGLE_CLIENT_ID</code> and reload.
+                {t('login.notConfigured')}
               </div>
             )}
 
@@ -166,19 +164,19 @@ export default function Login() {
             <button
               type="button"
               disabled
-              title="Apple Sign-In requires a paid Apple Developer account. Coming soon."
+              title={t('login.appleCta')}
               className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/[0.04] ring-1 ring-white/10 text-ink-400 px-5 py-3 text-[14px] font-semibold cursor-not-allowed"
             >
               <AppleIcon />
-              Continue with Apple
+              {t('login.appleCta')}
               <span className="ml-1 rounded-full bg-white/[0.06] ring-1 ring-white/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-ink-300">
-                Soon
+                {t('login.appleSoon')}
               </span>
             </button>
 
             <div className="relative flex items-center gap-3 py-1">
               <div className="flex-1 h-px bg-white/10" />
-              <span className="text-[10px] uppercase tracking-[0.18em] text-ink-500">or</span>
+              <span className="text-[10px] uppercase tracking-[0.18em] text-ink-500">{t('login.or')}</span>
               <div className="flex-1 h-px bg-white/10" />
             </div>
 
@@ -189,21 +187,16 @@ export default function Login() {
               className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] ring-1 ring-white/10 text-ink-100 px-5 py-3 text-[14px] font-semibold transition-colors"
             >
               <UserRound size={14} />
-              Continue as guest
+              {t('login.guestCta')}
             </button>
-            <p className="text-[11px] text-ink-400 text-center leading-relaxed">
-              You can still explore everything — progress just stays on this device.
-            </p>
+            <p className="text-[11px] text-ink-400 text-center leading-relaxed">{t('login.guestHint')}</p>
           </div>
 
           {/* Trust strip */}
           <div className="relative px-8 py-4 border-t border-white/5 bg-black/30">
             <div className="flex items-start gap-2 text-[11px] text-ink-400 leading-relaxed">
               <ShieldCheck size={13} className="mt-0.5 shrink-0 text-revs-300" />
-              <p>
-                We only store the name, email and avatar your provider returns. We never sell your data.
-                Not affiliated with FIFA, MLS or the New England Revolution.
-              </p>
+              <p>{t('login.trust')}</p>
             </div>
           </div>
         </div>

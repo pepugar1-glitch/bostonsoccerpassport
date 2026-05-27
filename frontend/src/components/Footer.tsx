@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next';
 import RevsLogo from './RevsLogo';
 
 export default function Footer() {
+  const { t } = useTranslation();
   return (
     <footer className="px-4 lg:px-10 pb-6 lg:pb-8">
       <div className="mx-auto max-w-6xl">
@@ -9,12 +11,7 @@ export default function Footer() {
           className="rounded-2xl border border-white/5 bg-white/[0.02] px-4 py-3 text-[11px] leading-relaxed text-ink-400 flex items-start gap-3"
         >
           <RevsLogo size={28} className="shrink-0 mt-0.5 opacity-90" />
-          <div>
-            Boston Soccer Passport is a local soccer guide concept. Official event details should be
-            confirmed through official event organizers. Not affiliated with, endorsed by, or sponsored
-            by FIFA, MLS, or the New England Revolution. Prototype built for the Hult International
-            Business School consulting capstone (MGT-6080).
-          </div>
+          <div>{t('footer.disclaimer')}</div>
         </div>
       </div>
     </footer>

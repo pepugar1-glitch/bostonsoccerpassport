@@ -1,0 +1,340 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "map": "الخريطة",
+    "schedule": "الجدول",
+    "rewards": "المكافآت",
+    "share": "مشاركة",
+    "profile": "الملف",
+    "admin": "لوحة المشرف",
+    "qrcodes": "استوديو QR",
+    "yourPoints": "نقاطك",
+    "passport": "جواز",
+    "pts": "نقطة",
+    "signInCta": "سجل الدخول لحفظ تقدمك",
+    "signOut": "تسجيل الخروج",
+    "language": "اللغة"
+  },
+  "footer": {
+    "disclaimer": "Boston Soccer Passport هو مفهوم دليل محلي لكرة القدم. يجب تأكيد تفاصيل الفعاليات الرسمية من المنظمين الرسميين. غير تابع لـ FIFA أو MLS أو New England Revolution ولا مدعوم منهم. نموذج أولي من Hult International Business School لمشروع الاستشارة (MGT-6080)."
+  },
+  "login": {
+    "title": "سجل الدخول للاحتفاظ بجوازك",
+    "subtitle": "احفظ نقاطك وجدولك ومكافآتك عبر الأجهزة.",
+    "bonusBadge": "+25 نقطة ترحيب",
+    "googleCta": "متابعة باستخدام Google",
+    "googleConnecting": "جارٍ الاتصال بـ Google…",
+    "appleCta": "متابعة باستخدام Apple",
+    "appleSoon": "قريبًا",
+    "or": "أو",
+    "guestCta": "متابعة كضيف",
+    "guestHint": "يمكنك استكشاف كل شيء — يبقى التقدم على هذا الجهاز فقط.",
+    "trust": "نحفظ فقط الاسم والبريد والصورة من المزود. لا نبيع بياناتك أبدًا. غير تابع لـ FIFA أو MLS أو New England Revolution.",
+    "errorNoCred": "لم يرجع Google بيانات اعتماد. حاول مجددًا.",
+    "errorFailed": "فشل تسجيل الدخول عبر Google. حاول مجددًا.",
+    "errorProfile": "تعذّر جلب ملفك من Google. حاول مجددًا.",
+    "notConfigured": "تسجيل الدخول عبر Google غير مهيأ. عيّن VITE_GOOGLE_CLIENT_ID وأعد التحميل.",
+    "alreadySignedInTitle": "تم تسجيل دخولك",
+    "alreadySignedInBody": "مسجّل الدخول باسم {{email}}.",
+    "alreadySignedInCta": "اذهب إلى ملفك"
+  },
+  "signInPrompt": {
+    "checkIn": {
+      "title": "سجل الدخول لحفظ تسجيل الوصول",
+      "description": "سجل الدخول بـ Google لحفظ تسجيل وصولك في {{venue}} والاحتفاظ بنقاطك عبر الأجهزة."
+    },
+    "schedule": {
+      "title": "سجل الدخول لحفظ يومك الكروي",
+      "description": "بدون تسجيل دخول، يبقى هذا الحدث في هذا المتصفح فقط. سجل الدخول للاحتفاظ بجدولك عبر الأجهزة."
+    },
+    "reward": {
+      "title": "سجل الدخول للحصول على هذه المكافأة",
+      "description": "المكافآت مثل «{{title}}» تُحفظ في حسابك. سجل الدخول لاستلامها والاحتفاظ بها في ملفك."
+    },
+    "bonusBadge": "+25 نقطة ترحيب عند أول تسجيل دخول",
+    "accept": "تسجيل الدخول بـ Google",
+    "skip": "المتابعة بدون حفظ"
+  },
+  "home": {
+    "preTitle": "صيف 2026 · نيو إنجلاند",
+    "title": "جوازك الكروي في بوسطن",
+    "subtitle": "اكتشف أين تشاهد وتلعب وتحتفل وتكمل رحلتك الكروية في نيو إنجلاند.",
+    "ctaExplore": "استكشف الخريطة",
+    "ctaBuildDay": "ابنِ يومك الكروي",
+    "statPoints": "نقاطك",
+    "statDays": "أيام في الجدول",
+    "statCheckIns": "تسجيلات الوصول",
+    "statArchetype": "النمط",
+    "statTakeQuiz": "ابدأ الاختبار",
+    "welcomeBack": "مرحبًا بعودتك، {{name}} · تابع بناء يومك.",
+    "signinBanner": {
+      "title": "سجل الدخول لحفظ تقدمك",
+      "body": "احفظ النقاط والجدول والمكافآت عبر الأجهزة · +25 نقطة ترحيب"
+    },
+    "planWeek": "خطط لأسبوعك",
+    "openMap": "افتح الخريطة",
+    "cards": {
+      "fanFestival": "مهرجان المشجعين",
+      "fanFestivalSub": "ساحة سيتي هول · 12–27 يونيو",
+      "watchParties": "أماكن المشاهدة",
+      "watchPartiesSub": "12 موقعًا في المدينة",
+      "cultureHubs": "مراكز الثقافة الكروية",
+      "cultureHubsSub": "إيست بوسطن · كامبريدج · ألستون",
+      "amateur": "دوريات هواة",
+      "amateurSub": "Volo · NEOTHSL · مباريات حرّة",
+      "rewards": "مكافآت Revs",
+      "rewardsSub": "اكسب نقاطًا · افتح المزايا"
+    },
+    "revsSection": {
+      "preTitle": "بعد الصيف",
+      "title": "تابع الصيف مع Revs",
+      "seeRewards": "شاهد المكافآت",
+      "vs": "Revolution ضد {{opponent}}",
+      "tickets": "التذاكر",
+      "plan": "خطط",
+      "tagline": "يلعب Revolution حتى أكتوبر. خذ ما تحبه من صيف كرة القدم إلى Gillette — بلا ضغط."
+    },
+    "quiz": {
+      "archetypeTitle": "أي نوع من المشجعين أنت؟",
+      "archetypeBody": "7 أسئلة · توصية مخصصة · +30 نقطة",
+      "archetypeCta": "ابدأ الاختبار",
+      "triviaTitle": "ترفيا بوسطن وRevs",
+      "triviaBody": "10 أسئلة · ثقافة كروية + أساسيات MLS · +30 نقطة",
+      "triviaCta": "اختبر نفسك"
+    }
+  },
+  "map": {
+    "tabPro": "الخريطة الاحترافية",
+    "tabQuick": "الخريطة السريعة",
+    "proBadge": "مدعوم من خريطة تفعيل Revolution × Volo",
+    "filters": {
+      "all": "الكل",
+      "fanFestival": "مهرجان المشجعين",
+      "watchParty": "أماكن المشاهدة",
+      "transport": "النقل",
+      "cultureHub": "مراكز الثقافة",
+      "amateur": "دوريات هواة",
+      "family": "عائلي",
+      "revsRewards": "مكافآت Revs"
+    },
+    "searchPlaceholder": "ابحث عن مواقع وأحياء ووسوم…",
+    "noResults": "لا توجد مواقع تطابق هذا الفلتر.",
+    "card": {
+      "addToSchedule": "أضف إلى الجدول",
+      "checkIn": "تسجيل وصول",
+      "checkedIn": "تم",
+      "directions": "الاتجاهات",
+      "share": "مشاركة",
+      "tags": "وسوم",
+      "hours": "ساعات العمل",
+      "distance": "المسافة"
+    },
+    "disclaimer": "تأكد من التفاصيل الرسمية مع المنظمين."
+  },
+  "schedule": {
+    "preTitle": "يومي الكروي",
+    "title": "ابنِ صيفك الكروي",
+    "subtitle": "خطط لتسجيلات الوصول وأماكن المشاهدة والمباريات. كل حدث يضاف يعطي +10 نقاط.",
+    "groups": {
+      "morning": "الصباح",
+      "afternoon": "الظهيرة",
+      "evening": "المساء"
+    },
+    "empty": "يومك فارغ. أضف فعاليات من الخريطة.",
+    "browseMap": "تصفح الخريطة",
+    "remindersTitle": "تذكيرات",
+    "reminders": {
+      "thirty": "قبل 30 دقيقة",
+      "hour": "قبل ساعة",
+      "travel": "وقت السفر"
+    },
+    "status": {
+      "planned": "مخطط",
+      "attended": "حضرت",
+      "favorite": "مفضل"
+    },
+    "remove": "إزالة"
+  },
+  "rewards": {
+    "preTitle": "نقاط الجواز",
+    "title": "كتالوج المكافآت",
+    "subtitle": "اكسب نقاطًا باستكشاف كرة قدم بوسطن. استلم المزايا عند بلوغ المستوى.",
+    "balanceLabel": "رصيدك",
+    "nextTier": "المكافأة التالية عند {{points}} نقطة",
+    "earnMore": "اكسب أكثر",
+    "earnTitle": "كيف تكسب النقاط",
+    "earnRules": {
+      "checkIn": "+25 · تسجيل وصول",
+      "schedule": "+10 · إضافة حدث للجدول",
+      "referral": "+50 · دعوة صديق",
+      "quiz": "+30 · إكمال اختبار",
+      "share": "+20 · مشاركة بطاقة",
+      "partner": "+40 · زيارة شريك",
+      "match": "+200 · حضور مباراة Revs"
+    },
+    "catalogTitle": "الكتالوج",
+    "activityTitle": "النشاط الأخير",
+    "noActivity": "لا يوجد نشاط بعد. ابدأ الاستكشاف لكسب نقاط.",
+    "claim": "استلام",
+    "claimed": "تم الاستلام",
+    "locked": "تحتاج {{points}} نقطة",
+    "openTicket": "افتح تذكرتي بخصم Revs"
+  },
+  "share": {
+    "preTitle": "مشاركة",
+    "title": "شارك جوازي الكروي",
+    "subtitle": "اصنع بطاقة مربعة لـ Instagram أو X. بلا شعارات FIFA أو شعارات رسمية.",
+    "template": "القالب",
+    "templates": {
+      "stop": "محطتي الكروية في بوسطن",
+      "global": "من كرة العالم إلى كرة نيو إنجلاند",
+      "summer": "صيف كرة القدم في بوسطن"
+    },
+    "headline": "العنوان",
+    "subhead": "العنوان الفرعي",
+    "palette": "لوحة الألوان",
+    "palettes": {
+      "country": "البلد",
+      "boston": "بوسطن",
+      "revs": "Revs"
+    },
+    "stickers": "ملصقات",
+    "preview": "معاينة",
+    "download": "تنزيل",
+    "copyCaption": "نسخ النص",
+    "shareIg": "مشاركة على Instagram",
+    "shareX": "مشاركة على X",
+    "captionCopied": "تم نسخ النص",
+    "downloaded": "تم تنزيل البطاقة"
+  },
+  "quiz": {
+    "hubTitle": "اختبارات",
+    "hubSubtitle": "اكتشف نمطك واختبر معرفتك بكرة قدم بوسطن.",
+    "archetypeCard": {
+      "title": "أي نوع من المشجعين أنت؟",
+      "body": "7 أسئلة · توصية مخصصة · +30 نقطة",
+      "cta": "ابدأ الاختبار"
+    },
+    "triviaCard": {
+      "title": "ترفيا بوسطن وRevs",
+      "body": "10 أسئلة · ثقافة كروية + أساسيات MLS · +30 نقطة",
+      "cta": "اختبر نفسك"
+    },
+    "next": "التالي",
+    "back": "السابق",
+    "finish": "شاهد نتيجتي",
+    "questionOf": "السؤال {{n}} من {{total}}",
+    "yourArchetype": "نمطك",
+    "recommended": "الخطوة التالية الموصى بها",
+    "retake": "أعد الاختبار",
+    "scoreTitle": "نتيجتك",
+    "correctOf": "{{correct}} من {{total}} صحيحة"
+  },
+  "archetype": {
+    "local-loyalist": "وفي محلي",
+    "global-matchday-fan": "مشجع عالمي",
+    "family-soccer-explorer": "مستكشف عائلي",
+    "player-fan": "لاعب-مشجع",
+    "supporter-section-candidate": "مرشّح لقسم المشجعين",
+    "new-to-soccer": "جديد في كرة القدم"
+  },
+  "profile": {
+    "preTitle": "الملف",
+    "title": "صيفك الكروي",
+    "hi": "مرحبًا، {{name}}",
+    "intro": "خصّص جوازك. تساعد معلوماتك في تخصيص تجربتك. أنت تتحكم بما تشاركه.",
+    "name": "الاسم",
+    "namePh": "اسمك",
+    "country": "البلد المفضل",
+    "countryPh": "مثل: البرازيل",
+    "team": "الفريق المفضل",
+    "teamPh": "مثل: New England Revolution",
+    "visitor": "هل أنت محلي أم زائر؟",
+    "local": "محلي",
+    "visiting": "زائر",
+    "zip": "الرمز البريدي / الحي",
+    "zipPh": "02118 أو Back Bay",
+    "save": "حفظ الملف",
+    "takeQuiz": "ابدأ اختبار النمط (+30)",
+    "archetypeLabel": "نمطك",
+    "noArchetype": "ابدأ الاختبار للحصول على توصية مخصصة.",
+    "points": "النقاط",
+    "attended": "حضرت",
+    "checkInsStat": "تسجيلات الوصول",
+    "referralCode": "كود الدعوة",
+    "refer": "ادعُ (+50)",
+    "copied": "تم النسخ",
+    "badges": "الشارات والمكافآت",
+    "noBadges": "لم تستلم مكافآت بعد. اكسب نقاطًا واستلم من تبويب المكافآت.",
+    "connectedAccount": "الحساب المربوط",
+    "signInToSync": "سجل الدخول للاحتفاظ بالنقاط والجدول والشارات عبر الأجهزة. +25 نقطة ترحيب.",
+    "signInWithGoogle": "سجل الدخول بـ Google"
+  },
+  "admin": {
+    "lockTitle": "لوحة المشرف",
+    "lockSignedOutBody": "سجّل الدخول بحساب Google مصرح لمتابعة الدخول.",
+    "lockSignInCta": "سجل الدخول بـ Google",
+    "lockHint": "محصورة على موظفي Revolution المصرح لهم وقادة المشروع.",
+    "deniedTitle": "الوصول مقيّد",
+    "deniedBody": "حسابك {{email}} ليس ضمن قائمة المشرفين.",
+    "askOwner": "إذا كنت تستحق الوصول، اطلب من مالك المشروع إضافة بريدك.",
+    "goHome": "العودة إلى الرئيسية",
+    "authorized": "مصرّح",
+    "signedInAs": "مسجّل الدخول باسم {{email}}",
+    "preTitle": "مشرف · إحصاءات تجريبية",
+    "title": "Boston Soccer Passport — BI",
+    "subtitle": "بيانات تجريبية — وصِّل بـ Mixpanel · PostHog · Firebase Analytics. منطق التحديث قيد الإعداد.",
+    "qrTile": "استوديو QR",
+    "qrTileBody": "ولّد ملصقات A4 قابلة للطباعة لكل موقع مع QR موسوم UTM.",
+    "utmTemplate": "قالب UTM",
+    "topStats": "أهم المقاييس",
+    "funnel": "قمع التحويل",
+    "segments": "شرائح الجمهور",
+    "hotspots": "أكثر المواقع زيارة",
+    "popularRewards": "أكثر المكافآت شعبية",
+    "dailyUsers": "المستخدمون النشطون يوميًا"
+  },
+  "qrPosters": {
+    "lockTitle": "استوديو QR",
+    "lockBody": "ولّد ملصقات QR قابلة للطباعة لكل موقع.",
+    "preTitle": "مشرف · استوديو الطباعة",
+    "title": "استوديو QR",
+    "subtitle": "ملصق A4 واحد قابل للطباعة لكل موقع. يرمّز الـ QR رابط التطبيق مع UTM لكل موقع لتُنسب كل قراءة. حمّل PNG أو PDF.",
+    "back": "المشرف",
+    "downloadPng": "PNG",
+    "downloadPdf": "PDF",
+    "printAll": "اطبع الكل",
+    "batchPdf": "كل الملصقات · PDF",
+    "downloadedOne": "تم تنزيل الملصق · {{name}}"
+  },
+  "toast": {
+    "addedToDay": "تمت إضافته إلى يومك",
+    "alreadyInDay": "موجود في يومك بالفعل",
+    "alreadyInDayBody": "هذا موجود في يومك الكروي بالفعل.",
+    "removedFromDay": "تمت إزالته من يومك",
+    "checkedInAt": "تسجيل وصول في {{venue}}",
+    "alreadyCheckedIn": "تم تسجيل الوصول مسبقًا",
+    "alreadyCheckedInBody": "لقد سجّلت الوصول في {{venue}} مسبقًا.",
+    "claimed": "تم الاستلام: {{title}}",
+    "claimedBody": "-{{cost}} نقطة · محفوظ في ملفك",
+    "claimedBodyLocal": "-{{cost}} نقطة · محفوظ محليًا",
+    "profileSaved": "تم حفظ الملف",
+    "addNameWarn": "أضف اسمًا لحفظ ملفك.",
+    "reminderSet": "تم ضبط التذكير",
+    "reminderBody": "سترى شارة داخل التطبيق — الإشعار اختياري.",
+    "triviaComplete": "اكتمل الاختبار · {{score}}/{{total}}",
+    "signedOut": "تم تسجيل الخروج",
+    "welcomeUser": "أهلًا، {{name}}",
+    "welcomeBonus": "+25 نقطة مكافأة",
+    "welcomeBack": "مرحبًا بعودتك، {{name}}",
+    "referralCopied": "تم نسخ رابط الدعوة"
+  },
+  "common": {
+    "skip": "تخطٍ",
+    "close": "إغلاق",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "loading": "جارٍ التحميل…"
+  }
+}

@@ -1,0 +1,340 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "map": "Mapa",
+    "schedule": "Agenda",
+    "rewards": "Recompensas",
+    "share": "Compartir",
+    "profile": "Perfil",
+    "admin": "Panel de admin",
+    "qrcodes": "Estudio de QR",
+    "yourPoints": "Tus Puntos",
+    "passport": "pasaporte",
+    "pts": "pts",
+    "signInCta": "Inicia sesión para guardar tu progreso",
+    "signOut": "Cerrar sesión",
+    "language": "Idioma"
+  },
+  "footer": {
+    "disclaimer": "Boston Soccer Passport es un concepto de guía local de fútbol. Los detalles oficiales de eventos deben confirmarse con los organizadores oficiales. Sin afiliación, respaldo ni patrocinio de la FIFA, MLS o el New England Revolution. Prototipo creado para el capstone de consultoría de Hult International Business School (MGT-6080)."
+  },
+  "login": {
+    "title": "Inicia sesión para guardar tu pasaporte",
+    "subtitle": "Guarda tus puntos, agenda y recompensas en todos tus dispositivos.",
+    "bonusBadge": "+25 puntos de bienvenida",
+    "googleCta": "Continuar con Google",
+    "googleConnecting": "Conectando con Google…",
+    "appleCta": "Continuar con Apple",
+    "appleSoon": "Próximo",
+    "or": "o",
+    "guestCta": "Continuar como invitado",
+    "guestHint": "Puedes explorarlo todo igual — tu progreso solo se guarda en este dispositivo.",
+    "trust": "Solo guardamos el nombre, email y avatar que devuelve tu proveedor. Nunca vendemos tus datos. Sin afiliación con FIFA, MLS o el New England Revolution.",
+    "errorNoCred": "Google no devolvió una credencial. Inténtalo de nuevo.",
+    "errorFailed": "El inicio de sesión con Google falló. Inténtalo de nuevo.",
+    "errorProfile": "No pudimos obtener tu perfil de Google. Inténtalo de nuevo.",
+    "notConfigured": "El inicio con Google no está configurado en este entorno. Define VITE_GOOGLE_CLIENT_ID y recarga.",
+    "alreadySignedInTitle": "Ya has iniciado sesión",
+    "alreadySignedInBody": "Sesión iniciada como {{email}}.",
+    "alreadySignedInCta": "Ir a tu perfil"
+  },
+  "signInPrompt": {
+    "checkIn": {
+      "title": "Inicia sesión para guardar tu check-in",
+      "description": "Inicia sesión con Google para guardar tu check-in en {{venue}} y mantener tus puntos en todos los dispositivos."
+    },
+    "schedule": {
+      "title": "Inicia sesión para guardar tu día futbolero",
+      "description": "Sin iniciar sesión, este evento solo vive en este navegador. Inicia sesión para mantener tu agenda en todos los dispositivos."
+    },
+    "reward": {
+      "title": "Inicia sesión para canjear esta recompensa",
+      "description": "Las recompensas como \"{{title}}\" se guardan en tu cuenta. Inicia sesión para canjearla y guardarla en tu perfil."
+    },
+    "bonusBadge": "+25 puntos de bienvenida en tu primer login",
+    "accept": "Iniciar sesión con Google",
+    "skip": "Continuar sin guardar"
+  },
+  "home": {
+    "preTitle": "Verano 2026 · New England",
+    "title": "Tu Pasaporte Futbolero de Boston",
+    "subtitle": "Descubre dónde ver, jugar, celebrar y continuar tu viaje futbolero en New England.",
+    "ctaExplore": "Explorar Mapa",
+    "ctaBuildDay": "Crear mi Día Futbolero",
+    "statPoints": "Tus Puntos",
+    "statDays": "Días en Agenda",
+    "statCheckIns": "Check-ins",
+    "statArchetype": "Arquetipo",
+    "statTakeQuiz": "Hacer quiz",
+    "welcomeBack": "Bienvenido de nuevo, {{name}} · sigue construyendo tu día.",
+    "signinBanner": {
+      "title": "Inicia sesión para guardar tu progreso",
+      "body": "Mantén puntos, agenda y recompensas en todos tus dispositivos · +25 puntos de bienvenida"
+    },
+    "planWeek": "Planifica tu semana",
+    "openMap": "Abrir mapa",
+    "cards": {
+      "fanFestival": "Fan Festival",
+      "fanFestivalSub": "City Hall Plaza · 12–27 jun",
+      "watchParties": "Watch Parties",
+      "watchPartiesSub": "12 sitios por toda la ciudad",
+      "cultureHubs": "Hubs Culturales",
+      "cultureHubsSub": "East Boston · Cambridge · Allston",
+      "amateur": "Ligas Amateur",
+      "amateurSub": "Volo · NEOTHSL · pickup",
+      "rewards": "Recompensas Revs",
+      "rewardsSub": "Gana puntos · desbloquea beneficios"
+    },
+    "revsSection": {
+      "preTitle": "Después del verano",
+      "title": "Continúa el verano con los Revs",
+      "seeRewards": "Ver recompensas",
+      "vs": "Revolution vs {{opponent}}",
+      "tickets": "Entradas",
+      "plan": "Plan",
+      "tagline": "Los Revolution juegan hasta octubre. Lleva lo que amas del verano del fútbol a Gillette — sin presión."
+    },
+    "quiz": {
+      "archetypeTitle": "¿Qué tipo de aficionado eres?",
+      "archetypeBody": "7 preguntas · recomendación personalizada · +30 puntos",
+      "archetypeCta": "Hacer el quiz",
+      "triviaTitle": "Trivia Boston & Revs",
+      "triviaBody": "10 preguntas · cultura del fútbol + bases de MLS · +30 puntos",
+      "triviaCta": "Ponte a prueba"
+    }
+  },
+  "map": {
+    "tabPro": "Mapa Pro",
+    "tabQuick": "Mapa Rápido",
+    "proBadge": "Hecho con el mapa de activación Revolution × Volo",
+    "filters": {
+      "all": "Todo",
+      "fanFestival": "Fan Festival",
+      "watchParty": "Watch Parties",
+      "transport": "Transporte",
+      "cultureHub": "Hubs Culturales",
+      "amateur": "Ligas Amateur",
+      "family": "Familiar",
+      "revsRewards": "Recompensas Revs"
+    },
+    "searchPlaceholder": "Busca sitios, barrios, etiquetas…",
+    "noResults": "Ningún sitio coincide con este filtro.",
+    "card": {
+      "addToSchedule": "Añadir a Agenda",
+      "checkIn": "Check-in",
+      "checkedIn": "Hecho",
+      "directions": "Cómo llegar",
+      "share": "Compartir",
+      "tags": "Etiquetas",
+      "hours": "Horario",
+      "distance": "Distancia"
+    },
+    "disclaimer": "Confirma los detalles oficiales con los organizadores oficiales."
+  },
+  "schedule": {
+    "preTitle": "Mi Día Futbolero",
+    "title": "Construye tu verano futbolero",
+    "subtitle": "Planifica check-ins, watch parties y partidos. Cada evento añadido suma +10 puntos.",
+    "groups": {
+      "morning": "Mañana",
+      "afternoon": "Tarde",
+      "evening": "Noche"
+    },
+    "empty": "Tu día futbolero está vacío. Añade eventos desde el Mapa.",
+    "browseMap": "Explorar el mapa",
+    "remindersTitle": "Recordatorios",
+    "reminders": {
+      "thirty": "30 min antes",
+      "hour": "1 hora antes",
+      "travel": "Tiempo de viaje"
+    },
+    "status": {
+      "planned": "Planeado",
+      "attended": "Asistido",
+      "favorite": "Favorito"
+    },
+    "remove": "Quitar"
+  },
+  "rewards": {
+    "preTitle": "Puntos del Pasaporte",
+    "title": "Catálogo de Recompensas",
+    "subtitle": "Gana puntos explorando el fútbol de Boston. Canjea beneficios al alcanzar cada nivel.",
+    "balanceLabel": "Tu saldo",
+    "nextTier": "Próxima recompensa a los {{points}} pts",
+    "earnMore": "Ganar más",
+    "earnTitle": "Cómo ganar puntos",
+    "earnRules": {
+      "checkIn": "+25 · Check-in en un sitio",
+      "schedule": "+10 · Añadir un evento a tu agenda",
+      "referral": "+50 · Invitar a un amigo",
+      "quiz": "+30 · Completar un quiz",
+      "share": "+20 · Compartir una tarjeta",
+      "partner": "+40 · Visitar una watch party partner",
+      "match": "+200 · Ir a un partido de los Revs"
+    },
+    "catalogTitle": "Catálogo",
+    "activityTitle": "Actividad reciente",
+    "noActivity": "Aún sin actividad. Empieza a explorar para ganar puntos.",
+    "claim": "Canjear",
+    "claimed": "Canjeado",
+    "locked": "Faltan {{points}}",
+    "openTicket": "Abrir mi entrada con descuento"
+  },
+  "share": {
+    "preTitle": "Compartir",
+    "title": "Comparte mi Pasaporte",
+    "subtitle": "Crea una tarjeta cuadrada para Instagram o X. Sin logos FIFA, sin eslóganes oficiales.",
+    "template": "Plantilla",
+    "templates": {
+      "stop": "Mi parada futbolera en Boston",
+      "global": "Del fútbol global al fútbol de New England",
+      "summer": "Verano Futbolero en Boston"
+    },
+    "headline": "Titular",
+    "subhead": "Subtítulo",
+    "palette": "Paleta de acento",
+    "palettes": {
+      "country": "País",
+      "boston": "Boston",
+      "revs": "Revs"
+    },
+    "stickers": "Stickers",
+    "preview": "Vista previa",
+    "download": "Descargar Tarjeta",
+    "copyCaption": "Copiar Caption",
+    "shareIg": "Compartir en Instagram",
+    "shareX": "Compartir en X",
+    "captionCopied": "Caption copiado",
+    "downloaded": "Tarjeta descargada"
+  },
+  "quiz": {
+    "hubTitle": "Quizzes",
+    "hubSubtitle": "Descubre tu arquetipo y pon a prueba tu conocimiento del fútbol en Boston.",
+    "archetypeCard": {
+      "title": "¿Qué tipo de aficionado eres?",
+      "body": "7 preguntas · recomendación personalizada · +30 puntos",
+      "cta": "Hacer el quiz"
+    },
+    "triviaCard": {
+      "title": "Trivia Boston & Revs",
+      "body": "10 preguntas · cultura del fútbol + bases de MLS · +30 puntos",
+      "cta": "Ponte a prueba"
+    },
+    "next": "Siguiente",
+    "back": "Atrás",
+    "finish": "Ver mi resultado",
+    "questionOf": "Pregunta {{n}} de {{total}}",
+    "yourArchetype": "Tu arquetipo",
+    "recommended": "Siguiente paso recomendado",
+    "retake": "Repetir quiz",
+    "scoreTitle": "Tu puntuación",
+    "correctOf": "{{correct}} de {{total}} correctas"
+  },
+  "archetype": {
+    "local-loyalist": "Leal Local",
+    "global-matchday-fan": "Aficionado Global",
+    "family-soccer-explorer": "Explorador Familiar",
+    "player-fan": "Jugador-Aficionado",
+    "supporter-section-candidate": "Candidato a Supporter",
+    "new-to-soccer": "Nuevo en el Fútbol"
+  },
+  "profile": {
+    "preTitle": "Perfil",
+    "title": "Tu verano futbolero",
+    "hi": "Hola, {{name}}",
+    "intro": "Personaliza tu pasaporte. Tu información ayuda a personalizar tu experiencia. Tú controlas qué compartes.",
+    "name": "Nombre",
+    "namePh": "Tu nombre",
+    "country": "País favorito",
+    "countryPh": "p. ej. Brasil",
+    "team": "Equipo favorito",
+    "teamPh": "p. ej. New England Revolution",
+    "visitor": "¿Eres local o estás de visita?",
+    "local": "Local",
+    "visiting": "Visita",
+    "zip": "Código postal / barrio",
+    "zipPh": "02118 o Back Bay",
+    "save": "Guardar perfil",
+    "takeQuiz": "Hacer el quiz de arquetipo (+30)",
+    "archetypeLabel": "Tu arquetipo",
+    "noArchetype": "Haz el quiz para recibir una recomendación personalizada.",
+    "points": "Puntos",
+    "attended": "Asistidos",
+    "checkInsStat": "Check-ins",
+    "referralCode": "Código de invitación",
+    "refer": "Invitar (+50)",
+    "copied": "Copiado",
+    "badges": "Insignias y recompensas",
+    "noBadges": "Aún no has canjeado recompensas. Gana puntos y canjea desde Recompensas.",
+    "connectedAccount": "Cuenta conectada",
+    "signInToSync": "Inicia sesión para mantener tus puntos, agenda e insignias en todos los dispositivos. +25 puntos de bienvenida.",
+    "signInWithGoogle": "Iniciar sesión con Google"
+  },
+  "admin": {
+    "lockTitle": "Panel de Admin",
+    "lockSignedOutBody": "Inicia sesión con una cuenta de Google autorizada para continuar.",
+    "lockSignInCta": "Iniciar sesión con Google",
+    "lockHint": "Restringido al equipo autorizado del Revolution y al lead del proyecto.",
+    "deniedTitle": "Acceso restringido",
+    "deniedBody": "Tu cuenta de Google {{email}} no está en la lista de admins.",
+    "askOwner": "Si deberías tener acceso, pide al dueño del proyecto que añada tu email a la lista.",
+    "goHome": "Ir al inicio",
+    "authorized": "Autorizado",
+    "signedInAs": "sesión como {{email}}",
+    "preTitle": "Admin · Analíticas mock",
+    "title": "Boston Soccer Passport — BI",
+    "subtitle": "Datos mock — conectar a Mixpanel · PostHog · Firebase Analytics. Lógica de refresh pendiente de integración.",
+    "qrTile": "Estudio de QR",
+    "qrTileBody": "Genera posters A4 imprimibles por sitio con QR etiquetado por UTM.",
+    "utmTemplate": "Plantilla UTM",
+    "topStats": "Métricas principales",
+    "funnel": "Embudo de conversión",
+    "segments": "Segmentos de audiencia",
+    "hotspots": "Sitios más visitados",
+    "popularRewards": "Recompensas más populares",
+    "dailyUsers": "Usuarios activos diarios"
+  },
+  "qrPosters": {
+    "lockTitle": "Estudio de QR",
+    "lockBody": "Genera posters QR imprimibles para cada sitio.",
+    "preTitle": "Admin · Estudio de impresión",
+    "title": "Estudio de QR",
+    "subtitle": "Un poster A4 imprimible por sitio. El QR codifica la URL de la app con un UTM por sitio para que cada escaneo sea atribuible en el embudo. Descarga PNG o PDF para imprimir, o todos en bloque.",
+    "back": "Admin",
+    "downloadPng": "PNG",
+    "downloadPdf": "PDF",
+    "printAll": "Imprimir todos",
+    "batchPdf": "Todos los posters · PDF",
+    "downloadedOne": "Poster descargado · {{name}}"
+  },
+  "toast": {
+    "addedToDay": "Añadido a tu día futbolero",
+    "alreadyInDay": "Ya está en tu día",
+    "alreadyInDayBody": "Este evento ya está en tu día futbolero.",
+    "removedFromDay": "Quitado de tu día",
+    "checkedInAt": "Check-in en {{venue}}",
+    "alreadyCheckedIn": "Ya tienes check-in aquí",
+    "alreadyCheckedInBody": "Ya hiciste check-in en {{venue}}.",
+    "claimed": "Canjeado: {{title}}",
+    "claimedBody": "-{{cost}} puntos · guardado en tu perfil",
+    "claimedBodyLocal": "-{{cost}} puntos · guardado localmente",
+    "profileSaved": "Perfil guardado",
+    "addNameWarn": "Añade un nombre para guardar tu perfil.",
+    "reminderSet": "Recordatorio activado",
+    "reminderBody": "Verás una insignia en la app — push opcional.",
+    "triviaComplete": "Trivia completada · {{score}}/{{total}}",
+    "signedOut": "Sesión cerrada",
+    "welcomeUser": "Bienvenido, {{name}}",
+    "welcomeBonus": "+25 puntos bonus",
+    "welcomeBack": "Bienvenido de nuevo, {{name}}",
+    "referralCopied": "Enlace de invitación copiado"
+  },
+  "common": {
+    "skip": "Saltar",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "loading": "Cargando…"
+  }
+}

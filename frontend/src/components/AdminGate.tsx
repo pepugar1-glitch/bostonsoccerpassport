@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Lock, LogIn, ShieldOff, ShieldCheck, LogOut } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { track } from '@/lib/analytics';
@@ -18,8 +19,8 @@ function isAuthorized(email?: string | null) {
 export default function AdminGate({
   children,
   surface = 'admin',
-  title = 'Admin Dashboard',
-  description = 'Restricted to authorized Revolution staff and project leads.',
+  title,
+  description,
 }: {
   children: React.ReactNode;
   surface?: 'admin' | 'qrcodes';
@@ -29,6 +30,10 @@ export default function AdminGate({
   const { state, signOut } = useAppStore();
   const location = useLocation();
   const authed = isAuthorized(state.auth?.email);
+  const { t } = useTranslation();
+
+  const resolvedTitle = title || (surface === 'qrcodes' ? t('qrPosters.lockTitle') : t('admin.lockTitle'));
+  const resolvedDesc = description || t('admin.lockHint');
 
   useEffect(() => {
     if (authed) track('admin_unlock', { surface, email: state.auth?.email });
@@ -41,19 +46,17 @@ export default function AdminGate({
           <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl bg-revs-500/15 ring-1 ring-revs-500/30">
             <Lock size={22} className="text-revs-300" />
           </div>
-          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">{title}</h1>
-          <p className="mt-1 text-sm text-ink-300">
-            Sign in with an authorized Google account to continue.
-          </p>
+          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">{resolvedTitle}</h1>
+          <p className="mt-1 text-sm text-ink-300">{t('admin.lockSignedOutBody')}</p>
           <Link
             to="/login"
             state={{ from: location.pathname }}
             data-testid={`${surface}-gate-signin-cta`}
             className="mt-5 inline-flex items-center gap-2 rounded-full bg-revs-500 hover:bg-revs-400 active:bg-revs-600 text-white px-5 py-2.5 text-sm font-semibold shadow-glow transition-colors"
           >
-            <LogIn size={14} /> Sign in with Google
+            <LogIn size={14} /> {t('admin.lockSignInCta')}
           </Link>
-          <div className="mt-4 text-[11px] text-ink-400">{description}</div>
+          <div className="mt-4 text-[11px] text-ink-400">{resolvedDesc}</div>
         </div>
       </div>
     );
@@ -66,10 +69,9 @@ export default function AdminGate({
           <div className="mx-auto h-14 w-14 grid place-items-center rounded-2xl bg-revs-500/15 ring-1 ring-revs-500/30">
             <ShieldOff size={22} className="text-revs-300" />
           </div>
-          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">Access restricted</h1>
+          <h1 className="mt-4 text-xl font-display font-bold tracking-tight">{t('admin.deniedTitle')}</h1>
           <p className="mt-2 text-sm text-ink-300 leading-relaxed">
-            Your Google account <span className="text-white font-semibold">{state.auth.email}</span>{' '}
-            is not on the admin allowlist.
+            {t('admin.deniedBody', { email: state.auth.email })}
           </p>
           <div className="mt-4 flex items-center justify-center gap-2">
             <button
@@ -77,17 +79,17 @@ export default function AdminGate({
               data-testid={`${surface}-gate-signout`}
               className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-4 py-2 text-xs font-semibold"
             >
-              <LogOut size={12} /> Sign out
+              <LogOut size={12} /> {t('nav.signOut')}
             </button>
             <Link
               to="/"
               className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] ring-1 ring-white/10 px-4 py-2 text-xs font-semibold"
             >
-              Go to home
+              {t('admin.goHome')}
             </Link>
           </div>
           <div className="mt-5 pt-4 border-t border-white/5 text-[11px] text-ink-400 leading-relaxed">
-            If you should have access, ask the project owner to add your email to the allowlist.
+            {t('admin.askOwner')}
           </div>
         </div>
       </div>
@@ -103,14 +105,14 @@ export default function AdminGate({
         <RevsLogo size={20} className="shrink-0" />
         <ShieldCheck size={13} className="text-emerald-300 shrink-0" />
         <div className="flex-1 min-w-0 truncate">
-          <span className="text-emerald-200 font-semibold">Authorized</span>{' '}
-          <span className="text-ink-300">· signed in as {state.auth.email}</span>
+          <span className="text-emerald-200 font-semibold">{t('admin.authorized')}</span>{' '}
+          <span className="text-ink-300">· {t('admin.signedInAs', { email: state.auth.email })}</span>
         </div>
         <button
           onClick={signOut}
           className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-1 text-[11px] font-semibold"
         >
-          <LogOut size={11} /> Sign out
+          <LogOut size={11} /> {t('nav.signOut')}
         </button>
       </div>
       {children}

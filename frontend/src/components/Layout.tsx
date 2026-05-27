@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Home,
   Map as MapIcon,
@@ -16,21 +17,23 @@ import { useAppStore } from '@/lib/store';
 import Footer from './Footer';
 import RevsLogo from './RevsLogo';
 import SignInPrompt from './SignInPrompt';
+import LanguageSelector from './LanguageSelector';
 
 const NAV = [
-  { to: '/', label: 'Home', icon: Home },
-  { to: '/map', label: 'Map', icon: MapIcon },
-  { to: '/schedule', label: 'Schedule', icon: CalendarDays },
-  { to: '/rewards', label: 'Rewards', icon: Trophy },
-  { to: '/share', label: 'Share', icon: Share2 },
-  { to: '/profile', label: 'Profile', icon: User },
-];
+  { to: '/', key: 'home', icon: Home },
+  { to: '/map', key: 'map', icon: MapIcon },
+  { to: '/schedule', key: 'schedule', icon: CalendarDays },
+  { to: '/rewards', key: 'rewards', icon: Trophy },
+  { to: '/share', key: 'share', icon: Share2 },
+  { to: '/profile', key: 'profile', icon: User },
+] as const;
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { points, state, signOut } = useAppStore();
   const auth = state.auth;
   const location = useLocation();
   const isMap = location.pathname === '/map';
+  const { t } = useTranslation();
 
   return (
     <div className="flex min-h-screen text-ink-50">
@@ -47,12 +50,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <div className="px-4 pb-2 space-y-2">
           <div className="rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-4 py-3">
-            <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Your Points</div>
+            <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('nav.yourPoints')}</div>
             <div className="mt-1 flex items-baseline gap-2">
               <span className="text-2xl font-display font-bold tracking-tight" data-testid="sidebar-points">
                 {points.toLocaleString()}
               </span>
-              <span className="text-xs text-ink-400">passport</span>
+              <span className="text-xs text-ink-400">{t('nav.passport')}</span>
             </div>
           </div>
 
@@ -81,7 +84,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 type="button"
                 onClick={signOut}
                 data-testid="sidebar-signout"
-                title="Sign out"
+                title={t('nav.signOut')}
                 className="rounded-full p-1.5 text-ink-400 hover:bg-white/[0.06] hover:text-white transition-colors"
               >
                 <LogOut size={14} />
@@ -94,18 +97,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="flex items-center justify-center gap-2 rounded-2xl bg-revs-500 hover:bg-revs-400 text-white px-3 py-2.5 text-sm font-semibold transition-colors"
             >
               <LogIn size={14} />
-              Sign in to save progress
+              {t('nav.signInCta')}
             </NavLink>
           )}
+
+          <LanguageSelector variant="sidebar" />
         </div>
 
         <nav className="px-3 pt-2 flex-1">
-          {NAV.map(({ to, label, icon: Icon }) => (
+          {NAV.map(({ to, key, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/'}
-              data-testid={`sidebar-nav-${label.toLowerCase()}`}
+              data-testid={`sidebar-nav-${key}`}
               className={({ isActive }) =>
                 cn(
                   'group flex items-center gap-3 rounded-xl px-3 py-2.5 my-0.5 text-sm transition-colors',
@@ -116,7 +121,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               }
             >
               <Icon size={18} className="shrink-0 opacity-90" />
-              <span className="font-medium">{label}</span>
+              <span className="font-medium">{t(`nav.${key}`)}</span>
             </NavLink>
           ))}
         </nav>
@@ -133,7 +138,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }
           >
             <ShieldCheck size={18} />
-            <span className="font-medium">Admin Dashboard</span>
+            <span className="font-medium">{t('nav.admin')}</span>
           </NavLink>
           <NavLink
             to="/qrcodes"
@@ -146,7 +151,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             }
           >
             <QrCode size={18} />
-            <span className="font-medium">QR Poster Studio</span>
+            <span className="font-medium">{t('nav.qrcodes')}</span>
           </NavLink>
         </div>
       </aside>
@@ -164,16 +169,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               </div>
             </Link>
             <div className="flex items-center gap-2">
+              <LanguageSelector variant="topbar" />
               <div className="flex items-center gap-2 rounded-full bg-white/[0.06] ring-1 ring-white/5 px-3 py-1.5">
                 <Trophy size={14} className="text-revs-400" />
                 <span className="text-sm font-semibold" data-testid="topbar-points">{points.toLocaleString()}</span>
-                <span className="text-[11px] text-ink-400">pts</span>
+                <span className="text-[11px] text-ink-400">{t('nav.pts')}</span>
               </div>
               {auth ? (
                 <Link
                   to="/profile"
                   data-testid="topbar-avatar"
-                  aria-label="Your profile"
+                  aria-label={t('nav.profile')}
                   className="shrink-0"
                 >
                   {auth.picture ? (
@@ -193,7 +199,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Link
                   to="/login"
                   data-testid="topbar-signin"
-                  aria-label="Sign in"
+                  aria-label={t('login.googleCta')}
                   className="rounded-full bg-revs-500 hover:bg-revs-400 text-white p-2 transition-colors"
                 >
                   <LogIn size={14} />
@@ -214,12 +220,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Mobile bottom nav */}
         <nav className="lg:hidden sticky bottom-0 z-40 bg-navy-950/85 backdrop-blur-xl border-t border-white/5 pb-[max(env(safe-area-inset-bottom),0.25rem)]">
           <div className="grid grid-cols-6">
-            {NAV.map(({ to, label, icon: Icon }) => (
+            {NAV.map(({ to, key, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 end={to === '/'}
-                data-testid={`bottom-nav-${label.toLowerCase()}`}
+                data-testid={`bottom-nav-${key}`}
                 className={({ isActive }) =>
                   cn(
                     'flex flex-col items-center justify-center gap-0.5 py-2.5 text-[10px] font-medium',
@@ -237,7 +243,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     >
                       <Icon size={18} className={isActive ? 'text-revs-300' : ''} />
                     </div>
-                    <span className="tracking-tight">{label}</span>
+                    <span className="tracking-tight">{t(`nav.${key}`)}</span>
                   </>
                 )}
               </NavLink>
