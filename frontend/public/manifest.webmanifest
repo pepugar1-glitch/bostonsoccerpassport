@@ -1,0 +1,29 @@
+{
+  "name": "Boston Soccer Passport",
+  "short_name": "Soccer Passport",
+  "description": "Your guide to discovering where to watch, play, and celebrate soccer in New England.",
+  "theme_color": "#0A1A3D",
+  "background_color": "#0A1A3D",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
