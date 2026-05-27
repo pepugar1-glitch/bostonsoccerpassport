@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Polyline, Tooltip, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, CircleMarker, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import {
   Tent,
@@ -20,7 +20,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { VENUES, CATEGORY_LABELS, CATEGORY_COLORS } from '@/data/venues';
 import { EVENTS } from '@/data/content';
-import { MBTA_LINES } from '@/data/mbta';
+import { MBTA_LINES, MBTA_STATIONS, GILLETTE_ROUTES } from '@/data/mbta';
 import type { Venue, VenueCategory } from '@/types';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
@@ -63,6 +63,7 @@ export default function MapScreen() {
   );
   const [selected, setSelected] = useState<Venue | null>(null);
   const [showMbta, setShowMbta] = useState(true);
+  const [showGillette, setShowGillette] = useState(true);
 
   const { addToSchedule, checkInVenue, toast } = useAppStore();
   const { t } = useTranslation();
@@ -118,22 +119,38 @@ export default function MapScreen() {
     <div className="min-h-[calc(100vh-3.5rem)] lg:min-h-screen flex flex-col" data-testid="map-screen">
       {/* Header */}
       <div className="px-4 lg:px-10 pt-4 lg:pt-8">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center justify-between gap-3 flex-wrap">
           <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
-          <button
-            type="button"
-            onClick={() => setShowMbta((v) => !v)}
-            data-testid="map-toggle-mbta"
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-full ring-1 px-3 py-1.5 text-xs font-medium transition-colors',
-              showMbta
-                ? 'bg-white/[0.08] ring-white/20 text-white'
-                : 'bg-white/[0.03] ring-white/10 text-ink-300 hover:bg-white/[0.06]'
-            )}
-            aria-pressed={showMbta}
-          >
-            <SubwayIcon /> {t('map.subway')}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowMbta((v) => !v)}
+              data-testid="map-toggle-mbta"
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full ring-1 px-3 py-1.5 text-xs font-medium transition-colors',
+                showMbta
+                  ? 'bg-white/[0.08] ring-white/20 text-white'
+                  : 'bg-white/[0.03] ring-white/10 text-ink-300 hover:bg-white/[0.06]'
+              )}
+              aria-pressed={showMbta}
+            >
+              <SubwayIcon /> {t('map.subway')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowGillette((v) => !v)}
+              data-testid="map-toggle-gillette"
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full ring-1 px-3 py-1.5 text-xs font-medium transition-colors',
+                showGillette
+                  ? 'bg-white/[0.08] ring-white/20 text-white'
+                  : 'bg-white/[0.03] ring-white/10 text-ink-300 hover:bg-white/[0.06]'
+              )}
+              aria-pressed={showGillette}
+            >
+              <RouteIcon /> {t('map.gilletteRoutes')}
+            </button>
+          </div>
         </div>
 
         <div className="mt-3 -mx-4 lg:mx-0 overflow-x-auto no-scrollbar">
@@ -211,6 +228,49 @@ export default function MapScreen() {
                     </Polyline>
                   ))
                 )}
+              {showMbta &&
+                MBTA_STATIONS.map((s) => {
+                  const primaryLineColor =
+                    MBTA_LINES.find((l) => l.id === s.lines[0])?.color || '#FFFFFF';
+                  return (
+                    <CircleMarker
+                      key={`station-${s.name}-${s.lat}-${s.lng}`}
+                      center={[s.lat, s.lng]}
+                      radius={s.lines.length > 1 ? 4 : 3}
+                      pathOptions={{
+                        color: '#FFFFFF',
+                        weight: 1,
+                        fillColor: primaryLineColor,
+                        fillOpacity: 1,
+                      }}
+                    >
+                      <Tooltip direction="top" offset={[0, -2]} opacity={0.95}>
+                        {s.name}
+                        {s.lines.length > 1 && (
+                          <span className="text-[10px] opacity-80"> · {s.lines.join(' + ')}</span>
+                        )}
+                      </Tooltip>
+                    </CircleMarker>
+                  );
+                })}
+              {showGillette &&
+                GILLETTE_ROUTES.map((route) => (
+                  <Polyline
+                    key={`gillette-${route.id}`}
+                    positions={route.path}
+                    pathOptions={{
+                      color: route.color,
+                      weight: 3,
+                      opacity: 0.85,
+                      dashArray: route.mode === 'bus' ? '8 6' : '0',
+                      lineCap: 'round',
+                    }}
+                  >
+                    <Tooltip sticky direction="top" opacity={0.95}>
+                      {route.name}
+                    </Tooltip>
+                  </Polyline>
+                ))}
               <FitBounds venues={visible} />
               {visible.map((v) => (
                 <Marker
@@ -248,6 +308,27 @@ export default function MapScreen() {
                         style={{ backgroundColor: line.color }}
                       />
                       <span className="text-ink-100">{line.name}</span>
+                    </div>
+                  ))}
+                </>
+              )}
+              {showGillette && (
+                <>
+                  <div className="mt-2 pt-2 border-t border-white/10 text-[10px] uppercase tracking-[0.18em] text-ink-400 mb-1.5">
+                    {t('map.gilletteRoutes')}
+                  </div>
+                  {GILLETTE_ROUTES.map((route) => (
+                    <div key={route.id} className="flex items-center gap-2">
+                      <span
+                        className="h-1 w-4 rounded-full"
+                        style={{
+                          background:
+                            route.mode === 'bus'
+                              ? `repeating-linear-gradient(90deg, ${route.color} 0 4px, transparent 4px 7px)`
+                              : route.color,
+                        }}
+                      />
+                      <span className="text-ink-100">{route.name}</span>
                     </div>
                   ))}
                 </>
@@ -387,6 +468,16 @@ function SubwayIcon() {
       <circle cx="9" cy="15" r="0.5" fill="currentColor" />
       <circle cx="15" cy="15" r="0.5" fill="currentColor" />
       <line x1="5" y1="11" x2="19" y2="11" />
+    </svg>
+  );
+}
+
+function RouteIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width={13} height={13} aria-hidden fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="6" cy="19" r="2" />
+      <circle cx="18" cy="5" r="2" />
+      <path d="M8 19h6a4 4 0 0 0 0-8H10a4 4 0 0 1 0-8h6" />
     </svg>
   );
 }

@@ -103,6 +103,7 @@
   },
   "map": {
     "subway": "T-bane",
+    "gilletteRoutes": "Til Gillette",
     "filters": {
       "all": "Alt",
       "fanFestival": "Fan Festival",

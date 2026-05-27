@@ -103,6 +103,7 @@
   },
   "map": {
     "subway": "Metro",
+    "gilletteRoutes": "A Gillette",
     "filters": {
       "all": "Todo",
       "fanFestival": "Fan Festival",

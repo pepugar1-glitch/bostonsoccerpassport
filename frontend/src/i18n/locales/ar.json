@@ -103,6 +103,7 @@
   },
   "map": {
     "subway": "المترو",
+    "gilletteRoutes": "إلى Gillette",
     "filters": {
       "all": "الكل",
       "fanFestival": "مهرجان المشجعين",
