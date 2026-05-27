@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   ArrowRight,
   Tent,
@@ -15,54 +16,24 @@ import {
 import { format, parseISO } from 'date-fns';
 import { useAppStore } from '@/lib/store';
 import { UPCOMING_MATCHES } from '@/data/content';
-import { ARCHETYPE_LABELS } from '@/data/content';
 import { buildTicketLink } from '@/lib/utm';
 import { track } from '@/lib/analytics';
 import RevsLogo from '@/components/RevsLogo';
 import { LogIn } from 'lucide-react';
 
 const QUICK_CARDS = [
-  {
-    to: '/map?filter=fan-festival',
-    label: 'Fan Festival',
-    sub: 'City Hall Plaza · Jun 12–27',
-    icon: Tent,
-    accent: 'from-revs-500/20 to-transparent',
-  },
-  {
-    to: '/map?filter=watch-party',
-    label: 'Watch Parties',
-    sub: '12 venues across the city',
-    icon: Tv2,
-    accent: 'from-amber-400/20 to-transparent',
-  },
-  {
-    to: '/map?filter=culture-hub',
-    label: 'Soccer Culture Hubs',
-    sub: 'East Boston · Cambridge · Allston',
-    icon: Landmark,
-    accent: 'from-violet-400/20 to-transparent',
-  },
-  {
-    to: '/map?filter=amateur-league',
-    label: 'Amateur Leagues',
-    sub: 'Volo · NEOTHSL · pickup',
-    icon: Users,
-    accent: 'from-sky-400/20 to-transparent',
-  },
-  {
-    to: '/rewards',
-    label: 'Revs Rewards',
-    sub: 'Earn points · unlock perks',
-    icon: Trophy,
-    accent: 'from-emerald-400/20 to-transparent',
-  },
-];
+  { to: '/map?filter=fan-festival', key: 'fanFestival', icon: Tent, accent: 'from-revs-500/20 to-transparent' },
+  { to: '/map?filter=watch-party', key: 'watchParties', icon: Tv2, accent: 'from-amber-400/20 to-transparent' },
+  { to: '/map?filter=culture-hub', key: 'cultureHubs', icon: Landmark, accent: 'from-violet-400/20 to-transparent' },
+  { to: '/map?filter=amateur-league', key: 'amateur', icon: Users, accent: 'from-sky-400/20 to-transparent' },
+  { to: '/rewards', key: 'rewards', icon: Trophy, accent: 'from-emerald-400/20 to-transparent' },
+] as const;
 
 export default function Home() {
   const { state, points } = useAppStore();
   const profile = state.profile;
   const archetype = state.archetypeResult?.archetype;
+  const { t } = useTranslation();
 
   return (
     <div className="space-y-8 pb-2" data-testid="home-screen">
@@ -79,14 +50,13 @@ export default function Home() {
         <div className="relative px-6 lg:px-12 py-10 lg:py-16">
           <div className="inline-flex items-center gap-2 rounded-full bg-white/5 ring-1 ring-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.18em] text-ink-200">
             <span className="w-1.5 h-1.5 rounded-full bg-revs-400 animate-pulse-soft" />
-            Summer 2026 · New England
+            {t('home.preTitle')}
           </div>
           <h1 className="mt-4 text-4xl lg:text-6xl font-display font-bold tracking-tight leading-[1.05]">
-            Your Boston
-            <br className="hidden sm:block" /> Soccer Passport
+            {t('home.title')}
           </h1>
           <p className="mt-4 max-w-xl text-base lg:text-lg text-ink-200 leading-relaxed">
-            Discover where to watch, play, celebrate, and continue your soccer journey in New England.
+            {t('home.subtitle')}
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -95,28 +65,25 @@ export default function Home() {
               data-testid="hero-cta-explore-map"
               className="inline-flex items-center gap-2 rounded-full bg-revs-500 hover:bg-revs-400 active:bg-revs-600 text-white px-5 py-3 text-sm font-semibold shadow-glow transition-colors"
             >
-              <MapPin size={16} /> Explore Map
+              <MapPin size={16} /> {t('home.ctaExplore')}
             </Link>
             <Link
               to="/schedule"
               data-testid="hero-cta-build-day"
               className="inline-flex items-center gap-2 rounded-full bg-white/8 hover:bg-white/12 ring-1 ring-white/10 px-5 py-3 text-sm font-semibold transition-colors"
             >
-              <CalendarCheck2 size={16} /> Build My Soccer Day
+              <CalendarCheck2 size={16} /> {t('home.ctaBuildDay')}
             </Link>
           </div>
 
           {/* Status strip */}
           <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 max-w-3xl">
-            <Stat label="Your Points" value={points.toLocaleString()} />
-            <Stat label="Days In Schedule" value={state.schedule.length.toString()} />
+            <Stat label={t('home.statPoints')} value={points.toLocaleString()} />
+            <Stat label={t('home.statDays')} value={state.schedule.length.toString()} />
+            <Stat label={t('home.statCheckIns')} value={Object.keys(state.checkIns).length.toString()} />
             <Stat
-              label="Check-ins"
-              value={Object.keys(state.checkIns).length.toString()}
-            />
-            <Stat
-              label="Archetype"
-              value={archetype ? ARCHETYPE_LABELS[archetype].split(' ')[0] : 'Take quiz'}
+              label={t('home.statArchetype')}
+              value={archetype ? t(`archetype.${archetype}`).split(' ')[0] : t('home.statTakeQuiz')}
               link={archetype ? '/profile' : '/quiz'}
             />
           </div>
@@ -126,7 +93,7 @@ export default function Home() {
       {/* Welcome line */}
       {profile?.name && (
         <div className="text-sm text-ink-300">
-          Welcome back, <span className="text-white font-semibold">{profile.name}</span> · keep building your day.
+          {t('home.welcomeBack', { name: profile.name })}
         </div>
       )}
 
@@ -141,14 +108,12 @@ export default function Home() {
             <LogIn size={16} className="text-revs-200" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold">Sign in to save your progress</div>
-            <div className="text-[11px] text-ink-300 mt-0.5">
-              Keep points, schedule and rewards across devices · +25 welcome bonus
-            </div>
+            <div className="text-sm font-semibold">{t('home.signinBanner.title')}</div>
+            <div className="text-[11px] text-ink-300 mt-0.5">{t('home.signinBanner.body')}</div>
           </div>
           <ArrowRight
             size={14}
-            className="text-ink-300 group-hover:text-white group-hover:translate-x-0.5 transition-transform shrink-0"
+            className="text-ink-300 group-hover:text-white group-hover:translate-x-0.5 transition-transform shrink-0 rtl:rotate-180"
           />
         </Link>
       )}
@@ -156,22 +121,22 @@ export default function Home() {
       {/* Quick cards */}
       <section>
         <div className="flex items-baseline justify-between mb-4">
-          <h2 className="text-lg lg:text-xl font-display font-bold tracking-tight">Plan your week</h2>
+          <h2 className="text-lg lg:text-xl font-display font-bold tracking-tight">{t('home.planWeek')}</h2>
           <Link to="/map" className="text-xs text-ink-300 hover:text-white inline-flex items-center gap-1">
-            Open map <ArrowRight size={12} />
+            {t('home.openMap')} <ArrowRight size={12} className="rtl:rotate-180" />
           </Link>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-          {QUICK_CARDS.map(({ to, label, sub, icon: Icon, accent }, idx) => (
+          {QUICK_CARDS.map(({ to, key, icon: Icon, accent }, idx) => (
             <motion.div
-              key={label}
+              key={key}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.04 * idx, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
               <Link
                 to={to}
-                data-testid={`quick-card-${label.toLowerCase().replace(/\s+/g, '-')}`}
+                data-testid={`quick-card-${key}`}
                 className="group relative block rounded-2xl bg-navy-800/60 ring-1 ring-white/5 hover:ring-white/15 px-4 py-4 transition-all hover:-translate-y-0.5 shadow-card overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${accent} opacity-60 group-hover:opacity-90 transition-opacity`} aria-hidden />
@@ -179,8 +144,8 @@ export default function Home() {
                   <div className="h-9 w-9 rounded-xl bg-white/10 ring-1 ring-white/10 grid place-items-center mb-3">
                     <Icon size={18} />
                   </div>
-                  <div className="text-sm font-semibold leading-tight">{label}</div>
-                  <div className="text-[11px] text-ink-300 mt-1 leading-tight">{sub}</div>
+                  <div className="text-sm font-semibold leading-tight">{t(`home.cards.${key}`)}</div>
+                  <div className="text-[11px] text-ink-300 mt-1 leading-tight">{t(`home.cards.${key}Sub`)}</div>
                 </div>
               </Link>
             </motion.div>
@@ -194,9 +159,9 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <RevsLogo size={52} className="shrink-0 drop-shadow" />
             <div>
-              <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">After the summer</div>
+              <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('home.revsSection.preTitle')}</div>
               <h3 className="text-lg lg:text-xl font-display font-bold tracking-tight mt-1">
-                Continue the summer with the Revs
+                {t('home.revsSection.title')}
               </h3>
             </div>
           </div>
@@ -204,7 +169,7 @@ export default function Home() {
             to="/rewards"
             className="hidden sm:inline-flex items-center gap-1 rounded-full ring-1 ring-white/10 bg-white/[0.05] hover:bg-white/[0.08] px-3 py-1.5 text-xs"
           >
-            See rewards <ArrowRight size={12} />
+            {t('home.revsSection.seeRewards')} <ArrowRight size={12} className="rtl:rotate-180" />
           </Link>
         </div>
         <div className="grid md:grid-cols-2 gap-3 p-4 lg:p-6">
@@ -220,7 +185,7 @@ export default function Home() {
                   <Trophy size={20} className="text-revs-300" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold">Revolution vs {m.opponent}</div>
+                  <div className="text-sm font-semibold">{t('home.revsSection.vs', { opponent: m.opponent })}</div>
                   <div className="text-[11px] text-ink-300 mt-0.5">
                     {format(parseISO(m.date), 'EEE · MMM d, yyyy')} · {m.competition}
                   </div>
@@ -234,13 +199,13 @@ export default function Home() {
                     data-testid={`upcoming-match-tickets-${m.id}`}
                     className="inline-flex items-center gap-1 rounded-full bg-revs-500 hover:bg-revs-400 text-white px-3 py-1.5 text-xs font-semibold whitespace-nowrap"
                   >
-                    <Ticket size={11} /> Tickets
+                    <Ticket size={11} /> {t('home.revsSection.tickets')}
                   </a>
                   <Link
                     to="/schedule"
                     className="text-[11px] text-center rounded-full ring-1 ring-white/10 bg-white/[0.04] hover:bg-white/[0.08] px-3 py-1 transition-colors"
                   >
-                    Plan
+                    {t('home.revsSection.plan')}
                   </Link>
                 </div>
               </div>
@@ -248,8 +213,7 @@ export default function Home() {
           })}
         </div>
         <p className="px-6 lg:px-10 pb-6 text-xs text-ink-400 leading-relaxed">
-          The Revolution play through October. Take what you love about the summer of soccer and bring it
-          home to Gillette — no hard sell.
+          {t('home.revsSection.tagline')}
         </p>
       </section>
 
@@ -261,10 +225,10 @@ export default function Home() {
           className="group relative rounded-3xl bg-gradient-to-br from-navy-800 to-navy-900 ring-1 ring-white/5 hover:ring-white/15 px-6 py-6 transition-all shadow-card overflow-hidden"
         >
           <Sparkles size={18} className="text-revs-300 mb-3" />
-          <div className="text-base font-display font-bold tracking-tight">What kind of soccer fan are you?</div>
-          <div className="text-xs text-ink-300 mt-1">7 questions · personalized recommendation · +30 points</div>
+          <div className="text-base font-display font-bold tracking-tight">{t('home.quiz.archetypeTitle')}</div>
+          <div className="text-xs text-ink-300 mt-1">{t('home.quiz.archetypeBody')}</div>
           <div className="mt-4 inline-flex items-center gap-1.5 text-xs text-white">
-            Take the quiz <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            {t('home.quiz.archetypeCta')} <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
           </div>
         </Link>
         <Link
@@ -273,10 +237,10 @@ export default function Home() {
           className="group relative rounded-3xl bg-gradient-to-br from-revs-700/40 to-navy-900 ring-1 ring-white/5 hover:ring-white/15 px-6 py-6 transition-all shadow-card overflow-hidden"
         >
           <Trophy size={18} className="text-revs-300 mb-3" />
-          <div className="text-base font-display font-bold tracking-tight">Boston & Revs trivia</div>
-          <div className="text-xs text-ink-300 mt-1">10 questions · soccer culture + MLS basics · +30 points</div>
+          <div className="text-base font-display font-bold tracking-tight">{t('home.quiz.triviaTitle')}</div>
+          <div className="text-xs text-ink-300 mt-1">{t('home.quiz.triviaBody')}</div>
           <div className="mt-4 inline-flex items-center gap-1.5 text-xs text-white">
-            Test yourself <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
+            {t('home.quiz.triviaCta')} <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5 rtl:rotate-180" />
           </div>
         </Link>
       </section>

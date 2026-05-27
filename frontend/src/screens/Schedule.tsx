@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { format, parseISO, isSameDay, addDays } from 'date-fns';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Sunrise,
   Sun,
@@ -25,11 +26,11 @@ const MIN_DATE = new Date(2026, 5, 12);
 const MAX_DATE = new Date(2026, 8, 30);
 
 const BUCKET_ICON = { morning: Sunrise, afternoon: Sun, evening: Moon } as const;
-const BUCKET_LABEL = { morning: 'Morning', afternoon: 'Afternoon', evening: 'Evening' } as const;
 
 export default function Schedule() {
   const [activeDate, setActiveDate] = useState<Date>(MIN_DATE);
   const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder } = useAppStore();
+  const { t } = useTranslation();
 
   const dateOptions = useMemo(() => {
     const out: Date[] = [];
@@ -73,14 +74,12 @@ export default function Schedule() {
     <div className="space-y-6 pb-2" data-testid="schedule-screen">
       <header className="flex items-end justify-between gap-4">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">My Soccer Day</div>
-          <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Plan your week</h1>
-          <p className="mt-1 text-sm text-ink-300">
-            Build your day across the host-city festival, watch parties, and Revs matches.
-          </p>
+          <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('schedule.preTitle')}</div>
+          <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('schedule.title')}</h1>
+          <p className="mt-1 text-sm text-ink-300">{t('schedule.subtitle')}</p>
         </div>
         <div className="hidden sm:block rounded-2xl bg-white/[0.04] ring-1 ring-white/5 px-4 py-3">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">In your schedule</div>
+          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">{t('home.statDays')}</div>
           <div className="text-2xl font-display font-bold mt-0.5">{state.schedule.length}</div>
         </div>
       </header>
@@ -151,7 +150,7 @@ export default function Schedule() {
               <div key={b.key} className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 shadow-card">
                 <div className="flex items-center gap-2 px-5 py-3 border-b border-white/5">
                   <Icon size={15} className="text-ink-300" />
-                  <span className="text-xs uppercase tracking-[0.18em] text-ink-400">{BUCKET_LABEL[b.key]}</span>
+                  <span className="text-xs uppercase tracking-[0.18em] text-ink-400">{t(`schedule.groups.${b.key}`)}</span>
                 </div>
                 {b.events.length === 0 ? (
                   <div className="px-5 py-4 text-xs text-ink-400">No events.</div>
@@ -202,7 +201,7 @@ export default function Schedule() {
                                 data-testid={`event-remove-${e.id}`}
                                 className="inline-flex items-center gap-1 rounded-full bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-1.5 text-[11px]"
                               >
-                                <Trash2 size={12} /> Remove
+                                <Trash2 size={12} /> {t('schedule.remove')}
                               </button>
                             ) : (
                               <button
