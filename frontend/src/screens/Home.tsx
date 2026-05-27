@@ -6,7 +6,6 @@ import {
   Tent,
   Tv2,
   Landmark,
-  Users,
   Trophy,
   Sparkles,
   MapPin,
@@ -25,7 +24,6 @@ const QUICK_CARDS = [
   { to: '/map?filter=fan-festival', key: 'fanFestival', icon: Tent, accent: 'from-revs-500/20 to-transparent' },
   { to: '/map?filter=watch-party', key: 'watchParties', icon: Tv2, accent: 'from-amber-400/20 to-transparent' },
   { to: '/map?filter=culture-hub', key: 'cultureHubs', icon: Landmark, accent: 'from-violet-400/20 to-transparent' },
-  { to: '/map?filter=amateur-league', key: 'amateur', icon: Users, accent: 'from-sky-400/20 to-transparent' },
   { to: '/rewards', key: 'rewards', icon: Trophy, accent: 'from-emerald-400/20 to-transparent' },
 ] as const;
 

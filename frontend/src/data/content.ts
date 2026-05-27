@@ -35,17 +35,6 @@ export const EVENTS: SoccerEvent[] = [
     description: 'Portuguese community club opens its doors for a community watch night with traditional food and family entertainment.',
   },
   {
-    id: 'evt-jun25-volo',
-    date: '2026-06-25',
-    time: '18:30',
-    title: 'Volo Pickup Soccer Night',
-    venueId: 'volo-assembly',
-    venueName: 'Club Volo Assembly Row',
-    timeBucket: 'evening',
-    category: 'amateur-league',
-    description: 'Drop-in coed pickup matches. All skill levels welcome — gear provided, stay for the post-match social.',
-  },
-  {
     id: 'evt-jul09-quarter',
     date: '2026-07-09',
     time: '16:00',
@@ -208,7 +197,7 @@ export const ARCHETYPE_NEXT_ACTION: Record<FanArchetype, { label: string; to: st
   'local-loyalist': { label: 'Plan a Revs matchday', to: '/schedule' },
   'global-matchday-fan': { label: 'Find a watch party near you', to: '/map' },
   'family-soccer-explorer': { label: 'Browse family-friendly stops', to: '/map' },
-  'player-fan': { label: 'See amateur leagues', to: '/map' },
+  'player-fan': { label: 'Find culture hubs to play', to: '/map' },
   'supporter-section-candidate': { label: 'Browse Revs rewards', to: '/rewards' },
   'new-to-soccer': { label: 'Start at the Fan Festival', to: '/map' },
 };

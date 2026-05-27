@@ -3,7 +3,6 @@ export type VenueCategory =
   | 'watch-party'
   | 'transport'
   | 'culture-hub'
-  | 'amateur-league'
   | 'family'
   | 'revs-rewards';
 

@@ -7,7 +7,6 @@ import {
   Tv2,
   Train,
   Landmark,
-  Users,
   Baby,
   Trophy,
   ChevronRight,
@@ -15,9 +14,7 @@ import {
   MapPin,
   CalendarPlus,
   CheckCircle2,
-  Compass,
   Share2,
-  ExternalLink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +29,6 @@ const CHIPS: { id: VenueCategory; label: string; icon: typeof Tent }[] = [
   { id: 'watch-party', label: 'Watch Parties', icon: Tv2 },
   { id: 'transport', label: 'Transport', icon: Train },
   { id: 'culture-hub', label: 'Culture Hubs', icon: Landmark },
-  { id: 'amateur-league', label: 'Amateur Leagues', icon: Users },
   { id: 'family', label: 'Family', icon: Baby },
   { id: 'revs-rewards', label: 'Revs Rewards', icon: Trophy },
 ];
@@ -60,7 +56,6 @@ function FitBounds({ venues }: { venues: Venue[] }) {
 
 export default function MapScreen() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [tab, setTab] = useState<'quick' | 'pro'>('quick');
   const initialFilter = searchParams.get('filter') as VenueCategory | null;
   const [active, setActive] = useState<Set<VenueCategory>>(
     new Set(initialFilter ? [initialFilter] : [])
@@ -119,37 +114,12 @@ export default function MapScreen() {
 
   return (
     <div className="min-h-[calc(100vh-3.5rem)] lg:min-h-screen flex flex-col" data-testid="map-screen">
-      {/* Tabs */}
+      {/* Header */}
       <div className="px-4 lg:px-10 pt-4 lg:pt-8">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
-          <div className="inline-flex rounded-full bg-white/[0.04] ring-1 ring-white/10 p-1 text-xs">
-            <button
-              onClick={() => setTab('quick')}
-              data-testid="map-tab-quick"
-              className={cn(
-                'px-3.5 py-1.5 rounded-full transition-colors',
-                tab === 'quick' ? 'bg-white text-navy-900 font-semibold' : 'text-ink-200 hover:text-white'
-              )}
-            >
-              {t('map.tabQuick')}
-            </button>
-            <button
-              onClick={() => setTab('pro')}
-              data-testid="map-tab-pro"
-              className={cn(
-                'px-3.5 py-1.5 rounded-full transition-colors',
-                tab === 'pro' ? 'bg-white text-navy-900 font-semibold' : 'text-ink-200 hover:text-white'
-              )}
-            >
-              {t('map.tabPro')}
-            </button>
-          </div>
-        </div>
+        <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
 
-        {tab === 'quick' && (
-          <div className="mt-3 -mx-4 lg:mx-0 overflow-x-auto no-scrollbar">
-            <div className="px-4 lg:px-0 flex gap-2 pb-1">
+        <div className="mt-3 -mx-4 lg:mx-0 overflow-x-auto no-scrollbar">
+          <div className="px-4 lg:px-0 flex gap-2 pb-1">
               <button
                 onClick={() => {
                   setActive(new Set());
@@ -184,26 +154,13 @@ export default function MapScreen() {
                   </button>
                 );
               })}
-            </div>
           </div>
-        )}
-
-        {tab === 'pro' && (
-          <div className="mt-3">
-            <span
-              data-testid="pro-map-badge"
-              className="inline-flex items-center gap-1.5 rounded-full bg-revs-500/12 ring-1 ring-revs-500/30 text-revs-200 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em]"
-            >
-              Powered by the Revolution × Volo activation map
-            </span>
-          </div>
-        )}
+        </div>
       </div>
 
       {/* Map body */}
       <div className="flex-1 px-4 lg:px-10 pt-3 pb-6 lg:pb-8">
-        {tab === 'quick' ? (
-          <div className="relative h-[calc(100vh-12rem)] lg:h-[calc(100vh-12rem)] rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-card">
+        <div className="relative h-[calc(100vh-12rem)] lg:h-[calc(100vh-12rem)] rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-card">
             <MapContainer
               center={[42.3601, -71.0589]}
               zoom={12}
@@ -243,30 +200,6 @@ export default function MapScreen() {
               ))}
             </div>
           </div>
-        ) : (
-          <div className="iframe-card rounded-2xl overflow-hidden ring-1 ring-white/10 shadow-card">
-            <iframe
-              src="https://bostonmapworldcup.netlify.app"
-              className="w-full h-[calc(100vh-13rem)] rounded-2xl border-0"
-              title="Boston Soccer Activation Map"
-              data-testid="pro-map-iframe"
-              loading="lazy"
-            />
-            <div className="px-4 py-3 flex items-center justify-between text-xs text-ink-300 border-t border-white/5">
-              <span className="inline-flex items-center gap-2">
-                <Compass size={13} /> Powered by the Revolution × Volo activation map
-              </span>
-              <a
-                href="https://bostonmapworldcup.netlify.app"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 hover:text-white"
-              >
-                Open in new tab <ExternalLink size={12} />
-              </a>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Venue bottom sheet */}
@@ -351,7 +284,7 @@ export default function MapScreen() {
                   data-testid="venue-sheet-directions"
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] ring-1 ring-white/10 px-3 py-2.5 text-sm font-medium transition-colors"
                 >
-                  <Compass size={15} /> Directions
+                  <MapPin size={15} /> {t('map.card.directions')}
                 </a>
                 <button
                   onClick={() => handleShare(selected)}
@@ -367,7 +300,7 @@ export default function MapScreen() {
       </AnimatePresence>
 
       {/* Mobile FAB to deselect filters */}
-      {tab === 'quick' && active.size > 0 && (
+      {active.size > 0 && (
         <button
           onClick={() => {
             setActive(new Set());

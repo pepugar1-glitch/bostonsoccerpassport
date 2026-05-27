@@ -80,8 +80,6 @@
       "watchPartiesSub": "12 lieux dans la ville",
       "cultureHubs": "Pôles Culturels",
       "cultureHubsSub": "East Boston · Cambridge · Allston",
-      "amateur": "Ligues Amateur",
-      "amateurSub": "Volo · NEOTHSL · pickup",
       "rewards": "Récompenses Revs",
       "rewardsSub": "Gagnez des points · débloquez des avantages"
     },
@@ -104,16 +102,12 @@
     }
   },
   "map": {
-    "tabPro": "Carte Pro",
-    "tabQuick": "Carte Rapide",
-    "proBadge": "Propulsé par la carte d'activation Revolution × Volo",
     "filters": {
       "all": "Tout",
       "fanFestival": "Fan Festival",
       "watchParty": "Watch Parties",
       "transport": "Transport",
       "cultureHub": "Pôles Culturels",
-      "amateur": "Ligues Amateur",
       "family": "Famille",
       "revsRewards": "Récompenses Revs"
     },

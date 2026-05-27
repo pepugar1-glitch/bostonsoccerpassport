@@ -106,32 +106,6 @@ export const VENUES: Venue[] = [
     neighborhood: 'Allston / Brighton',
   },
   {
-    id: 'volo-assembly',
-    name: 'Club Volo — Assembly Row',
-    category: 'amateur-league',
-    lat: 42.3925,
-    lng: -71.0775,
-    distance: '4.6 mi',
-    description:
-      'Adult coed leagues, pickup, and tournaments. Built-in social scene with sponsor-night meetups all summer.',
-    hours: 'Mon–Sun · 6:00 AM – 11:00 PM',
-    tags: ['Adult', 'Coed', 'League'],
-    neighborhood: 'Somerville',
-  },
-  {
-    id: 'neothsl',
-    name: 'NEOTHSL Masters — Greater Boston Fields',
-    category: 'amateur-league',
-    lat: 42.3736,
-    lng: -71.119,
-    distance: '5.2 mi',
-    description:
-      'Sunday 30+ Masters League. Long-running over-30 competition with weekend matchdays across multiple fields.',
-    hours: 'Sundays · 8:00 AM – 5:00 PM',
-    tags: ['Masters 30+', 'Sunday League', 'Competitive'],
-    neighborhood: 'Greater Boston',
-  },
-  {
     id: 'gillette',
     name: 'Gillette Stadium',
     category: 'revs-rewards',
@@ -164,7 +138,6 @@ export const CATEGORY_LABELS: Record<Venue['category'], string> = {
   'watch-party': 'Watch Parties',
   transport: 'Transport',
   'culture-hub': 'Culture Hubs',
-  'amateur-league': 'Amateur Leagues',
   family: 'Family',
   'revs-rewards': 'Revs Rewards',
 };
@@ -174,7 +147,6 @@ export const CATEGORY_COLORS: Record<Venue['category'], string> = {
   'watch-party': '#F59E0B',
   transport: '#10B981',
   'culture-hub': '#8B5CF6',
-  'amateur-league': '#3B82F6',
   family: '#EC4899',
   'revs-rewards': '#0A1A3D',
 };

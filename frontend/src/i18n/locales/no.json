@@ -80,8 +80,6 @@
       "watchPartiesSub": "12 steder i byen",
       "cultureHubs": "Kulturhuber",
       "cultureHubsSub": "East Boston · Cambridge · Allston",
-      "amateur": "Amatørligaer",
-      "amateurSub": "Volo · NEOTHSL · pickup",
       "rewards": "Revs Belønninger",
       "rewardsSub": "Tjen poeng · lås opp fordeler"
     },
@@ -104,16 +102,12 @@
     }
   },
   "map": {
-    "tabPro": "Pro-kart",
-    "tabQuick": "Hurtigkart",
-    "proBadge": "Drevet av Revolution × Volo-aktiveringskartet",
     "filters": {
       "all": "Alt",
       "fanFestival": "Fan Festival",
       "watchParty": "Watch Parties",
       "transport": "Transport",
       "cultureHub": "Kulturhuber",
-      "amateur": "Amatørligaer",
       "family": "Familie",
       "revsRewards": "Revs Belønninger"
     },

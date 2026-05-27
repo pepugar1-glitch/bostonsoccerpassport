@@ -80,8 +80,6 @@
       "watchPartiesSub": "12 موقعًا في المدينة",
       "cultureHubs": "مراكز الثقافة الكروية",
       "cultureHubsSub": "إيست بوسطن · كامبريدج · ألستون",
-      "amateur": "دوريات هواة",
-      "amateurSub": "Volo · NEOTHSL · مباريات حرّة",
       "rewards": "مكافآت Revs",
       "rewardsSub": "اكسب نقاطًا · افتح المزايا"
     },
@@ -104,16 +102,12 @@
     }
   },
   "map": {
-    "tabPro": "الخريطة الاحترافية",
-    "tabQuick": "الخريطة السريعة",
-    "proBadge": "مدعوم من خريطة تفعيل Revolution × Volo",
     "filters": {
       "all": "الكل",
       "fanFestival": "مهرجان المشجعين",
       "watchParty": "أماكن المشاهدة",
       "transport": "النقل",
       "cultureHub": "مراكز الثقافة",
-      "amateur": "دوريات هواة",
       "family": "عائلي",
       "revsRewards": "مكافآت Revs"
     },
