@@ -18,6 +18,7 @@ import { UPCOMING_MATCHES } from '@/data/content';
 import { ARCHETYPE_LABELS } from '@/data/content';
 import { buildTicketLink } from '@/lib/utm';
 import { track } from '@/lib/analytics';
+import RevsLogo from '@/components/RevsLogo';
 
 const QUICK_CARDS = [
   {
@@ -166,11 +167,14 @@ export default function Home() {
       {/* Continue with the Revs */}
       <section className="rounded-3xl bg-navy-900/55 ring-1 ring-white/5 shadow-card overflow-hidden">
         <div className="px-6 lg:px-10 py-6 lg:py-7 flex items-center justify-between gap-4 border-b border-white/5">
-          <div>
-            <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">After the summer</div>
-            <h3 className="text-lg lg:text-xl font-display font-bold tracking-tight mt-1">
-              Continue the summer with the Revs
-            </h3>
+          <div className="flex items-center gap-4">
+            <RevsLogo size={52} className="shrink-0 drop-shadow" />
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">After the summer</div>
+              <h3 className="text-lg lg:text-xl font-display font-bold tracking-tight mt-1">
+                Continue the summer with the Revs
+              </h3>
+            </div>
           </div>
           <Link
             to="/rewards"

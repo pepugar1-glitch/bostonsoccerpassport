@@ -12,6 +12,7 @@ import {
 import { cn } from '@/lib/cn';
 import { useAppStore } from '@/lib/store';
 import Footer from './Footer';
+import RevsLogo from './RevsLogo';
 
 const NAV = [
   { to: '/', label: 'Home', icon: Home },
@@ -32,7 +33,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-white/5 bg-navy-950/60 backdrop-blur-xl">
         <Link to="/" className="flex items-center gap-3 px-6 pt-7 pb-6">
-          <Crest />
+          <RevsLogo size={42} className="shrink-0 drop-shadow" />
           <div className="leading-tight">
             <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Boston</div>
             <div className="text-base font-display font-bold tracking-tight">Soccer Passport</div>
@@ -109,7 +110,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <header className="lg:hidden sticky top-0 z-40 bg-navy-950/80 backdrop-blur-xl border-b border-white/5">
           <div className="flex items-center justify-between px-4 py-3">
             <Link to="/" className="flex items-center gap-2.5" data-testid="topbar-logo">
-              <Crest small />
+              <RevsLogo size={32} className="shrink-0" />
               <div className="leading-tight">
                 <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Boston</div>
                 <div className="text-sm font-display font-bold tracking-tight">Soccer Passport</div>
