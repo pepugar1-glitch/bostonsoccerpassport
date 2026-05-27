@@ -335,5 +335,25 @@
     "confirm": "Bekreft",
     "save": "Lagre",
     "loading": "Laster…"
+  },
+  "photos": {
+    "promptTitle": "Legg til et bilde til check-in",
+    "promptBody": "Del et bilde fra {{venue}} — tjen bonuspoeng og vis stemningen til andre supportere.",
+    "bonusBadge": "bonuspoeng",
+    "takePhoto": "Ta et bilde",
+    "pickFromGallery": "Velg fra galleriet",
+    "retake": "Ta på nytt",
+    "captionPlaceholder": "Legg til en kort billedtekst (valgfritt)",
+    "save": "Lagre bilde (+{{points}})",
+    "skip": "Hopp over — behold kun check-in",
+    "addPhotoCta": "Legg til bilde (+50)",
+    "venueFeedTitle": "Supporterbilder · {{count}}",
+    "profileTitle": "Dine bilder",
+    "shown": "vist",
+    "emptyBody": "Sjekk inn på et sted og legg til et bilde for å tjene bonuspoeng. Bildene dine ligger på denne enheten.",
+    "errorNotImage": "Velg en bildefil.",
+    "errorTooLarge": "Bildet er litt stort — det kan bruke mye lagringsplass.",
+    "errorFailed": "Kunne ikke lese bildet. Prøv et annet.",
+    "errorStorageFull": "Lokal lagring er full. Slett noen bilder og prøv igjen."
   }
 }

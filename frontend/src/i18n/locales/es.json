@@ -335,5 +335,25 @@
     "confirm": "Confirmar",
     "save": "Guardar",
     "loading": "Cargando…"
+  },
+  "photos": {
+    "promptTitle": "Añade una foto a tu check-in",
+    "promptBody": "Comparte una foto desde {{venue}}: gana puntos extra y deja que otros fans vean cómo está el ambiente.",
+    "bonusBadge": "puntos extra",
+    "takePhoto": "Hacer una foto",
+    "pickFromGallery": "Elegir de la galería",
+    "retake": "Repetir",
+    "captionPlaceholder": "Añade un pie de foto corto (opcional)",
+    "save": "Guardar foto (+{{points}})",
+    "skip": "Saltar — solo el check-in",
+    "addPhotoCta": "Añadir foto (+50)",
+    "venueFeedTitle": "Fotos de fans · {{count}}",
+    "profileTitle": "Tus fotos",
+    "shown": "mostradas",
+    "emptyBody": "Haz check-in en un sitio y añade una foto para ganar puntos extra. Tus fotos se guardan en este dispositivo.",
+    "errorNotImage": "Selecciona un archivo de imagen.",
+    "errorTooLarge": "La foto es algo grande — puede ocupar bastante almacenamiento.",
+    "errorFailed": "No se pudo leer esa foto. Prueba con otra.",
+    "errorStorageFull": "Almacenamiento local lleno. Borra alguna foto e inténtalo de nuevo."
   }
 }

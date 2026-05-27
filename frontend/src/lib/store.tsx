@@ -18,7 +18,10 @@ import type {
   Profile,
   ScheduleItem,
   ScheduleStatus,
+  VenuePhoto,
 } from '@/types';
+
+export const PHOTO_BONUS_POINTS = 50;
 
 interface ToastMsg {
   id: string;
@@ -38,6 +41,12 @@ interface SignInPromptState {
   onContinue?: () => void;
 }
 
+interface PhotoPromptState {
+  open: boolean;
+  venueId: string;
+  venueName: string;
+}
+
 interface State {
   profile: Profile | null;
   schedule: ScheduleItem[];
@@ -49,6 +58,8 @@ interface State {
   auth: AuthUser | null;
   toasts: ToastMsg[];
   signInPrompt: SignInPromptState;
+  photos: VenuePhoto[];
+  photoPrompt: PhotoPromptState;
 }
 
 type Action =
@@ -66,10 +77,15 @@ type Action =
   | { type: 'SET_AUTH'; user: AuthUser | null }
   | { type: 'OPEN_SIGNIN_PROMPT'; prompt: { kind: SignInPromptKind; params: Record<string, string>; cta: string; onContinue?: () => void } }
   | { type: 'CLOSE_SIGNIN_PROMPT' }
+  | { type: 'OPEN_PHOTO_PROMPT'; venueId: string; venueName: string }
+  | { type: 'CLOSE_PHOTO_PROMPT' }
+  | { type: 'ADD_PHOTO'; photo: VenuePhoto }
+  | { type: 'REMOVE_PHOTO'; id: string }
   | { type: 'PUSH_TOAST'; toast: ToastMsg }
   | { type: 'DISMISS_TOAST'; id: string };
 
 const CLOSED_PROMPT: SignInPromptState = { open: false, kind: null, params: {}, cta: '' };
+const CLOSED_PHOTO_PROMPT: PhotoPromptState = { open: false, venueId: '', venueName: '' };
 
 const initial: State = {
   profile: null,
@@ -82,6 +98,8 @@ const initial: State = {
   auth: null,
   toasts: [],
   signInPrompt: CLOSED_PROMPT,
+  photos: [],
+  photoPrompt: CLOSED_PHOTO_PROMPT,
 };
 
 function initState(): State {
@@ -112,6 +130,8 @@ function initState(): State {
     auth: storage.getAuth(),
     toasts: [],
     signInPrompt: CLOSED_PROMPT,
+    photos: storage.getPhotos(),
+    photoPrompt: CLOSED_PHOTO_PROMPT,
   };
 }
 
@@ -165,6 +185,17 @@ function reducer(state: State, action: Action): State {
       return { ...state, signInPrompt: { ...action.prompt, open: true } };
     case 'CLOSE_SIGNIN_PROMPT':
       return { ...state, signInPrompt: CLOSED_PROMPT };
+    case 'OPEN_PHOTO_PROMPT':
+      return {
+        ...state,
+        photoPrompt: { open: true, venueId: action.venueId, venueName: action.venueName },
+      };
+    case 'CLOSE_PHOTO_PROMPT':
+      return { ...state, photoPrompt: CLOSED_PHOTO_PROMPT };
+    case 'ADD_PHOTO':
+      return { ...state, photos: [action.photo, ...state.photos].slice(0, 60) };
+    case 'REMOVE_PHOTO':
+      return { ...state, photos: state.photos.filter((p) => p.id !== action.id) };
     case 'PUSH_TOAST':
       return { ...state, toasts: [...state.toasts, action.toast] };
     case 'DISMISS_TOAST':
@@ -191,6 +222,10 @@ interface AppStoreContextValue {
   signOut: () => void;
   requireAuth: (opts: { kind: SignInPromptKind; params?: Record<string, string>; cta: string; action: () => void }) => void;
   closeSignInPrompt: () => void;
+  openPhotoPrompt: (venueId: string, venueName: string) => void;
+  closePhotoPrompt: () => void;
+  addPhoto: (input: { venueId: string; venueName: string; dataUrl: string; caption?: string }) => void;
+  removePhoto: (id: string) => void;
   toast: (t: Omit<ToastMsg, 'id'>) => void;
   dismissToast: (id: string) => void;
 }
@@ -221,6 +256,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     storage.setAuth(state.auth);
   }, [state.auth]);
+  useEffect(() => storage.setPhotos(state.photos), [state.photos]);
 
   const points = useMemo(
     () =>
@@ -340,6 +376,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         dispatch({ type: 'CHECK_IN', venueId });
         addPoints('check-in', 25, `Checked in at ${venueName}`, venueId);
         toast({ title: `Checked in at ${venueName}`, points: 25 });
+        dispatch({ type: 'OPEN_PHOTO_PROMPT', venueId, venueName });
       };
       if (!state.auth) {
         dispatch({
@@ -484,6 +521,40 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLOSE_SIGNIN_PROMPT' });
   }, []);
 
+  const openPhotoPrompt = useCallback((venueId: string, venueName: string) => {
+    dispatch({ type: 'OPEN_PHOTO_PROMPT', venueId, venueName });
+  }, []);
+
+  const closePhotoPrompt = useCallback(() => {
+    dispatch({ type: 'CLOSE_PHOTO_PROMPT' });
+  }, []);
+
+  const addPhoto = useCallback(
+    (input: { venueId: string; venueName: string; dataUrl: string; caption?: string }) => {
+      const photo: VenuePhoto = {
+        id: uid(),
+        venueId: input.venueId,
+        venueName: input.venueName,
+        dataUrl: input.dataUrl,
+        caption: input.caption,
+        createdAt: new Date().toISOString(),
+      };
+      dispatch({ type: 'ADD_PHOTO', photo });
+      addPoints('photo-upload', PHOTO_BONUS_POINTS, `Photo at ${input.venueName}`, input.venueId);
+      track('photo_uploaded', { venueId: input.venueId });
+      toast({ title: `Photo saved · ${input.venueName}`, points: PHOTO_BONUS_POINTS, variant: 'reward' });
+    },
+    [addPoints, toast]
+  );
+
+  const removePhoto = useCallback(
+    (id: string) => {
+      dispatch({ type: 'REMOVE_PHOTO', id });
+      toast({ title: 'Photo removed', variant: 'info' });
+    },
+    [toast]
+  );
+
   const value: AppStoreContextValue = {
     state,
     points,
@@ -501,6 +572,10 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
     signOut,
     requireAuth,
     closeSignInPrompt,
+    openPhotoPrompt,
+    closePhotoPrompt,
+    addPhoto,
+    removePhoto,
     toast,
     dismissToast,
   };

@@ -335,5 +335,25 @@
     "confirm": "Confirm",
     "save": "Save",
     "loading": "Loading…"
+  },
+  "photos": {
+    "promptTitle": "Add a photo to your check-in",
+    "promptBody": "Share a snap from {{venue}} — earn bonus points and let other fans see what's going on.",
+    "bonusBadge": "bonus points",
+    "takePhoto": "Take a photo",
+    "pickFromGallery": "Pick from gallery",
+    "retake": "Retake",
+    "captionPlaceholder": "Add a short caption (optional)",
+    "save": "Save photo (+{{points}})",
+    "skip": "Skip — keep my check-in only",
+    "addPhotoCta": "Add photo (+50)",
+    "venueFeedTitle": "Fan photos · {{count}}",
+    "profileTitle": "Your photos",
+    "shown": "shown",
+    "emptyBody": "Check in at a venue and add a photo to earn bonus points. Your photos live on this device.",
+    "errorNotImage": "Please pick an image file.",
+    "errorTooLarge": "Photo is a bit large — it may use significant storage.",
+    "errorFailed": "Could not read that photo. Try another one.",
+    "errorStorageFull": "Local storage is full. Delete a few photos and try again."
   }
 }

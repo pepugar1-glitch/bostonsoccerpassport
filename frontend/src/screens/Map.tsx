@@ -18,6 +18,7 @@ import {
   Search,
   LocateFixed,
   Loader2,
+  Camera,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -98,8 +99,13 @@ export default function MapScreen() {
   const [userPos, setUserPos] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
 
-  const { addToSchedule, checkInVenue, toast } = useAppStore();
+  const { state, addToSchedule, checkInVenue, openPhotoPrompt, toast } = useAppStore();
   const { t } = useTranslation();
+  const selectedPhotos = useMemo(
+    () => (selected ? state.photos.filter((p) => p.venueId === selected.id) : []),
+    [selected, state.photos]
+  );
+  const selectedCheckedIn = selected ? Boolean(state.checkIns[selected.id]) : false;
 
   const visible = useMemo(() => {
     let list = VENUES;
@@ -557,6 +563,31 @@ export default function MapScreen() {
                 </div>
               </div>
 
+              {selectedPhotos.length > 0 && (
+                <div className="px-6 mt-4">
+                  <div className="flex items-center justify-between">
+                    <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">
+                      {t('photos.venueFeedTitle', { count: selectedPhotos.length })}
+                    </div>
+                  </div>
+                  <div className="mt-2 -mx-1 px-1 flex gap-2 overflow-x-auto no-scrollbar pb-1">
+                    {selectedPhotos.slice(0, 8).map((p) => (
+                      <div
+                        key={p.id}
+                        className="shrink-0 h-20 w-20 rounded-xl overflow-hidden ring-1 ring-white/10 bg-black/30"
+                        title={p.caption || p.venueName}
+                      >
+                        <img
+                          src={p.dataUrl}
+                          alt={p.caption || p.venueName}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <div className="px-6 mt-4 grid grid-cols-2 gap-2 pb-[max(env(safe-area-inset-bottom),1.25rem)]">
                 <button
                   onClick={() => handleAddToSchedule(selected)}
@@ -565,13 +596,23 @@ export default function MapScreen() {
                 >
                   <CalendarPlus size={15} /> Add to Schedule
                 </button>
-                <button
-                  onClick={() => checkInVenue(selected.id, selected.name)}
-                  data-testid="venue-sheet-checkin"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-revs-500 hover:bg-revs-400 active:bg-revs-600 text-white px-3 py-2.5 text-sm font-semibold transition-colors"
-                >
-                  <CheckCircle2 size={15} /> Check In (+25)
-                </button>
+                {selectedCheckedIn ? (
+                  <button
+                    onClick={() => openPhotoPrompt(selected.id, selected.name)}
+                    data-testid="venue-sheet-add-photo"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-revs-500 hover:bg-revs-400 active:bg-revs-600 text-white px-3 py-2.5 text-sm font-semibold transition-colors"
+                  >
+                    <Camera size={15} /> {t('photos.addPhotoCta')}
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => checkInVenue(selected.id, selected.name)}
+                    data-testid="venue-sheet-checkin"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-revs-500 hover:bg-revs-400 active:bg-revs-600 text-white px-3 py-2.5 text-sm font-semibold transition-colors"
+                  >
+                    <CheckCircle2 size={15} /> {t('map.card.checkIn')} (+25)
+                  </button>
+                )}
                 <a
                   href={`https://www.google.com/maps/dir/?api=1&destination=${selected.lat},${selected.lng}`}
                   target="_blank"

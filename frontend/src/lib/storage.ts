@@ -4,6 +4,7 @@ import type {
   ClaimedReward,
   Profile,
   ScheduleItem,
+  VenuePhoto,
 } from '@/types';
 
 const KEYS = {
@@ -20,6 +21,7 @@ const KEYS = {
   signinBonus: 'bsp.signinBonus.v1',
   welcomeSeen: 'bsp.welcomeSeen.v1',
   tourSeen: 'bsp.tourSeen.v1',
+  photos: 'bsp.photos.v1',
 } as const;
 
 function read<T>(key: string, fallback: T): T {
@@ -83,4 +85,7 @@ export const storage = {
 
   getTourSeen: (): boolean => read<boolean>(KEYS.tourSeen, false),
   setTourSeen: (v: boolean) => write(KEYS.tourSeen, v),
+
+  getPhotos: (): VenuePhoto[] => read<VenuePhoto[]>(KEYS.photos, []),
+  setPhotos: (v: VenuePhoto[]) => write(KEYS.photos, v),
 };

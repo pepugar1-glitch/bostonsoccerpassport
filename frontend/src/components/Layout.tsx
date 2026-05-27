@@ -17,6 +17,7 @@ import { useAppStore } from '@/lib/store';
 import Footer from './Footer';
 import RevsLogo from './RevsLogo';
 import SignInPrompt from './SignInPrompt';
+import PhotoCaptureModal from './PhotoCaptureModal';
 import LanguageSelector from './LanguageSelector';
 import OnboardingTour from './OnboardingTour';
 
@@ -39,6 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen text-ink-50">
       <SignInPrompt />
+      <PhotoCaptureModal />
       <OnboardingTour />
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-white/5 bg-navy-950/60 backdrop-blur-xl">

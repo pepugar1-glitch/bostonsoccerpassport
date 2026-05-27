@@ -14,6 +14,8 @@ import {
   Heart,
   LogIn,
   LogOut,
+  Camera,
+  Trash2,
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { ARCHETYPE_LABELS, ARCHETYPE_DESCRIPTIONS, ARCHETYPE_NEXT_ACTION, REWARDS } from '@/data/content';
@@ -40,7 +42,7 @@ function randomCode() {
 }
 
 export default function ProfileScreen() {
-  const { state, setProfile, points, toast, addPoints, signOut } = useAppStore();
+  const { state, setProfile, points, toast, addPoints, signOut, removePhoto } = useAppStore();
   const auth = state.auth;
   const { t } = useTranslation();
   const [form, setForm] = useState<Profile>(EMPTY);
@@ -296,6 +298,7 @@ export default function ProfileScreen() {
                 triviaDone: Boolean(state.triviaResult),
                 rewardsClaimed: state.claimedRewards.length,
                 signedIn: Boolean(state.auth),
+                photosUploaded: state.photos.length,
               };
               const unlockedCount = ACHIEVEMENTS.filter((a) => a.unlockedBy(ctx)).length;
               return (
@@ -342,6 +345,58 @@ export default function ProfileScreen() {
                 </>
               );
             })()}
+          </div>
+
+          <div
+            data-testid="profile-photos"
+            className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card"
+          >
+            <div className="flex items-center justify-between">
+              <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">
+                {t('photos.profileTitle')}
+              </div>
+              <div className="text-[10px] text-ink-400">
+                {state.photos.length} · {Math.min(state.photos.length, 30)} {t('photos.shown')}
+              </div>
+            </div>
+            {state.photos.length === 0 ? (
+              <div className="mt-3 rounded-xl bg-white/[0.03] ring-1 ring-white/5 px-3 py-4 text-center">
+                <Camera size={18} className="mx-auto text-ink-400" />
+                <p className="mt-2 text-xs text-ink-300 leading-relaxed">
+                  {t('photos.emptyBody')}
+                </p>
+              </div>
+            ) : (
+              <div className="mt-3 grid grid-cols-3 gap-2">
+                {state.photos.slice(0, 30).map((p) => (
+                  <div
+                    key={p.id}
+                    className="group relative aspect-square rounded-xl overflow-hidden ring-1 ring-white/10 bg-black/30"
+                    title={p.caption || p.venueName}
+                  >
+                    <img
+                      src={p.dataUrl}
+                      alt={p.caption || p.venueName}
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-1.5 pt-3 pb-1">
+                      <div className="text-[9px] font-semibold leading-tight truncate text-white/90">
+                        {p.venueName}
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removePhoto(p.id)}
+                      data-testid={`profile-photo-delete-${p.id}`}
+                      aria-label="Delete photo"
+                      className="absolute top-1 right-1 grid place-items-center h-6 w-6 rounded-full bg-black/60 ring-1 ring-white/20 backdrop-blur text-white opacity-0 group-hover:opacity-100 hover:bg-revs-500 transition-opacity"
+                    >
+                      <Trash2 size={11} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 p-5 shadow-card">

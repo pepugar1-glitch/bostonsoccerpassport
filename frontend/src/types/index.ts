@@ -64,11 +64,21 @@ export type ActivityType =
   | 'referral'
   | 'quiz-complete'
   | 'share-photo'
+  | 'photo-upload'
   | 'watch-party'
   | 'revs-match'
   | 'reward-claim'
   | 'first-visit'
   | 'signin-bonus';
+
+export interface VenuePhoto {
+  id: string;
+  venueId: string;
+  venueName: string;
+  dataUrl: string;
+  caption?: string;
+  createdAt: string;
+}
 
 export type AuthProvider = 'google' | 'apple';
 

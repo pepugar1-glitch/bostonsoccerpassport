@@ -7,6 +7,7 @@ import {
   Globe2,
   Share2,
   Crown,
+  Camera,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -24,6 +25,7 @@ export interface Achievement {
     triviaDone: boolean;
     rewardsClaimed: number;
     signedIn: boolean;
+    photosUploaded: number;
   }) => boolean;
 }
 
@@ -76,6 +78,13 @@ export const ACHIEVEMENTS: Achievement[] = [
     title: 'Reward unlocked',
     body: 'Claimed your first reward from the catalog.',
     unlockedBy: (c) => c.rewardsClaimed >= 1,
+  },
+  {
+    id: 'documentalist',
+    icon: Camera,
+    title: 'Documentarian',
+    body: 'Uploaded 3 photos from Boston soccer venues.',
+    unlockedBy: (c) => c.photosUploaded >= 3,
   },
   {
     id: 'supporter-track',
