@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
+import { useTranslation } from 'react-i18next';
 import {
   Download,
   Copy,
@@ -40,6 +41,7 @@ const CAPTIONS: Record<Template, string> = {
 };
 
 export default function Share() {
+  const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [template, setTemplate] = useState<Template>('summer');
   const [palette, setPalette] = useState<typeof PALETTES[number]>(PALETTES[2]);
@@ -128,11 +130,9 @@ export default function Share() {
   return (
     <div className="space-y-6 pb-2" data-testid="share-screen">
       <header>
-        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Photo Card Studio</div>
-        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Share your day</h1>
-        <p className="mt-1 text-sm text-ink-300">
-          Build a 1080×1080 photo card. No FIFA marks, no trophies. Boston soccer, your way.
-        </p>
+        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('share.preTitle')}</div>
+        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('share.title')}</h1>
+        <p className="mt-1 text-sm text-ink-300">{t('share.subtitle')}</p>
       </header>
 
       <div className="grid lg:grid-cols-[1fr_22rem] gap-5">

@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import confetti from 'canvas-confetti';
+import { useTranslation } from 'react-i18next';
 import {
   Award,
   Sparkles,
@@ -44,6 +45,7 @@ function categoryIcon(c: string) {
 
 export default function Rewards() {
   const { state, points, claimReward, toast } = useAppStore();
+  const { t } = useTranslation();
   const claimed = new Set(state.claimedRewards.map((c) => c.rewardId));
 
   const nextTier = useMemo(() => NEXT_TIERS.find((t) => t > points) ?? 1000, [points]);
@@ -75,11 +77,9 @@ export default function Rewards() {
   return (
     <div className="space-y-6 pb-2" data-testid="rewards-screen">
       <header>
-        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Passport Points</div>
-        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Rewards</h1>
-        <p className="mt-1 text-sm text-ink-300">
-          Earn points by exploring the city. Unlock perks at Revs partner venues and at Gillette.
-        </p>
+        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('rewards.preTitle')}</div>
+        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('rewards.title')}</h1>
+        <p className="mt-1 text-sm text-ink-300">{t('rewards.subtitle')}</p>
       </header>
 
       {/* Balance & progress */}

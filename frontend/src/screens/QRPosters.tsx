@@ -1,4 +1,5 @@
 import { useRef, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';
@@ -29,6 +30,7 @@ export default function QRPosters() {
 
 function QRPostersInner() {
   const { toast, state } = useAppStore();
+  const { t } = useTranslation();
   const archetype = state.archetypeResult?.archetype;
   const origin = typeof window !== 'undefined' ? window.location.origin : 'https://bostonsoccerpassport.netlify.app';
 
@@ -37,16 +39,13 @@ function QRPostersInner() {
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <Link to="/admin" className="inline-flex items-center gap-1 text-xs text-ink-300 hover:text-white">
-            <ChevronLeft size={12} /> Admin
+            <ChevronLeft size={12} className="rtl:rotate-180" /> {t('qrPosters.back')}
           </Link>
           <div className="mt-2 text-[11px] uppercase tracking-[0.18em] text-ink-400 inline-flex items-center gap-2">
-            <ShieldCheck size={12} className="text-revs-300" /> Admin · Print studio
+            <ShieldCheck size={12} className="text-revs-300" /> {t('qrPosters.preTitle')}
           </div>
-          <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">QR Poster Studio</h1>
-          <p className="mt-1 text-sm text-ink-300 max-w-2xl">
-            One printable A4 poster per venue. The QR encodes the app URL with a per-venue UTM so every
-            scan is attributable in the funnel. Download PNG or PDF for print, or batch-download all.
-          </p>
+          <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('qrPosters.title')}</h1>
+          <p className="mt-1 text-sm text-ink-300 max-w-2xl">{t('qrPosters.subtitle')}</p>
         </div>
         <BatchActions origin={origin} archetype={archetype} />
       </header>

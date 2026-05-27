@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ResponsiveContainer,
   BarChart,
@@ -56,6 +57,7 @@ export default function AdminScreen() {
 }
 
 function Dashboard() {
+  const { t } = useTranslation();
   const funnelWithRate = useMemo(() => {
     const out: { step: string; value: number; rate: number }[] = [];
     FUNNEL.forEach((s, i) => {
@@ -68,12 +70,10 @@ function Dashboard() {
     <div className="space-y-6 pb-2" data-testid="admin-dashboard">
       <header>
         <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400 inline-flex items-center gap-2">
-          <ShieldCheck size={12} className="text-revs-300" /> Admin · Mock analytics
+          <ShieldCheck size={12} className="text-revs-300" /> {t('admin.preTitle')}
         </div>
-        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Boston Soccer Passport — BI</h1>
-        <p className="mt-1 text-sm text-ink-300">
-          Mock data — wire to Mixpanel · PostHog · Firebase Analytics. Refresh logic pending integration.
-        </p>
+        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('admin.title')}</h1>
+        <p className="mt-1 text-sm text-ink-300">{t('admin.subtitle')}</p>
       </header>
 
       {/* Action tiles */}

@@ -20,6 +20,7 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { VENUES, CATEGORY_LABELS, CATEGORY_COLORS } from '@/data/venues';
 import { EVENTS } from '@/data/content';
 import type { Venue, VenueCategory } from '@/types';
@@ -67,6 +68,7 @@ export default function MapScreen() {
   const [selected, setSelected] = useState<Venue | null>(null);
 
   const { addToSchedule, checkInVenue, toast } = useAppStore();
+  const { t } = useTranslation();
 
   const visible = useMemo(() => {
     if (active.size === 0) return VENUES;
@@ -120,7 +122,7 @@ export default function MapScreen() {
       {/* Tabs */}
       <div className="px-4 lg:px-10 pt-4 lg:pt-8">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">Map</h1>
+          <h1 className="text-xl lg:text-2xl font-display font-bold tracking-tight">{t('nav.map')}</h1>
           <div className="inline-flex rounded-full bg-white/[0.04] ring-1 ring-white/10 p-1 text-xs">
             <button
               onClick={() => setTab('quick')}
@@ -130,7 +132,7 @@ export default function MapScreen() {
                 tab === 'quick' ? 'bg-white text-navy-900 font-semibold' : 'text-ink-200 hover:text-white'
               )}
             >
-              Quick Map
+              {t('map.tabQuick')}
             </button>
             <button
               onClick={() => setTab('pro')}
@@ -140,7 +142,7 @@ export default function MapScreen() {
                 tab === 'pro' ? 'bg-white text-navy-900 font-semibold' : 'text-ink-200 hover:text-white'
               )}
             >
-              Pro Map
+              {t('map.tabPro')}
             </button>
           </div>
         </div>

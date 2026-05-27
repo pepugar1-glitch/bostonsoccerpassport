@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   User as UserIcon,
   Globe2,
@@ -40,6 +41,7 @@ function randomCode() {
 export default function ProfileScreen() {
   const { state, setProfile, points, toast, addPoints, signOut } = useAppStore();
   const auth = state.auth;
+  const { t } = useTranslation();
   const [form, setForm] = useState<Profile>(EMPTY);
   const [copied, setCopied] = useState(false);
   const archetype = state.archetypeResult?.archetype;
@@ -82,14 +84,11 @@ export default function ProfileScreen() {
   return (
     <div className="space-y-6 pb-2" data-testid="profile-screen">
       <header>
-        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Profile</div>
+        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('profile.preTitle')}</div>
         <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">
-          {form.name ? `Hi, ${form.name.split(' ')[0]}` : 'Your soccer summer'}
+          {form.name ? t('profile.hi', { name: form.name.split(' ')[0] }) : t('profile.title')}
         </h1>
-        <p className="mt-1 text-sm text-ink-300">
-          Personalize your passport. Your information helps personalize your soccer experience. You control
-          what you share.
-        </p>
+        <p className="mt-1 text-sm text-ink-300">{t('profile.intro')}</p>
       </header>
 
       <div className="grid lg:grid-cols-[1fr_22rem] gap-5">

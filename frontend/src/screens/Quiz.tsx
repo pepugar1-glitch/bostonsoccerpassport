@@ -1,19 +1,17 @@
 import { Link } from 'react-router-dom';
 import { Sparkles, Trophy, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAppStore } from '@/lib/store';
-import { ARCHETYPE_LABELS } from '@/data/content';
 import { format, parseISO } from 'date-fns';
 
 export default function QuizHub() {
   const { state } = useAppStore();
+  const { t } = useTranslation();
   return (
     <div className="space-y-6 pb-2" data-testid="quiz-hub">
       <header>
-        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">Quizzes</div>
-        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">Find your soccer story</h1>
-        <p className="mt-1 text-sm text-ink-300">
-          Two quick games. Earn points either way. The archetype shapes your recommendations.
-        </p>
+        <div className="text-[11px] uppercase tracking-[0.18em] text-ink-400">{t('quiz.hubTitle')}</div>
+        <h1 className="mt-1 text-2xl lg:text-3xl font-display font-bold tracking-tight">{t('quiz.hubSubtitle')}</h1>
       </header>
 
       <div className="grid lg:grid-cols-2 gap-4">
@@ -28,16 +26,16 @@ export default function QuizHub() {
           />
           <div className="relative">
             <Sparkles size={20} className="text-revs-300" />
-            <h2 className="mt-3 text-xl font-display font-bold tracking-tight">What kind of soccer fan are you?</h2>
-            <p className="mt-1 text-sm text-ink-300">7 questions · 6 archetypes · personalized next step.</p>
+            <h2 className="mt-3 text-xl font-display font-bold tracking-tight">{t('quiz.archetypeCard.title')}</h2>
+            <p className="mt-1 text-sm text-ink-300">{t('quiz.archetypeCard.body')}</p>
             <div className="mt-5 flex items-center justify-between">
               <span className="text-xs text-ink-400">
                 {state.archetypeResult
-                  ? `Your result: ${ARCHETYPE_LABELS[state.archetypeResult.archetype]} · ${format(parseISO(state.archetypeResult.at), 'MMM d')}`
-                  : '+30 points on completion'}
+                  ? `${t('quiz.yourArchetype')}: ${t(`archetype.${state.archetypeResult.archetype}`)} · ${format(parseISO(state.archetypeResult.at), 'MMM d')}`
+                  : ''}
               </span>
               <span className="inline-flex items-center gap-1 text-sm font-semibold text-white">
-                {state.archetypeResult ? 'Retake' : 'Start'} <ArrowRight size={14} />
+                {state.archetypeResult ? t('quiz.retake') : t('quiz.archetypeCard.cta')} <ArrowRight size={14} className="rtl:rotate-180" />
               </span>
             </div>
           </div>
@@ -54,16 +52,16 @@ export default function QuizHub() {
           />
           <div className="relative">
             <Trophy size={20} className="text-amber-300" />
-            <h2 className="mt-3 text-xl font-display font-bold tracking-tight">Boston & Revs trivia</h2>
-            <p className="mt-1 text-sm text-ink-300">10 questions · MLS basics, supporter culture, Revs history.</p>
+            <h2 className="mt-3 text-xl font-display font-bold tracking-tight">{t('quiz.triviaCard.title')}</h2>
+            <p className="mt-1 text-sm text-ink-300">{t('quiz.triviaCard.body')}</p>
             <div className="mt-5 flex items-center justify-between">
               <span className="text-xs text-ink-400">
                 {state.triviaResult
-                  ? `Last score: ${state.triviaResult.score}/${state.triviaResult.total}`
-                  : '+30 points on completion'}
+                  ? t('quiz.correctOf', { correct: state.triviaResult.score, total: state.triviaResult.total })
+                  : ''}
               </span>
               <span className="inline-flex items-center gap-1 text-sm font-semibold text-white">
-                {state.triviaResult ? 'Play again' : 'Start'} <ArrowRight size={14} />
+                {state.triviaResult ? t('quiz.retake') : t('quiz.triviaCard.cta')} <ArrowRight size={14} className="rtl:rotate-180" />
               </span>
             </div>
           </div>
