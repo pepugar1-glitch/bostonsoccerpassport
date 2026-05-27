@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #06122E;
+  color: #F7F8FA;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'ss01', 'cv11';
+}
+
+/* App shell background — subtle navy gradient */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1100px 600px at -10% -10%, rgba(31, 55, 102, 0.55), transparent 60%),
+    radial-gradient(900px 600px at 110% 0%, rgba(200, 16, 46, 0.18), transparent 55%),
+    linear-gradient(180deg, #06122E 0%, #0A1A3D 50%, #06122E 100%);
+}
+
+/* Hide scrollbars on small horizontal scroll rows */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Soft text gradient utility (used sparingly) */
+.text-soft {
+  color: rgba(247, 248, 250, 0.78);
+}
+
+/* Leaflet container */
+.leaflet-container {
+  background: #0A1A3D;
+  font-family: inherit;
+  border-radius: 1.25rem;
+}
+.leaflet-popup-content-wrapper {
+  background: #0F2042;
+  color: #F7F8FA;
+  border-radius: 0.75rem;
+}
+.leaflet-popup-tip {
+  background: #0F2042;
+}
+.leaflet-control-attribution {
+  background: rgba(10, 26, 61, 0.6) !important;
+  color: #B8BECC !important;
+  backdrop-filter: blur(8px);
+}
+.leaflet-control-attribution a {
+  color: #DCDFE7 !important;
+}
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  background-color: #1F3766 !important;
+  color: #F7F8FA !important;
+  border-bottom-color: #324B7E !important;
+}
+
+/* Custom marker bubble */
+.venue-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 6px 12px -4px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Toast container */
+.toast-stack {
+  position: fixed;
+  bottom: 6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 80;
+  pointer-events: none;
+  width: min(92vw, 28rem);
+}
+@media (min-width: 1024px) {
+  .toast-stack {
+    bottom: 1.5rem;
+  }
+}
+
+/* Range input for sticker controls */
+input[type='range'] {
+  accent-color: #C8102E;
+}
+
+/* Iframe full-bleed */
+.iframe-card {
+  background: #0F2042;
+}

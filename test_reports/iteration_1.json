@@ -1,0 +1,28 @@
+{
+  "summary": "Frontend-only review of Boston Soccer Passport (Vite + React PWA at https://boston-rev-passport.preview.emergentagent.com). Tested 11 critical flows on mobile viewport (390x844) + desktop (1440x900). 10/11 PASS. Welcome bonus +25 seeds correctly on first visit and shows in sidebar/topbar/home stat cards. All footer disclaimers present on Home/Schedule/Rewards/Share/Profile (omitted on /map as designed). Map shows 12 markers; Family filter -> 0 markers (matches spec note), Fan Festival -> 1 marker. Venue bottom sheet exposes the 4 required buttons (add-schedule, checkin, directions, share); check-in adds +25 points. Schedule date pills work, event-add gives +10 points. Rewards catalog renders 7 items, claim disabled when insufficient. Archetype quiz (7 Qs) reaches result page with archetype label, description, next-action CTA, and awards +30 points (25 -> 55). Admin gate: wrong passcode shows error, 'revs2026' unlocks dashboard. localStorage persistence verified across reloads. Desktop sidebar exposes all 7 nav testIDs. SINGLE FAILURE: /manifest.webmanifest is not served as a JSON file — Vite dev SPA falls back to index.html (content-type text/html), breaking the PWA manifest spec (name + theme_color #0A1A3D).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "PWA manifest", "issue": "/manifest.webmanifest endpoint returns the HTML SPA fallback (status 200, content-type text/html) instead of a JSON manifest. No file exists at /app/frontend/public/manifest.webmanifest. Spec requires name 'Boston Soccer Passport' and theme_color #0A1A3D. Browsers will fail manifest parse and PWA installability check.", "testID": "n/a", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/test_reports/iteration_1.json"],
+  "action_items": [
+    "Add /app/frontend/public/manifest.webmanifest as static JSON with at minimum: {\"name\":\"Boston Soccer Passport\",\"short_name\":\"Soccer Passport\",\"theme_color\":\"#0A1A3D\",\"background_color\":\"#0A1A3D\",\"display\":\"standalone\",\"start_url\":\"/\",\"icons\":[...]}. Vite will then serve it from the public/ root with the correct application/manifest+json content-type.",
+    "Optional: silence the React Router v6 future-flag console warnings (v7_startTransition, v7_relativeSplatPath) by opting in or by passing future={{...}} to BrowserRouter — non-blocking."
+  ],
+  "critical_code_review_comments": [
+    "store.tsx points calc has a no-op loop over claimedRewards (sum + 0). Harmless but dead code — claim cost is already a negative activity delta, so the second reduce can be removed.",
+    "storage.setAdminUnlock(null) calls window.localStorage.removeItem directly without the SSR guard — fine in this app (client-only) but inconsistent with the rest of the helpers."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "91% (10/11 critical flows)"},
+  "seed_data_creation": "None. Used localStorage.clear() before each playwright run to validate the welcome-bonus first-visit seed (+25).",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All major user flows verified end-to-end via Playwright at the public URL on mobile viewport: Home/welcome bonus, Map quick tab + filter chips + venue sheet check-in +25, Schedule date pills + event add +10, Rewards catalog (7 items) with claim/lock states, Share screen testIDs present, Profile form inputs, Archetype quiz full 7-question completion -> result page + 30 points, Admin gate revs2026 unlock + wrong-passcode error, localStorage persistence across reloads, desktop sidebar nav. Did NOT exhaustively test: trivia quiz scoring screen, share PNG download/clipboard, profile referral +50 copy, reminder toggles requesting Notification permission (browser-dependent). Pro Map tab is a third-party iframe (bostonmapworldcup.netlify.app) — expected per agent note. Only blocking issue is the missing static manifest.webmanifest file; once added, re-curl the URL to confirm content-type application/manifest+json and JSON body containing the required name and theme_color.",
+  "rca_of_issue": "RCA for /manifest.webmanifest 404-as-html: Vite's dev/preview server serves files from /app/frontend/public/ at the root. /app/frontend/public/ currently contains only favicon.svg (verified via `ls -la`). The index.html references <link rel=\"manifest\" href=\"/manifest.webmanifest\"> but no such file exists, so the SPA history-fallback returns index.html instead. Mitigation: create /app/frontend/public/manifest.webmanifest with the required JSON. No code changes elsewhere are needed."
+}
