@@ -221,6 +221,9 @@ export default function MapScreen() {
                         lineCap: 'round',
                         lineJoin: 'round',
                       }}
+                      eventHandlers={{
+                        click: () => toast({ title: line.name, variant: 'info' }),
+                      }}
                     >
                       <Tooltip sticky direction="top" opacity={0.95}>
                         {line.name}
@@ -232,22 +235,33 @@ export default function MapScreen() {
                 MBTA_STATIONS.map((s) => {
                   const primaryLineColor =
                     MBTA_LINES.find((l) => l.id === s.lines[0])?.color || '#FFFFFF';
+                  const lineNames = s.lines
+                    .map((id) => MBTA_LINES.find((l) => l.id === id)?.name.replace(' Line', '') || id)
+                    .join(' + ');
                   return (
                     <CircleMarker
                       key={`station-${s.name}-${s.lat}-${s.lng}`}
                       center={[s.lat, s.lng]}
-                      radius={s.lines.length > 1 ? 4 : 3}
+                      radius={s.lines.length > 1 ? 5 : 4}
                       pathOptions={{
                         color: '#FFFFFF',
-                        weight: 1,
+                        weight: 1.5,
                         fillColor: primaryLineColor,
                         fillOpacity: 1,
+                      }}
+                      eventHandlers={{
+                        click: () =>
+                          toast({
+                            title: `${s.name} station`,
+                            description: `${lineNames} Line${s.lines.length > 1 ? 's' : ''}`,
+                            variant: 'info',
+                          }),
                       }}
                     >
                       <Tooltip direction="top" offset={[0, -2]} opacity={0.95}>
                         {s.name}
                         {s.lines.length > 1 && (
-                          <span className="text-[10px] opacity-80"> · {s.lines.join(' + ')}</span>
+                          <span className="text-[10px] opacity-80"> · {lineNames}</span>
                         )}
                       </Tooltip>
                     </CircleMarker>
@@ -260,14 +274,25 @@ export default function MapScreen() {
                     positions={route.path}
                     pathOptions={{
                       color: route.color,
-                      weight: 3,
-                      opacity: 0.85,
+                      weight: 4,
+                      opacity: 0.9,
                       dashArray: route.mode === 'bus' ? '8 6' : '0',
                       lineCap: 'round',
                     }}
+                    eventHandlers={{
+                      click: () =>
+                        toast({
+                          title: route.name,
+                          description: route.description,
+                          variant: 'info',
+                        }),
+                    }}
                   >
                     <Tooltip sticky direction="top" opacity={0.95}>
-                      {route.name}
+                      <div className="font-semibold">{route.name}</div>
+                      <div className="text-[10px] opacity-80 max-w-[220px] whitespace-normal">
+                        {route.description}
+                      </div>
                     </Tooltip>
                   </Polyline>
                 ))}
@@ -343,7 +368,7 @@ export default function MapScreen() {
           <>
             <motion.div
               key="backdrop"
-              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+              className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -352,7 +377,7 @@ export default function MapScreen() {
             <motion.div
               key="sheet"
               data-testid="venue-sheet"
-              className="fixed inset-x-0 bottom-0 z-[60] rounded-t-3xl bg-navy-900 ring-1 ring-white/10 shadow-card max-w-2xl mx-auto"
+              className="fixed inset-x-0 bottom-0 z-[1010] rounded-t-3xl bg-navy-900 ring-1 ring-white/10 shadow-card max-w-2xl mx-auto"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
