@@ -180,30 +180,28 @@ export default function Schedule() {
             Next week <ChevronRight size={14} />
           </button>
         </div>
-        <div className="overflow-x-auto no-scrollbar -mx-1 px-1">
-          <div className="flex gap-2">
-            {dateOptions.map((d) => {
-              const isActive = isSameDay(d, activeDate);
-              const hasEvents = EVENTS.some((e) => isSameDay(parseISO(e.date), d));
-              return (
-                <button
-                  key={d.toISOString()}
-                  data-testid={`date-pill-${format(d, 'yyyy-MM-dd')}`}
-                  onClick={() => setActiveDate(d)}
-                  className={cn(
-                    'shrink-0 w-14 rounded-xl px-2 py-2 text-center transition-all',
-                    isActive
-                      ? 'bg-revs-500 ring-1 ring-revs-400 text-white shadow-glow'
-                      : 'bg-white/[0.04] ring-1 ring-white/5 text-ink-200 hover:bg-white/[0.08]'
-                  )}
-                >
-                  <div className="text-[10px] uppercase tracking-[0.18em] opacity-80">{format(d, 'EEE')}</div>
-                  <div className="text-lg font-display font-bold leading-none mt-1">{format(d, 'd')}</div>
-                  <div className={cn('h-1 mt-1.5 mx-auto rounded-full', hasEvents ? 'w-4 bg-revs-300' : 'w-0')} />
-                </button>
-              );
-            })}
-          </div>
+        <div className="grid grid-cols-7 gap-2">
+          {dateOptions.map((d) => {
+            const isActive = isSameDay(d, activeDate);
+            const hasEvents = EVENTS.some((e) => isSameDay(parseISO(e.date), d));
+            return (
+              <button
+                key={d.toISOString()}
+                data-testid={`date-pill-${format(d, 'yyyy-MM-dd')}`}
+                onClick={() => setActiveDate(d)}
+                className={cn(
+                  'rounded-xl px-2 py-3 text-center transition-all',
+                  isActive
+                    ? 'bg-revs-500 ring-1 ring-revs-400 text-white shadow-glow'
+                    : 'bg-white/[0.04] ring-1 ring-white/5 text-ink-200 hover:bg-white/[0.08]'
+                )}
+              >
+                <div className="text-[10px] uppercase tracking-[0.18em] opacity-80">{format(d, 'EEE')}</div>
+                <div className="text-xl font-display font-bold leading-none mt-1.5">{format(d, 'd')}</div>
+                <div className={cn('h-1 mt-2 mx-auto rounded-full', hasEvents ? 'w-4 bg-revs-300' : 'w-0')} />
+              </button>
+            );
+          })}
         </div>
       </div>
 
