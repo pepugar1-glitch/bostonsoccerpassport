@@ -40,6 +40,7 @@ const BUCKET_ICON = { morning: Sunrise, afternoon: Sun, evening: Moon } as const
 
 export default function Schedule() {
   const [activeDate, setActiveDate] = useState<Date>(MIN_DATE);
+  const [weekStart, setWeekStart] = useState<Date>(MIN_DATE);
   const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder, openPhotoPrompt, toast } = useAppStore();
 
   const markAttended = (ev: SoccerEvent, currentStatus: 'planned' | 'attended' | 'favorite' | undefined) => {
@@ -81,13 +82,25 @@ export default function Schedule() {
 
   const dateOptions = useMemo(() => {
     const out: Date[] = [];
-    let d = MIN_DATE;
-    while (d <= MAX_DATE) {
+    for (let i = 0; i < 7; i++) {
+      const d = addDays(weekStart, i);
+      if (d > MAX_DATE) break;
       out.push(d);
-      d = addDays(d, 1);
     }
     return out;
-  }, []);
+  }, [weekStart]);
+
+  const canPrevWeek = addDays(weekStart, -7) >= MIN_DATE || weekStart > MIN_DATE;
+  const canNextWeek = addDays(weekStart, 7) <= MAX_DATE;
+
+  const goPrevWeek = () => {
+    const next = addDays(weekStart, -7);
+    setWeekStart(next < MIN_DATE ? MIN_DATE : next);
+  };
+  const goNextWeek = () => {
+    const next = addDays(weekStart, 7);
+    setWeekStart(next > MAX_DATE ? weekStart : next);
+  };
 
   const dayEvents = useMemo(
     () => EVENTS.filter((e) => isSameDay(parseISO(e.date), activeDate)),
@@ -145,24 +158,26 @@ export default function Schedule() {
       <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 px-3 py-3 shadow-card">
         <div className="flex items-center justify-between mb-2 px-1">
           <button
-            data-testid="schedule-prev-day"
-            onClick={() => setActiveDate(addDays(activeDate, -1))}
-            disabled={activeDate <= MIN_DATE}
+            data-testid="schedule-prev-week"
+            onClick={goPrevWeek}
+            disabled={!canPrevWeek}
             className="inline-flex items-center gap-1 text-xs text-ink-300 hover:text-white disabled:opacity-30"
           >
-            <ChevronLeft size={14} /> Prev
+            <ChevronLeft size={14} /> Prev week
           </button>
           <div className="inline-flex items-center gap-2 text-sm">
             <CalendarDays size={14} className="text-ink-300" />
-            <span className="font-semibold tracking-tight">{format(activeDate, 'EEEE · MMM d, yyyy')}</span>
+            <span className="font-semibold tracking-tight">
+              {format(weekStart, 'MMM d')} · {format(dateOptions[dateOptions.length - 1] || weekStart, 'MMM d, yyyy')}
+            </span>
           </div>
           <button
-            data-testid="schedule-next-day"
-            onClick={() => setActiveDate(addDays(activeDate, 1))}
-            disabled={activeDate >= MAX_DATE}
+            data-testid="schedule-next-week"
+            onClick={goNextWeek}
+            disabled={!canNextWeek}
             className="inline-flex items-center gap-1 text-xs text-ink-300 hover:text-white disabled:opacity-30"
           >
-            Next <ChevronRight size={14} />
+            Next week <ChevronRight size={14} />
           </button>
         </div>
         <div className="overflow-x-auto no-scrollbar -mx-1 px-1">
