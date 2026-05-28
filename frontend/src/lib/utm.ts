@@ -2,9 +2,9 @@
 
 import type { FanArchetype } from '@/types';
 
-// Official Revolution ticketing landing — lists all single-match tickets.
-// Ticketmaster respects the UTMs we attach when it redirects from the Revs site.
-export const TICKETING_BASE_URL = 'https://www.revolutionsoccer.net/tickets/single-match-tickets';
+// Official Revolution ticketing landing (verified live).
+// Ticketmaster respects the UTMs we attach when the Revs site hands off.
+export const TICKETING_BASE_URL = 'https://www.revolutionsoccer.net/tickets';
 
 const FIXED_UTM = {
   utm_source: 'passport',

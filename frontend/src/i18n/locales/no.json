@@ -336,6 +336,14 @@
     "save": "Lagre",
     "loading": "Laster…"
   },
+  "countdown": {
+    "nextHome": "Neste hjemmekamp for Revolution",
+    "days": "Dager",
+    "hours": "Timer",
+    "minutes": "Minutter",
+    "seconds": "Sekunder",
+    "directions": "Veibeskrivelse"
+  },
   "photos": {
     "promptTitle": "Legg til et bilde til check-in",
     "promptBody": "Del et bilde fra {{venue}} — tjen bonuspoeng og vis stemningen til andre supportere.",

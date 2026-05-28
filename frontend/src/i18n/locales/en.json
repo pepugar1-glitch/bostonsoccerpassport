@@ -336,6 +336,14 @@
     "save": "Save",
     "loading": "Loading…"
   },
+  "countdown": {
+    "nextHome": "Next Revolution home match",
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds",
+    "directions": "Directions"
+  },
   "photos": {
     "promptTitle": "Add a photo to your check-in",
     "promptBody": "Share a snap from {{venue}} — earn bonus points and let other fans see what's going on.",

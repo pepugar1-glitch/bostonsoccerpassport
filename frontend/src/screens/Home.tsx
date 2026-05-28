@@ -18,6 +18,7 @@ import { UPCOMING_MATCHES } from '@/data/content';
 import { buildTicketLink } from '@/lib/utm';
 import { track } from '@/lib/analytics';
 import RevsLogo from '@/components/RevsLogo';
+import MatchCountdown from '@/components/MatchCountdown';
 import { LogIn } from 'lucide-react';
 
 const QUICK_CARDS = [
@@ -94,6 +95,9 @@ export default function Home() {
           {t('home.welcomeBack', { name: profile.name })}
         </div>
       )}
+
+      {/* Match-day countdown */}
+      <MatchCountdown archetype={archetype} />
 
       {/* Sign-in nudge (only when not authed) */}
       {!state.auth && (

@@ -336,6 +336,14 @@
     "save": "Guardar",
     "loading": "Cargando…"
   },
+  "countdown": {
+    "nextHome": "Próximo partido en casa del Revolution",
+    "days": "Días",
+    "hours": "Horas",
+    "minutes": "Minutos",
+    "seconds": "Segundos",
+    "directions": "Cómo llegar"
+  },
   "photos": {
     "promptTitle": "Añade una foto a tu check-in",
     "promptBody": "Comparte una foto desde {{venue}}: gana puntos extra y deja que otros fans vean cómo está el ambiente.",
