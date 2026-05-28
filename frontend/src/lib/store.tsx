@@ -375,8 +375,11 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
       const doIt = () => {
         dispatch({ type: 'CHECK_IN', venueId });
         addPoints('check-in', 25, `Checked in at ${venueName}`, venueId);
-        toast({ title: `Checked in at ${venueName}`, points: 25 });
-        dispatch({ type: 'OPEN_PHOTO_PROMPT', venueId, venueName });
+        toast({
+          title: `Checked in at ${venueName}`,
+          description: 'Add a photo from the venue to earn +50 once you arrive.',
+          points: 25,
+        });
       };
       if (!state.auth) {
         dispatch({

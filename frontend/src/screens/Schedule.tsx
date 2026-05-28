@@ -40,7 +40,16 @@ const BUCKET_ICON = { morning: Sunrise, afternoon: Sun, evening: Moon } as const
 
 export default function Schedule() {
   const [activeDate, setActiveDate] = useState<Date>(MIN_DATE);
-  const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder, toast } = useAppStore();
+  const { state, addToSchedule, removeFromSchedule, updateScheduleStatus, toggleReminder, openPhotoPrompt, toast } = useAppStore();
+
+  const markAttended = (ev: SoccerEvent, currentStatus: 'planned' | 'attended' | 'favorite' | undefined) => {
+    const nextStatus = currentStatus === 'attended' ? 'planned' : 'attended';
+    updateScheduleStatus(ev.id, nextStatus);
+    // When you mark "Attended", open the photo prompt — the event has started/happened.
+    if (nextStatus === 'attended') {
+      openPhotoPrompt(ev.venueId, ev.venueName);
+    }
+  };
   const { t } = useTranslation();
 
   const exportToCalendar = () => {
@@ -265,7 +274,7 @@ export default function Schedule() {
                               <div className="flex items-center gap-1">
                                 <StatusButton
                                   active={it?.status === 'attended'}
-                                  onClick={() => updateScheduleStatus(e.id, it?.status === 'attended' ? 'planned' : 'attended')}
+                                  onClick={() => markAttended(e, it?.status)}
                                   icon={CheckCircle2}
                                   label="Attended"
                                   testId={`status-attended-${e.id}`}
