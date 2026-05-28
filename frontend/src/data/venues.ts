@@ -81,7 +81,7 @@ export const VENUES: Venue[] = [
   },
   {
     id: 'south-station',
-    name: 'South Station — Stadium Train',
+    name: 'South Station · Stadium Train',
     category: 'transport',
     lat: 42.3519,
     lng: -71.0552,
@@ -94,7 +94,7 @@ export const VENUES: Venue[] = [
   },
   {
     id: 'copley-square',
-    name: 'Copley Square — Stadium Express Bus',
+    name: 'Copley Square · Stadium Express Bus',
     category: 'transport',
     lat: 42.3499,
     lng: -71.0786,

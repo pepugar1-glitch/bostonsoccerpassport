@@ -538,7 +538,7 @@ function Dashboard() {
       </section>
 
       <div className="rounded-2xl bg-white/[0.03] ring-1 ring-white/5 px-4 py-3 text-[11px] text-ink-400">
-        Mock data — wire to Mixpanel / PostHog / Firebase Analytics.
+        Mock data · wire to Mixpanel / PostHog / Firebase Analytics.
         <code className="ml-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-[10px]">{`// TODO(integration: analytics)`}</code>
       </div>
     </div>
@@ -546,7 +546,7 @@ function Dashboard() {
 }
 
 function RetentionCell({ pct }: { pct: number | null }) {
-  if (pct == null) return <span className="text-ink-500">—</span>;
+  if (pct == null) return <span className="text-ink-500">·</span>;
   const intensity = Math.min(1, pct / 80);
   return (
     <span

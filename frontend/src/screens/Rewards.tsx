@@ -99,7 +99,7 @@ export default function Rewards() {
                   <span className="text-white font-semibold">{nextTier - points}</span> to next tier ({nextTier})
                 </>
               ) : (
-                <>You&apos;ve hit the top tier — claim away.</>
+                <>You&apos;ve hit the top tier · claim away.</>
               )}
             </div>
           </div>
@@ -210,7 +210,7 @@ export default function Rewards() {
                   </button>
                 </div>
 
-                {/* Ticketmaster placeholder CTA — only on rw-400 once claimed */}
+                {/* Ticketmaster placeholder CTA · only on rw-400 once claimed */}
                 {/* TODO(integration: Ticketmaster) Swap host with real partner URL. */}
                 {isClaimed && r.id === 'rw-400' && (
                   <a

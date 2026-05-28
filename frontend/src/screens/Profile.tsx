@@ -222,7 +222,7 @@ export default function ProfileScreen() {
             <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Referral code</div>
             <div className="mt-1 flex items-center justify-between gap-3">
               <div className="text-lg font-mono font-bold tracking-tight" data-testid="profile-referral-code">
-                {form.referralCode || '—'}
+                {form.referralCode || '·'}
               </div>
               <button
                 onClick={handleRefer}

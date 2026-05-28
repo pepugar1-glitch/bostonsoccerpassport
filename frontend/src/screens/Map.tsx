@@ -152,7 +152,7 @@ export default function MapScreen() {
         } else if (err.code === err.POSITION_UNAVAILABLE) {
           toast({ title: 'Location unavailable', description: 'Try outdoors or check that Location Services are on.', variant: 'warn' });
         } else if (err.code === err.TIMEOUT) {
-          toast({ title: 'Location took too long', description: 'Tap Near me again — first lock can be slow.', variant: 'warn' });
+          toast({ title: 'Location took too long', description: 'Tap Near me again · first lock can be slow.', variant: 'warn' });
         } else {
           toast({ title: 'Could not get your location', variant: 'warn' });
         }
@@ -186,7 +186,7 @@ export default function MapScreen() {
 
   const handleShare = async (v: Venue) => {
     const url = window.location.origin + `/map?filter=${v.category}`;
-    const text = `${v.name} — on the Boston Soccer Passport.`;
+    const text = `${v.name} · on the Boston Soccer Passport.`;
     if (typeof navigator !== 'undefined' && navigator.share) {
       try {
         await navigator.share({ title: v.name, text, url });

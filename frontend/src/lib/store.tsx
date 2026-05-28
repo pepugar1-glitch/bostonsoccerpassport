@@ -268,7 +268,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         storage.setPhotos(trimmed);
         dispatch({ type: 'HYDRATE', payload: { photos: trimmed } });
       } catch {
-        /* still over quota — leave memory state alone */
+        /* still over quota · leave memory state alone */
       }
       dispatch({
         type: 'PUSH_TOAST',
@@ -384,7 +384,7 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
             }
           }
         }
-        toast({ title: 'Reminder set', description: 'You will see an in-app badge — push optional.', variant: 'info' });
+        toast({ title: 'Reminder set', description: 'You will see an in-app badge · push optional.', variant: 'info' });
       }
     },
     [state.schedule, toast]

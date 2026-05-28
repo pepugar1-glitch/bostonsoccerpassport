@@ -55,7 +55,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'archetype-found',
     icon: Sparkles,
     title: 'Soccer self-aware',
-    body: 'Completed the archetype quiz — you know what kind of fan you are.',
+    body: 'Completed the archetype quiz · you know what kind of fan you are.',
     unlockedBy: (c) => c.archetypeDone,
   },
   {
@@ -90,7 +90,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     id: 'supporter-track',
     icon: Crown,
     title: 'Supporter section candidate',
-    body: 'Reached 500 points — eligible for supporter welcome experience.',
+    body: 'Reached 500 points · eligible for supporter welcome experience.',
     unlockedBy: (c) => c.points >= 500,
   },
 ];

@@ -15,7 +15,7 @@ const STEPS: Step[] = [
   {
     icon: Sparkles,
     title: 'Welcome to your Boston Soccer Passport',
-    body: 'A guide to the summer of soccer — fan festival, watch parties, transport to Gillette, and your path into the Revolution.',
+    body: 'A guide to the summer of soccer · fan festival, watch parties, transport to Gillette, and your path into the Revolution.',
   },
   {
     icon: MapPin,
@@ -30,12 +30,12 @@ const STEPS: Step[] = [
   {
     icon: Trophy,
     title: 'Earn points, unlock rewards',
-    body: 'Check in, take quizzes, share photo cards. Tiers unlock at 100, 250, 400, 600, 800 and 1000 points — culminating in a Revs match experience.',
+    body: 'Check in, take quizzes, share photo cards. Tiers unlock at 100, 250, 400, 600, 800 and 1000 points · culminating in a Revs match experience.',
   },
   {
     icon: User,
     title: 'Sign in to sync',
-    body: 'Optional — but signing in keeps your progress across devices and gives you +25 welcome bonus. Skip to continue as guest anytime.',
+    body: 'Optional · but signing in keeps your progress across devices and gives you +25 welcome bonus. Skip to continue as guest anytime.',
   },
 ];
 
