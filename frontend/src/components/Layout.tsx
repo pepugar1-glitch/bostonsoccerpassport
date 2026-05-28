@@ -106,31 +106,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           )}
 
           <LanguageSelector variant="sidebar" />
-        </div>
 
-        <nav className="px-3 pt-2 flex-1">
-          {NAV.map(({ to, key, icon: Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === '/'}
-              data-testid={`sidebar-nav-${key}`}
-              className={({ isActive }) =>
-                cn(
-                  'group flex items-center gap-3 rounded-xl px-3 py-2.5 my-0.5 text-sm transition-colors',
-                  isActive
-                    ? 'bg-white/[0.06] text-white ring-1 ring-white/5'
-                    : 'text-ink-300 hover:bg-white/[0.03] hover:text-white'
-                )
-              }
-            >
-              <Icon size={18} className="shrink-0 opacity-90" />
-              <span className="font-medium">{t(`nav.${key}`)}</span>
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="px-3 pb-6 space-y-1">
           <NavLink
             to="/admin"
             data-testid="sidebar-nav-admin"
@@ -158,6 +134,28 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <span className="font-medium">{t('nav.qrcodes')}</span>
           </NavLink>
         </div>
+
+        <nav className="px-3 pt-2 pb-6 flex-1">
+          {NAV.map(({ to, key, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              end={to === '/'}
+              data-testid={`sidebar-nav-${key}`}
+              className={({ isActive }) =>
+                cn(
+                  'group flex items-center gap-3 rounded-xl px-3 py-2.5 my-0.5 text-sm transition-colors',
+                  isActive
+                    ? 'bg-white/[0.06] text-white ring-1 ring-white/5'
+                    : 'text-ink-300 hover:bg-white/[0.03] hover:text-white'
+                )
+              }
+            >
+              <Icon size={18} className="shrink-0 opacity-90" />
+              <span className="font-medium">{t(`nav.${key}`)}</span>
+            </NavLink>
+          ))}
+        </nav>
       </aside>
 
       {/* Main column */}

@@ -293,7 +293,12 @@ function Dashboard() {
                   border: '1px solid #FFFFFF22',
                   borderRadius: 12,
                   fontSize: 12,
+                  color: '#FFFFFF',
                 }}
+                itemStyle={{ color: '#FFFFFF' }}
+                labelStyle={{ color: '#DCDFE7', marginBottom: 4 }}
+                cursor={{ fill: '#FFFFFF08' }}
+
               />
               <Bar dataKey="value" radius={[8, 8, 0, 0]} fill="#C8102E" />
             </BarChart>
@@ -336,7 +341,12 @@ function Dashboard() {
                   border: '1px solid #FFFFFF22',
                   borderRadius: 12,
                   fontSize: 12,
+                  color: '#FFFFFF',
                 }}
+                itemStyle={{ color: '#FFFFFF' }}
+                labelStyle={{ color: '#DCDFE7', marginBottom: 4 }}
+                cursor={{ fill: '#FFFFFF08' }}
+
               />
             </PieChart>
           </ResponsiveContainer>
@@ -363,7 +373,12 @@ function Dashboard() {
                 border: '1px solid #FFFFFF22',
                 borderRadius: 12,
                 fontSize: 12,
+                color: '#FFFFFF',
               }}
+              itemStyle={{ color: '#FFFFFF' }}
+              labelStyle={{ color: '#DCDFE7', marginBottom: 4 }}
+              cursor={{ fill: '#FFFFFF08' }}
+
             />
             <Line type="monotone" dataKey="users" stroke="#C8102E" strokeWidth={2.5} dot={false} />
           </LineChart>
@@ -416,7 +431,12 @@ function Dashboard() {
                   border: '1px solid #FFFFFF22',
                   borderRadius: 12,
                   fontSize: 12,
+                  color: '#FFFFFF',
                 }}
+                itemStyle={{ color: '#FFFFFF' }}
+                labelStyle={{ color: '#DCDFE7', marginBottom: 4 }}
+                cursor={{ fill: '#FFFFFF08' }}
+
               />
               <Bar dataKey="claims" radius={[0, 8, 8, 0]} fill="#F59E0B" />
             </BarChart>
