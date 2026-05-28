@@ -130,6 +130,10 @@ export default function MapScreen() {
       toast({ title: 'Geolocation not supported', variant: 'warn' });
       return;
     }
+    if (typeof window !== 'undefined' && window.isSecureContext === false) {
+      toast({ title: 'Location needs HTTPS', description: 'Open the site over https://', variant: 'warn' });
+      return;
+    }
     setLocating(true);
     navigator.geolocation.getCurrentPosition(
       (pos) => {
@@ -137,11 +141,23 @@ export default function MapScreen() {
         setLocating(false);
         toast({ title: 'Sorted by distance from you', variant: 'info' });
       },
-      () => {
+      (err) => {
         setLocating(false);
-        toast({ title: 'Could not get your location', variant: 'warn' });
+        if (err.code === err.PERMISSION_DENIED) {
+          toast({
+            title: 'Location permission blocked',
+            description: 'Allow location for this site in Safari/Chrome settings, then tap Near me again.',
+            variant: 'warn',
+          });
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          toast({ title: 'Location unavailable', description: 'Try outdoors or check that Location Services are on.', variant: 'warn' });
+        } else if (err.code === err.TIMEOUT) {
+          toast({ title: 'Location took too long', description: 'Tap Near me again — first lock can be slow.', variant: 'warn' });
+        } else {
+          toast({ title: 'Could not get your location', variant: 'warn' });
+        }
       },
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 }
     );
   };
 
