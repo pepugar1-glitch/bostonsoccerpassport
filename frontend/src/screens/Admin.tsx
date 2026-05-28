@@ -189,10 +189,33 @@ function Dashboard() {
           <ChevronRight size={16} className="text-ink-300 group-hover:text-white group-hover:translate-x-0.5 transition-transform" />
         </Link>
         <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 px-5 py-4 shadow-card">
-          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">UTM template</div>
-          <div className="mt-1 text-[11px] font-mono text-ink-100 leading-relaxed break-all">
-            utm_source=passport · utm_medium=qr · utm_campaign=wc2026 · utm_content={'{venue_id}'} · utm_term={'{archetype}'}
+          <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400">Conversion tracking</div>
+          <div className="mt-1 text-sm font-semibold text-white">Every scan, tagged. Every step, attributed.</div>
+          <div className="mt-2 text-[11px] text-ink-300 leading-relaxed">
+            Each QR scan carries 5 UTM tags into Mixpanel · PostHog · Power BI:
           </div>
+          <ul className="mt-2 space-y-1 text-[11px]">
+            <li className="flex gap-2">
+              <span className="font-mono text-revs-400 shrink-0 w-16">source</span>
+              <span className="text-ink-100">where the click came from</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-mono text-revs-400 shrink-0 w-16">medium</span>
+              <span className="text-ink-100">qr · email · social · paid</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-mono text-revs-400 shrink-0 w-16">campaign</span>
+              <span className="text-ink-100">wc2026 · post-wc · regular-season</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-mono text-revs-400 shrink-0 w-16">content</span>
+              <span className="text-ink-100">which booth / venue (Park Street, Maverick…)</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="font-mono text-revs-400 shrink-0 w-16">term</span>
+              <span className="text-ink-100">user archetype (Local, Visitor, Family…)</span>
+            </li>
+          </ul>
         </div>
       </section>
 
