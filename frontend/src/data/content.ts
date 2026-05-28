@@ -1,6 +1,20 @@
 import type { SoccerEvent, Match, Reward, QuizQuestion, TriviaQuestion, FanArchetype } from '@/types';
 
 export const EVENTS: SoccerEvent[] = [
+  // ============================
+  // FIFA World Cup 2026 · 7 matches at Gillette
+  // ============================
+  {
+    id: 'evt-jun13-wc-gillette',
+    date: '2026-06-13',
+    time: '15:00',
+    title: 'World Cup · Group Stage at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'First of 7 FIFA World Cup matches at Gillette. Take the Foxboro Special Train from South Station.',
+  },
   {
     id: 'evt-jun13-festival-open',
     date: '2026-06-13',
@@ -11,6 +25,17 @@ export const EVENTS: SoccerEvent[] = [
     timeBucket: 'morning',
     category: 'fan-festival',
     description: 'Ribbon-cutting, youth clinics, live music, and the first big-screen match of the host-city festival.',
+  },
+  {
+    id: 'evt-jun16-wc-gillette',
+    date: '2026-06-16',
+    time: '15:00',
+    title: 'World Cup · Group Stage at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'Group-stage match #2 at Gillette. City Hall Plaza Fan Festival is the closest free watch alternative.',
   },
   {
     id: 'evt-jun16-group-stage',
@@ -24,6 +49,17 @@ export const EVENTS: SoccerEvent[] = [
     description: 'Indoor multi-screen viewing for the marquee afternoon group-stage match. Reserved seating available.',
   },
   {
+    id: 'evt-jun19-wc-gillette',
+    date: '2026-06-19',
+    time: '15:00',
+    title: 'World Cup · Group Stage at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'Group-stage match #3 at Gillette. Foxboro Special Train + Stadium Express bus running.',
+  },
+  {
     id: 'evt-jun22-faialense',
     date: '2026-06-22',
     time: '19:00',
@@ -33,6 +69,50 @@ export const EVENTS: SoccerEvent[] = [
     timeBucket: 'evening',
     category: 'culture-hub',
     description: 'Portuguese community club opens its doors for a community watch night with traditional food and family entertainment.',
+  },
+  {
+    id: 'evt-jun23-wc-gillette',
+    date: '2026-06-23',
+    time: '12:00',
+    title: 'World Cup · Group Stage at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'morning',
+    category: 'fan-festival',
+    description: 'Group-stage match #4 at Gillette. Early afternoon kickoff — get the morning train.',
+  },
+  {
+    id: 'evt-jun26-wc-gillette',
+    date: '2026-06-26',
+    time: '15:00',
+    title: 'World Cup · Group Stage at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'Final group-stage match #5 at Gillette. Last chance to see a group-stage game in Foxboro.',
+  },
+  {
+    id: 'evt-jun29-wc-gillette',
+    date: '2026-06-29',
+    time: '15:00',
+    title: 'World Cup · Round of 32 at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'Knockout phase begins. Higher demand for the Foxboro Special Train — book ahead.',
+  },
+  {
+    id: 'evt-jul09-wc-gillette',
+    date: '2026-07-09',
+    time: '16:00',
+    title: 'World Cup · Quarterfinal at Gillette',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'fan-festival',
+    description: 'The biggest match of the tournament in New England. Stadium-scale watch at City Hall Plaza.',
   },
   {
     id: 'evt-jul09-quarter',
@@ -45,27 +125,19 @@ export const EVENTS: SoccerEvent[] = [
     category: 'fan-festival',
     description: 'Stadium-scale outdoor viewing for the host-city quarterfinal. Expect the biggest crowd of the summer.',
   },
+  // ============================
+  // Revolution post-WC home matches · 3 anchor matches from the consulting deck
+  // ============================
   {
-    id: 'evt-jul19-revs-nycfc',
-    date: '2026-07-19',
-    time: '19:30',
-    title: 'Revolution vs NYCFC',
+    id: 'evt-aug08-revs-houston',
+    date: '2026-08-08',
+    time: '16:30',
+    title: 'Revolution vs Houston Dynamo',
     venueId: 'gillette',
     venueName: 'Gillette Stadium',
-    timeBucket: 'evening',
+    timeBucket: 'afternoon',
     category: 'revs-rewards',
-    description: 'Revolution home match. Placeholder opponent — verify against MLS schedule. Stadium Express buses available.',
-  },
-  {
-    id: 'evt-aug02-revs-miami',
-    date: '2026-08-02',
-    time: '19:30',
-    title: 'Revolution vs Inter Miami CF',
-    venueId: 'gillette',
-    venueName: 'Gillette Stadium',
-    timeBucket: 'evening',
-    category: 'revs-rewards',
-    description: 'Marquee home matchup. Placeholder opponent — verify against MLS schedule. Family Day activations on the concourse.',
+    description: 'Rescheduled opener. First home match post-WC — peak afterglow window. Anchor match #1.',
   },
   {
     id: 'evt-aug09-supporter-night',
@@ -79,53 +151,56 @@ export const EVENTS: SoccerEvent[] = [
     description: 'Open-tent meetup for visitors and new supporters. Tifo workshops, supporter group introductions, and matchday primer.',
   },
   {
-    id: 'evt-aug23-revs-union',
+    id: 'evt-aug23-revs-nycfc',
     date: '2026-08-23',
-    time: '19:30',
-    title: 'Revolution vs Philadelphia Union',
+    time: '16:30',
+    title: 'Revolution vs NYCFC',
+    venueId: 'gillette',
+    venueName: 'Gillette Stadium',
+    timeBucket: 'afternoon',
+    category: 'revs-rewards',
+    description: 'East Conference derby. Family slot, optimal weather. Anchor match #2.',
+  },
+  {
+    id: 'evt-nov01-revs-miami',
+    date: '2026-11-01',
+    time: '19:00',
+    title: 'Revolution vs Inter Miami CF',
     venueId: 'gillette',
     venueName: 'Gillette Stadium',
     timeBucket: 'evening',
     category: 'revs-rewards',
-    description: 'East Conference rivalry night. Placeholder opponent — verify against MLS schedule. Premium tailgate at Patriot Place.',
+    description: 'Home finale. Messi pull. Media spike. Anchor match #3 of the conversion runway.',
   },
 ];
 
-// Approximated 2026 MLS home dates for the New England Revolution. These are typical
-// home windows around the World Cup hiatus (June 12–July 19) but should be replaced
-// with the official MLS calendar once published.
+// Revolution home matches that anchor the consulting deck's "First Match On Us"
+// conversion runway. Aug 8 · Aug 23 · Nov 1 = the 3 anchor matches the MBTA pilot
+// funnels into. Times and opponents match the deck and the public 2026 MLS schedule.
 export const UPCOMING_MATCHES: Match[] = [
   {
-    id: 'match-jul22',
-    date: '2026-07-22',
+    id: 'match-aug08',
+    date: '2026-08-08',
+    opponent: 'Houston Dynamo',
+    homeAway: 'home',
+    competition: 'MLS Regular Season',
+    note: 'Anchor #1 · Rescheduled opener. First home post-WC. Peak afterglow.',
+  },
+  {
+    id: 'match-aug23',
+    date: '2026-08-23',
+    opponent: 'NYCFC',
+    homeAway: 'home',
+    competition: 'MLS Regular Season',
+    note: 'Anchor #2 · East Conference derby. Family slot, optimal weather.',
+  },
+  {
+    id: 'match-nov01',
+    date: '2026-11-01',
     opponent: 'Inter Miami CF',
     homeAway: 'home',
     competition: 'MLS Regular Season',
-    note: 'First Saturday back after the WC break.',
-  },
-  {
-    id: 'match-aug01',
-    date: '2026-08-01',
-    opponent: 'New York City FC',
-    homeAway: 'home',
-    competition: 'MLS Regular Season',
-    note: 'Eastern Conference rival — typically packed crowd.',
-  },
-  {
-    id: 'match-aug22',
-    date: '2026-08-22',
-    opponent: 'Philadelphia Union',
-    homeAway: 'home',
-    competition: 'MLS Regular Season',
-    note: 'Atlantic Cup derby.',
-  },
-  {
-    id: 'match-sep05',
-    date: '2026-09-05',
-    opponent: 'Columbus Crew',
-    homeAway: 'home',
-    competition: 'MLS Regular Season',
-    note: 'Saturday night under the lights at Gillette.',
+    note: 'Anchor #3 · Home finale. Messi pull. Media spike.',
   },
 ];
 
