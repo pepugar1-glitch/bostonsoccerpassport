@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { toPng } from 'html-to-image';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,22 +9,28 @@ import {
   Sparkles,
   Type,
   Palette,
+  Instagram,
+  Trash2,
+  Twitter,
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
 
 type Template = 'stop' | 'global' | 'summer';
 
-const TEMPLATES: { id: Template; label: string; subtitle: string }[] = [
-  { id: 'stop', label: 'My Boston Soccer Stop', subtitle: 'Spot · Date · Vibe' },
-  { id: 'global', label: 'From Global Soccer to New England Soccer', subtitle: 'Country → Boston' },
-  { id: 'summer', label: 'Boston Soccer Summer', subtitle: 'Postcard from the city' },
+const TEMPLATES: { id: Template; label: string; eyebrow: string }[] = [
+  { id: 'summer', label: 'Boston Soccer Summer', eyebrow: 'Postcard from the city' },
+  { id: 'stop', label: 'My Boston Stop', eyebrow: 'Spot · Date · Vibe' },
+  { id: 'global', label: 'Global to Local', eyebrow: 'Country → Boston' },
 ];
 
-const PALETTES: { id: 'country' | 'boston' | 'revs'; label: string; primary: string; secondary: string }[] = [
-  { id: 'country', label: 'Country', primary: '#10B981', secondary: '#FFD700' },
-  { id: 'boston', label: 'Boston', primary: '#0A1A3D', secondary: '#FFFFFF' },
-  { id: 'revs', label: 'Revs', primary: '#C8102E', secondary: '#0A1A3D' },
+const PALETTES: { id: string; label: string; primary: string; secondary: string }[] = [
+  { id: 'revs', label: 'Revolution', primary: '#C8102E', secondary: '#0A1A3D' },
+  { id: 'boston', label: 'Boston', primary: '#0A1A3D', secondary: '#1E3A8A' },
+  { id: 'world', label: 'World', primary: '#10B981', secondary: '#F59E0B' },
+  { id: 'sunset', label: 'Sunset', primary: '#FB7185', secondary: '#F59E0B' },
+  { id: 'ocean', label: 'Ocean', primary: '#0EA5E9', secondary: '#0B2A5B' },
+  { id: 'midnight', label: 'Midnight', primary: '#7C3AED', secondary: '#0F0524' },
 ];
 
 const STICKERS = [
@@ -40,43 +46,90 @@ const CAPTIONS: Record<Template, string> = {
   summer: 'Boston, the soccer city. Summer 2026. #BostonSoccerPassport',
 };
 
+const EYEBROW: Record<Template, string> = {
+  stop: 'My Boston soccer stop',
+  global: 'From global soccer to',
+  summer: 'Boston soccer summer',
+};
+
+const INSTAGRAM_URL = 'https://www.instagram.com/';
+const TWITTER_INTENT = 'https://twitter.com/intent/tweet';
+
+function canShareFiles() {
+  return (
+    typeof navigator !== 'undefined' &&
+    typeof (navigator as Navigator & { canShare?: (data?: ShareData) => boolean }).canShare ===
+      'function'
+  );
+}
+
 export default function Share() {
   const { t } = useTranslation();
   const cardRef = useRef<HTMLDivElement>(null);
   const [template, setTemplate] = useState<Template>('summer');
-  const [palette, setPalette] = useState<typeof PALETTES[number]>(PALETTES[2]);
+  const [palette, setPalette] = useState<typeof PALETTES[number]>(PALETTES[0]);
   const [stickers, setStickers] = useState<Record<string, boolean>>({ ball: true, skyline: true });
   const [headline, setHeadline] = useState('Boston Soccer Summer');
   const [subhead, setSubhead] = useState('City Hall Plaza · Jun 13');
   const [photoData, setPhotoData] = useState<string | null>(null);
-  const { addPoints, toast } = useAppStore();
-  const [busy, setBusy] = useState<'download' | 'share' | null>(null);
+  const { state, addPoints, toast } = useAppStore();
+  const [busy, setBusy] = useState<'download' | 'share' | 'ig' | 'x' | null>(null);
 
-  const handlePhoto = (file: File) => {
+  const savedPhotos = state.photos;
+
+  // Auto-pick first saved photo on first mount, if available.
+  useEffect(() => {
+    if (!photoData && savedPhotos.length > 0) {
+      setPhotoData(savedPhotos[0].dataUrl);
+      setSubhead(`${savedPhotos[0].venueName} · saved`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const supportsNativeFileShare = useMemo(() => {
+    if (!canShareFiles()) return false;
+    try {
+      const probe = new File([new Blob()], 'p.png', { type: 'image/png' });
+      return (navigator as Navigator & { canShare: (data?: ShareData) => boolean }).canShare({
+        files: [probe],
+      });
+    } catch {
+      return false;
+    }
+  }, []);
+
+  const handleFileUpload = (file: File) => {
     const reader = new FileReader();
     reader.onload = () => setPhotoData(reader.result as string);
     reader.readAsDataURL(file);
   };
 
-  const generatePng = async () => {
+  const generatePngBlob = async (): Promise<{ url: string; blob: Blob } | null> => {
     if (!cardRef.current) return null;
-    const dataUrl = await toPng(cardRef.current, {
+    const url = await toPng(cardRef.current, {
       cacheBust: true,
       pixelRatio: 2,
       backgroundColor: '#0A1A3D',
     });
-    return dataUrl;
+    const blob = await (await fetch(url)).blob();
+    return { url, blob };
+  };
+
+  const downloadFile = (url: string) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `boston-soccer-passport-${Date.now()}.png`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleDownload = async () => {
     setBusy('download');
     try {
-      const url = await generatePng();
-      if (!url) return;
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `boston-soccer-passport-${Date.now()}.png`;
-      a.click();
+      const out = await generatePngBlob();
+      if (!out) return;
+      downloadFile(out.url);
       addPoints('share-photo', 20, 'Downloaded a photo card');
       toast({ title: 'Photo card downloaded', points: 20 });
     } catch {
@@ -86,37 +139,66 @@ export default function Share() {
     }
   };
 
-  const handleShare = async (target?: 'instagram' | 'x') => {
+  const handleNativeShare = async () => {
     setBusy('share');
     try {
-      const url = await generatePng();
-      if (!url) return;
-      if (target === 'instagram') {
-        await navigator.clipboard.writeText(CAPTIONS[template]);
-        toast({ title: 'Caption copied for Instagram', description: 'Paste it on your IG post.', variant: 'info' });
-      } else if (target === 'x') {
-        const text = encodeURIComponent(CAPTIONS[template]);
-        window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
-      } else if (typeof navigator !== 'undefined' && navigator.share) {
-        try {
-          const blob = await (await fetch(url)).blob();
-          const file = new File([blob], 'soccer-passport.png', { type: 'image/png' });
-          await navigator.share({
-            title: 'Boston Soccer Passport',
-            text: CAPTIONS[template],
-            files: [file],
-          });
-        } catch {
-          await navigator.clipboard.writeText(CAPTIONS[template]);
-          toast({ title: 'Caption copied', variant: 'info' });
-        }
-      } else {
-        await navigator.clipboard.writeText(CAPTIONS[template]);
-        toast({ title: 'Caption copied', variant: 'info' });
+      const out = await generatePngBlob();
+      if (!out) return;
+      const file = new File([out.blob], 'soccer-passport.png', { type: 'image/png' });
+      try {
+        await (navigator as Navigator & { share: (data: ShareData) => Promise<void> }).share({
+          title: 'Boston Soccer Passport',
+          text: CAPTIONS[template],
+          files: [file],
+        });
+        addPoints('share-photo', 20, 'Shared photo card');
+      } catch {
+        // user cancelled — silent
       }
-      addPoints('share-photo', 20, `Shared photo card${target ? ` to ${target}` : ''}`);
     } catch {
       toast({ title: 'Share failed', variant: 'warn' });
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleInstagram = async () => {
+    setBusy('ig');
+    try {
+      const out = await generatePngBlob();
+      if (!out) return;
+      downloadFile(out.url);
+      await navigator.clipboard.writeText(CAPTIONS[template]);
+      addPoints('share-photo', 20, 'Prepped Instagram post');
+      toast({
+        title: 'Image saved · caption copied',
+        description: 'Open Instagram, start a new post, attach the image, paste the caption.',
+        variant: 'info',
+      });
+      window.open(INSTAGRAM_URL, '_blank', 'noopener');
+    } catch {
+      toast({ title: 'Could not prep Instagram post', variant: 'warn' });
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleTweet = async () => {
+    setBusy('x');
+    try {
+      const out = await generatePngBlob();
+      if (!out) return;
+      downloadFile(out.url);
+      const text = encodeURIComponent(CAPTIONS[template]);
+      window.open(`${TWITTER_INTENT}?text=${text}`, '_blank', 'noopener');
+      addPoints('share-photo', 20, 'Prepped a tweet');
+      toast({
+        title: 'Image saved · tweet ready',
+        description: 'X opened with the caption. Attach the image you just saved.',
+        variant: 'info',
+      });
+    } catch {
+      toast({ title: 'Could not open X', variant: 'warn' });
     } finally {
       setBusy(null);
     }
@@ -136,9 +218,9 @@ export default function Share() {
       </header>
 
       <div className="grid lg:grid-cols-[1fr_22rem] gap-5">
-        {/* Card preview */}
+        {/* Card preview + actions */}
         <div className="rounded-3xl bg-navy-900/55 ring-1 ring-white/5 shadow-card p-4 lg:p-6">
-          <div className="aspect-square w-full max-w-[480px] mx-auto rounded-2xl overflow-hidden">
+          <div className="aspect-square w-full max-w-[560px] mx-auto rounded-2xl overflow-hidden">
             <div
               ref={cardRef}
               data-testid="share-card-preview"
@@ -147,7 +229,6 @@ export default function Share() {
                 background: `linear-gradient(135deg, ${palette.primary} 0%, ${palette.secondary} 100%)`,
               }}
             >
-              {/* Top accent ribbon */}
               <div
                 className="absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.18em]"
                 style={{ background: 'rgba(0,0,0,0.45)', color: '#ffffff' }}
@@ -155,24 +236,22 @@ export default function Share() {
                 Boston Soccer Passport
               </div>
 
-              {/* Photo bg */}
               {photoData && (
                 <img
                   src={photoData}
-                  alt="user upload"
+                  alt=""
                   className="absolute inset-0 w-full h-full object-cover opacity-90"
                 />
               )}
 
-              {/* Overlay */}
               <div
                 className="absolute inset-0"
                 style={{
-                  background: 'linear-gradient(180deg, rgba(10,26,61,0.0) 35%, rgba(10,26,61,0.85) 100%)',
+                  background:
+                    'linear-gradient(180deg, rgba(10,26,61,0.0) 35%, rgba(10,26,61,0.85) 100%)',
                 }}
               />
 
-              {/* Stickers */}
               <div className="absolute top-16 right-4 flex flex-col gap-2">
                 {stickers.ball && <BallSticker />}
                 {stickers.scarf && <ScarfSticker color={palette.primary} />}
@@ -180,14 +259,9 @@ export default function Share() {
                 {stickers.matchday && <MatchdaySticker />}
               </div>
 
-              {/* Headline */}
               <div className="absolute left-6 right-6 bottom-6">
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/80">
-                  {template === 'global'
-                    ? 'From global soccer to'
-                    : template === 'stop'
-                    ? 'My Boston soccer stop'
-                    : 'Boston soccer summer'}
+                  {EYEBROW[template]}
                 </div>
                 <div className="mt-1 text-3xl font-display font-bold text-white tracking-tight leading-tight">
                   {headline}
@@ -195,7 +269,6 @@ export default function Share() {
                 <div className="mt-1 text-sm text-white/80">{subhead}</div>
               </div>
 
-              {/* Crest mark */}
               <div className="absolute bottom-6 right-6 grid place-items-center h-10 w-10 rounded-xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
                 <svg viewBox="0 0 24 24" width={22} height={22}>
                   <circle cx="12" cy="12" r="9" fill="none" stroke="#ffffff" strokeWidth="1.5" />
@@ -206,7 +279,8 @@ export default function Share() {
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-2">
+          {/* Action buttons */}
+          <div className="mt-5 grid grid-cols-2 lg:grid-cols-3 gap-2">
             <button
               onClick={handleDownload}
               disabled={busy !== null}
@@ -215,6 +289,32 @@ export default function Share() {
             >
               <Download size={15} /> Download
             </button>
+            {supportsNativeFileShare && (
+              <button
+                onClick={handleNativeShare}
+                disabled={busy !== null}
+                data-testid="share-native"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.08] hover:bg-white/[0.14] ring-1 ring-white/15 px-3 py-2.5 text-sm font-semibold disabled:opacity-60"
+              >
+                <Share2 size={15} /> Share…
+              </button>
+            )}
+            <button
+              onClick={handleInstagram}
+              disabled={busy !== null}
+              data-testid="share-instagram"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-2.5 text-sm disabled:opacity-60"
+            >
+              <Instagram size={15} /> Instagram
+            </button>
+            <button
+              onClick={handleTweet}
+              disabled={busy !== null}
+              data-testid="share-x"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-2.5 text-sm disabled:opacity-60"
+            >
+              <Twitter size={15} /> Post on X
+            </button>
             <button
               onClick={handleCopyCaption}
               data-testid="share-copy-caption"
@@ -222,67 +322,91 @@ export default function Share() {
             >
               <Copy size={15} /> Copy caption
             </button>
-            <button
-              onClick={() => handleShare('instagram')}
-              disabled={busy !== null}
-              data-testid="share-instagram"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-2.5 text-sm disabled:opacity-60"
-            >
-              <Share2 size={15} /> Instagram
-            </button>
-            <button
-              onClick={() => handleShare('x')}
-              disabled={busy !== null}
-              data-testid="share-x"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-white/[0.06] hover:bg-white/[0.1] ring-1 ring-white/10 px-3 py-2.5 text-sm disabled:opacity-60"
-            >
-              <Share2 size={15} /> Share to X
-            </button>
           </div>
+
+          <p className="mt-3 text-[11px] text-ink-400 leading-relaxed">
+            Instagram and X don&apos;t accept programmatic posts from web apps · the image is
+            saved to your device and the caption copied to your clipboard so you can finish the
+            post in one tap.
+          </p>
         </div>
 
         {/* Controls */}
         <aside className="space-y-4">
           <Panel title="Template" icon={Sparkles}>
             <div className="grid gap-2">
-              {TEMPLATES.map((t) => (
+              {TEMPLATES.map((tpl) => (
                 <button
-                  key={t.id}
-                  onClick={() => setTemplate(t.id)}
-                  data-testid={`template-${t.id}`}
+                  key={tpl.id}
+                  onClick={() => {
+                    setTemplate(tpl.id);
+                    setHeadline(tpl.label);
+                  }}
+                  data-testid={`template-${tpl.id}`}
                   className={cn(
                     'text-left rounded-xl px-3 py-2.5 ring-1 transition-colors',
-                    template === t.id
+                    template === tpl.id
                       ? 'bg-revs-500/15 ring-revs-500/40'
                       : 'bg-white/[0.04] ring-white/10 hover:bg-white/[0.08]'
                   )}
                 >
-                  <div className="text-sm font-semibold leading-tight">{t.label}</div>
-                  <div className="text-[11px] text-ink-400 mt-0.5">{t.subtitle}</div>
+                  <div className="text-sm font-semibold leading-tight">{tpl.label}</div>
+                  <div className="text-[11px] text-ink-400 mt-0.5">{tpl.eyebrow}</div>
                 </button>
               ))}
             </div>
           </Panel>
 
           <Panel title="Photo" icon={ImageIcon}>
-            <label className="block">
+            {savedPhotos.length > 0 && (
+              <>
+                <div className="text-[10px] uppercase tracking-[0.18em] text-ink-400 mb-1.5">
+                  From your check-ins
+                </div>
+                <div className="flex gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1 pb-1">
+                  {savedPhotos.slice(0, 12).map((p) => {
+                    const isSelected = photoData === p.dataUrl;
+                    return (
+                      <button
+                        key={p.id}
+                        onClick={() => {
+                          setPhotoData(p.dataUrl);
+                          setSubhead(`${p.venueName} · saved`);
+                        }}
+                        data-testid={`share-saved-photo-${p.id}`}
+                        className={cn(
+                          'shrink-0 h-14 w-14 rounded-lg overflow-hidden ring-2 transition-all',
+                          isSelected
+                            ? 'ring-revs-500 ring-offset-2 ring-offset-navy-900'
+                            : 'ring-white/10 hover:ring-white/30'
+                        )}
+                        title={p.venueName}
+                      >
+                        <img src={p.dataUrl} alt={p.venueName} className="h-full w-full object-cover" />
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+            <label className="block mt-2">
               <input
                 type="file"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => e.target.files?.[0] && handlePhoto(e.target.files[0])}
+                onChange={(e) => e.target.files?.[0] && handleFileUpload(e.target.files[0])}
                 data-testid="share-photo-input"
               />
               <span className="block w-full text-center rounded-xl bg-white/[0.04] hover:bg-white/[0.08] ring-1 ring-white/10 px-3 py-2.5 text-sm cursor-pointer">
-                {photoData ? 'Replace photo' : 'Upload a photo'}
+                {photoData ? 'Replace with upload' : 'Upload a photo'}
               </span>
             </label>
             {photoData && (
               <button
                 onClick={() => setPhotoData(null)}
-                className="mt-2 w-full text-xs text-ink-300 hover:text-white"
+                className="mt-1.5 w-full inline-flex items-center justify-center gap-1.5 text-xs text-ink-300 hover:text-white"
               >
-                Remove photo
+                <Trash2 size={12} /> Remove photo
               </button>
             )}
           </Panel>
@@ -294,6 +418,7 @@ export default function Share() {
                 value={headline}
                 onChange={(e) => setHeadline(e.target.value)}
                 data-testid="share-headline-input"
+                maxLength={48}
                 className="mt-1 w-full rounded-xl bg-white/[0.04] ring-1 ring-white/10 focus:ring-revs-400 outline-none px-3 py-2 text-sm"
               />
             </label>
@@ -303,6 +428,7 @@ export default function Share() {
                 value={subhead}
                 onChange={(e) => setSubhead(e.target.value)}
                 data-testid="share-subhead-input"
+                maxLength={60}
                 className="mt-1 w-full rounded-xl bg-white/[0.04] ring-1 ring-white/10 focus:ring-revs-400 outline-none px-3 py-2 text-sm"
               />
             </label>
@@ -316,15 +442,17 @@ export default function Share() {
                   onClick={() => setPalette(p)}
                   data-testid={`palette-${p.id}`}
                   className={cn(
-                    'rounded-xl ring-1 px-3 py-3 text-left transition-colors',
-                    palette.id === p.id ? 'ring-revs-500/40 bg-revs-500/10' : 'ring-white/10 bg-white/[0.04]'
+                    'rounded-xl ring-1 px-2 py-2 text-left transition-colors',
+                    palette.id === p.id
+                      ? 'ring-revs-500/50 bg-revs-500/10'
+                      : 'ring-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
                   )}
                 >
                   <div
-                    className="h-6 w-full rounded-md"
+                    className="h-8 w-full rounded-md"
                     style={{ background: `linear-gradient(135deg, ${p.primary}, ${p.secondary})` }}
                   />
-                  <div className="mt-1.5 text-[11px] font-semibold">{p.label}</div>
+                  <div className="mt-1.5 text-[10.5px] font-semibold">{p.label}</div>
                 </button>
               ))}
             </div>
@@ -337,7 +465,9 @@ export default function Share() {
                   key={s.id}
                   className={cn(
                     'flex items-center gap-2 rounded-xl ring-1 px-3 py-2 cursor-pointer text-sm',
-                    stickers[s.id] ? 'ring-revs-500/40 bg-revs-500/10' : 'ring-white/10 bg-white/[0.04]'
+                    stickers[s.id]
+                      ? 'ring-revs-500/40 bg-revs-500/10'
+                      : 'ring-white/10 bg-white/[0.04]'
                   )}
                 >
                   <input
@@ -358,7 +488,15 @@ export default function Share() {
   );
 }
 
-function Panel({ title, icon: Icon, children }: { title: string; icon: typeof Sparkles; children: React.ReactNode }) {
+function Panel({
+  title,
+  icon: Icon,
+  children,
+}: {
+  title: string;
+  icon: typeof Sparkles;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-2xl bg-navy-900/55 ring-1 ring-white/5 px-4 py-4 shadow-card">
       <div className="flex items-center gap-2 mb-3">
@@ -370,7 +508,7 @@ function Panel({ title, icon: Icon, children }: { title: string; icon: typeof Sp
   );
 }
 
-/* Sticker SVGs — explicitly generic, no FIFA marks, no trophies */
+/* Sticker SVGs · explicitly generic, no FIFA marks, no trophies */
 function BallSticker() {
   return (
     <svg width="56" height="56" viewBox="0 0 64 64" aria-hidden>
