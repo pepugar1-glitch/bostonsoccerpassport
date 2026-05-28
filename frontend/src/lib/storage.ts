@@ -44,6 +44,11 @@ function write<T>(key: string, value: T) {
   }
 }
 
+function writeOrThrow<T>(key: string, value: T) {
+  if (typeof window === 'undefined') return;
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+
 export const storage = {
   getProfile: (): Profile | null => read<Profile | null>(KEYS.profile, null),
   setProfile: (p: Profile) => write(KEYS.profile, p),
@@ -87,5 +92,5 @@ export const storage = {
   setTourSeen: (v: boolean) => write(KEYS.tourSeen, v),
 
   getPhotos: (): VenuePhoto[] => read<VenuePhoto[]>(KEYS.photos, []),
-  setPhotos: (v: VenuePhoto[]) => write(KEYS.photos, v),
+  setPhotos: (v: VenuePhoto[]) => writeOrThrow(KEYS.photos, v),
 };

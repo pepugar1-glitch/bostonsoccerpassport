@@ -256,7 +256,31 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     storage.setAuth(state.auth);
   }, [state.auth]);
-  useEffect(() => storage.setPhotos(state.photos), [state.photos]);
+  useEffect(() => {
+    try {
+      storage.setPhotos(state.photos);
+    } catch {
+      // localStorage quota — photo stays in memory this session but will be
+      // lost on reload. Drop the most recent photo so future saves don't
+      // keep hitting the cap, and surface a clear warning.
+      const trimmed = state.photos.slice(1);
+      try {
+        storage.setPhotos(trimmed);
+        dispatch({ type: 'HYDRATE', payload: { photos: trimmed } });
+      } catch {
+        /* still over quota — leave memory state alone */
+      }
+      dispatch({
+        type: 'PUSH_TOAST',
+        toast: {
+          id: Math.random().toString(36).slice(2, 10),
+          title: 'Photo storage full',
+          description: 'Delete a few photos in Profile to make room.',
+          variant: 'warn',
+        },
+      });
+    }
+  }, [state.photos]);
 
   const points = useMemo(
     () =>

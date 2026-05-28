@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Ticket, CalendarPlus, Trophy } from 'lucide-react';
@@ -32,20 +32,18 @@ export default function MatchCountdown({ archetype }: Props) {
   const [now, setNow] = useState(() => new Date());
   const { t } = useTranslation();
 
-  const nextMatch = useMemo(() => {
-    const today = new Date();
-    return UPCOMING_MATCHES
-      .filter((m) => m.homeAway === 'home')
-      .map((m) => ({ m, when: parseISO(`${m.date}T19:30:00`) }))
-      .filter((x) => x.when.getTime() > today.getTime())
-      .sort((a, b) => a.when.getTime() - b.when.getTime())[0];
-  }, []);
+  // Recompute every render so a match that just passed during a long-lived
+  // session correctly rolls forward to the next one.
+  const nextMatch = UPCOMING_MATCHES
+    .filter((m) => m.homeAway === 'home')
+    .map((m) => ({ m, when: parseISO(`${m.date}T19:30:00`) }))
+    .filter((x) => x.when.getTime() > now.getTime())
+    .sort((a, b) => a.when.getTime() - b.when.getTime())[0];
 
   useEffect(() => {
-    if (!nextMatch) return;
     const id = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(id);
-  }, [nextMatch]);
+  }, []);
 
   if (!nextMatch) return null;
 

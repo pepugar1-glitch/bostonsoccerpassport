@@ -79,7 +79,7 @@ export default function PhotoCaptureModal() {
       {prompt.open && (
         <div
           data-testid="photo-prompt"
-          className="fixed inset-0 z-[1015] flex items-center justify-center px-4 py-6"
+          className="fixed inset-0 z-[1016] flex items-center justify-center px-4 py-6"
         >
           <motion.div
             aria-hidden
