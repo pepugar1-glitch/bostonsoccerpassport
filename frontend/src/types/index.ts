@@ -147,4 +147,5 @@ export interface Match {
   homeAway: 'home' | 'away';
   competition: string;
   note: string;
+  ticketUrl?: string;
 }

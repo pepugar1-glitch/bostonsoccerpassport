@@ -17,12 +17,21 @@ import {
   Clock,
   CalendarDays,
   Download,
+  Ticket,
 } from 'lucide-react';
-import { EVENTS } from '@/data/content';
+import { EVENTS, UPCOMING_MATCHES } from '@/data/content';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
 import { buildIcs, downloadIcs } from '@/lib/ics';
+import { buildTicketLink } from '@/lib/utm';
+import { track } from '@/lib/analytics';
 import type { SoccerEvent } from '@/types';
+
+function ticketsForEvent(e: SoccerEvent) {
+  if (e.venueId !== 'gillette' || e.category !== 'revs-rewards') return null;
+  const match = UPCOMING_MATCHES.find((m) => m.date === e.date);
+  return buildTicketLink({ venueId: e.id }, match?.ticketUrl);
+}
 
 const MIN_DATE = new Date(2026, 5, 12);
 const MAX_DATE = new Date(2026, 8, 30);
@@ -198,6 +207,7 @@ export default function Schedule() {
                     {b.events.map((e) => {
                       const added = inSchedule(e.id);
                       const it = item(e.id);
+                      const ticketUrl = ticketsForEvent(e);
                       return (
                         <li
                           key={e.id}
@@ -269,6 +279,18 @@ export default function Schedule() {
                                 />
                               </div>
                             )}
+                            {ticketUrl && (
+                              <a
+                                href={ticketUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={() => track('revs_ticket_click', { eventId: e.id, surface: 'schedule-timeline' })}
+                                data-testid={`event-tickets-${e.id}`}
+                                className="inline-flex items-center gap-1 rounded-full bg-revs-500/15 hover:bg-revs-500/25 ring-1 ring-revs-500/40 text-revs-100 px-2.5 py-1 text-[10px] font-semibold"
+                              >
+                                <Ticket size={11} /> Tickets
+                              </a>
+                            )}
                           </div>
                         </li>
                       );
@@ -292,7 +314,9 @@ export default function Schedule() {
           </div>
         ) : (
           <ul>
-            {mySchedule.map((s) => (
+            {mySchedule.map((s) => {
+              const ticketUrl = ticketsForEvent(s!.ev);
+              return (
               <li
                 key={s!.eventId}
                 data-testid={`my-schedule-row-${s!.eventId}`}
@@ -321,9 +345,22 @@ export default function Schedule() {
                       <Bell size={10} /> on
                     </span>
                   )}
+                  {ticketUrl && (
+                    <a
+                      href={ticketUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => track('revs_ticket_click', { eventId: s!.ev.id, surface: 'schedule-list' })}
+                      data-testid={`my-schedule-tickets-${s!.eventId}`}
+                      className="inline-flex items-center gap-1 rounded-full bg-revs-500 hover:bg-revs-400 text-white px-2.5 py-0.5 text-[10px] font-semibold"
+                    >
+                      <Ticket size={10} /> Tickets
+                    </a>
+                  )}
                 </div>
               </li>
-            ))}
+              );
+            })}
           </ul>
         )}
       </section>

@@ -1,15 +1,10 @@
 // Deep-link + UTM helpers.
-// TODO(integration: Ticketmaster) Swap the placeholder host below for the real
-//   Revs / Ticketmaster / SeatGeek partner URL once provided. UTM structure is
-//   fixed per the campaign spec.
 
 import type { FanArchetype } from '@/types';
 
-/**
- * Placeholder ticketing host. DO NOT treat as a real URL — it's a structured
- * stand-in so the campaign UTMs are reviewable in the prototype.
- */
-export const TICKETING_PLACEHOLDER_HOST = 'https://example.com/revs-tickets';
+// Official Revolution ticketing landing — lists all single-match tickets.
+// Ticketmaster respects the UTMs we attach when it redirects from the Revs site.
+export const TICKETING_BASE_URL = 'https://www.revolutionsoccer.net/tickets/single-match-tickets';
 
 const FIXED_UTM = {
   utm_source: 'passport',
@@ -34,10 +29,16 @@ export function buildUtm({ venueId, archetype, extras }: UtmParams): URLSearchPa
   return p;
 }
 
-/** Build a deep link to the Revs ticketing placeholder with full UTM tagging. */
-export function buildTicketLink(params: UtmParams): string {
+/**
+ * Build a deep link to Revolution ticketing with full UTM tagging.
+ * Pass `overrideHost` to point at a specific match page (e.g. a Ticketmaster
+ * event URL) while keeping the UTM scheme consistent.
+ */
+export function buildTicketLink(params: UtmParams, overrideHost?: string): string {
   const qs = buildUtm(params).toString();
-  return `${TICKETING_PLACEHOLDER_HOST}?${qs}`;
+  const host = overrideHost || TICKETING_BASE_URL;
+  const sep = host.includes('?') ? '&' : '?';
+  return `${host}${sep}${qs}`;
 }
 
 /** Build a per-venue QR landing URL — the app itself, with attribution params. */

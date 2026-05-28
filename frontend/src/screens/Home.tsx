@@ -172,7 +172,7 @@ export default function Home() {
         </div>
         <div className="grid md:grid-cols-2 gap-3 p-4 lg:p-6">
           {UPCOMING_MATCHES.map((m) => {
-            const ticketLink = buildTicketLink({ venueId: m.id, archetype });
+            const ticketLink = buildTicketLink({ venueId: m.id, archetype }, m.ticketUrl);
             return (
               <div
                 key={m.id}
