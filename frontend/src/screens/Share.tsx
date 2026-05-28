@@ -12,9 +12,12 @@ import {
   Instagram,
   Trash2,
   Twitter,
+  ShieldCheck,
+  AtSign,
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { cn } from '@/lib/cn';
+import RevsLogo from '@/components/RevsLogo';
 
 type Template = 'stop' | 'global' | 'summer';
 
@@ -41,10 +44,14 @@ const STICKERS = [
 ];
 
 const CAPTIONS: Record<Template, string> = {
-  stop: 'Another stop on my Boston soccer summer. #BostonSoccerPassport',
-  global: 'From the world stage to the New England pitch. #BostonSoccerPassport',
-  summer: 'Boston, the soccer city. Summer 2026. #BostonSoccerPassport',
+  stop: 'Another stop on my Boston soccer summer with @NERevolution. #BostonSoccerPassport',
+  global:
+    'From the world stage to the New England pitch with @NERevolution. #BostonSoccerPassport',
+  summer:
+    'Boston, the soccer city. Summer 2026 with @NERevolution. #BostonSoccerPassport',
 };
+
+const TAG_BONUS_POINTS = 50;
 
 const EYEBROW: Record<Template, string> = {
   stop: 'My Boston soccer stop',
@@ -69,6 +76,9 @@ export default function Share() {
   const [template, setTemplate] = useState<Template>('summer');
   const [palette, setPalette] = useState<typeof PALETTES[number]>(PALETTES[0]);
   const [stickers, setStickers] = useState<Record<string, boolean>>({ ball: true, skyline: true });
+  const [showRevsLogo, setShowRevsLogo] = useState(false);
+  const [hasShared, setHasShared] = useState(false);
+  const [bonusClaimed, setBonusClaimed] = useState(false);
   const [headline, setHeadline] = useState('Boston Soccer Summer');
   const [subhead, setSubhead] = useState('City Hall Plaza · Jun 13');
   const [photoData, setPhotoData] = useState<string | null>(null);
@@ -152,6 +162,7 @@ export default function Share() {
           files: [file],
         });
         addPoints('share-photo', 20, 'Shared photo card');
+        setHasShared(true);
       } catch {
         // user cancelled — silent
       }
@@ -170,9 +181,11 @@ export default function Share() {
       downloadFile(out.url);
       await navigator.clipboard.writeText(CAPTIONS[template]);
       addPoints('share-photo', 20, 'Prepped Instagram post');
+      setHasShared(true);
       toast({
         title: 'Image saved · caption copied',
-        description: 'Open Instagram, start a new post, attach the image, paste the caption.',
+        description:
+          'Open Instagram, attach the image, paste the caption. Keep the @NERevolution tag for +50 bonus.',
         variant: 'info',
       });
       window.open(INSTAGRAM_URL, '_blank', 'noopener');
@@ -192,9 +205,11 @@ export default function Share() {
       const text = encodeURIComponent(CAPTIONS[template]);
       window.open(`${TWITTER_INTENT}?text=${text}`, '_blank', 'noopener');
       addPoints('share-photo', 20, 'Prepped a tweet');
+      setHasShared(true);
       toast({
         title: 'Image saved · tweet ready',
-        description: 'X opened with the caption. Attach the image you just saved.',
+        description:
+          'X opened with the caption. Attach the image. Keep the @NERevolution tag for +50 bonus.',
         variant: 'info',
       });
     } catch {
@@ -207,6 +222,18 @@ export default function Share() {
   const handleCopyCaption = async () => {
     await navigator.clipboard.writeText(CAPTIONS[template]);
     toast({ title: 'Caption copied', variant: 'info' });
+  };
+
+  const claimRevsBonus = () => {
+    if (bonusClaimed) return;
+    addPoints('share-photo', TAG_BONUS_POINTS, 'Tagged @NERevolution on social');
+    setBonusClaimed(true);
+    toast({
+      title: `+${TAG_BONUS_POINTS} for tagging the Revolution`,
+      description: 'Thanks for spreading the word.',
+      variant: 'reward',
+      points: TAG_BONUS_POINTS,
+    });
   };
 
   return (
@@ -252,7 +279,13 @@ export default function Share() {
                 }}
               />
 
-              <div className="absolute top-16 right-4 flex flex-col gap-2">
+              {showRevsLogo && (
+                <div className="absolute top-4 right-4 grid place-items-center h-14 w-14 rounded-2xl bg-white/95 ring-1 ring-white/40 shadow-lg backdrop-blur-sm">
+                  <RevsLogo size={44} />
+                </div>
+              )}
+
+              <div className={cn('absolute right-4 flex flex-col gap-2', showRevsLogo ? 'top-24' : 'top-16')}>
                 {stickers.ball && <BallSticker />}
                 {stickers.scarf && <ScarfSticker color={palette.primary} />}
                 {stickers.skyline && <SkylineSticker />}
@@ -329,6 +362,21 @@ export default function Share() {
             saved to your device and the caption copied to your clipboard so you can finish the
             post in one tap.
           </p>
+
+          {hasShared && !bonusClaimed && (
+            <button
+              onClick={claimRevsBonus}
+              data-testid="share-claim-tag-bonus"
+              className="mt-3 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-revs-500 to-revs-400 hover:from-revs-400 hover:to-revs-300 text-white px-4 py-3 text-sm font-semibold shadow-glow"
+            >
+              <AtSign size={15} /> I posted with @NERevolution · claim +{TAG_BONUS_POINTS}
+            </button>
+          )}
+          {bonusClaimed && (
+            <div className="mt-3 inline-flex items-center justify-center w-full gap-2 rounded-xl bg-emerald-500/10 ring-1 ring-emerald-400/30 text-emerald-200 px-4 py-3 text-sm font-medium">
+              <ShieldCheck size={15} /> Bonus claimed · thanks for tagging the Revolution
+            </div>
+          )}
         </div>
 
         {/* Controls */}
@@ -458,7 +506,30 @@ export default function Share() {
             </div>
           </Panel>
 
-          <Panel title="Stickers" icon={Sparkles}>
+          <Panel title="Brand & Stickers" icon={Sparkles}>
+            <label
+              className={cn(
+                'flex items-center gap-2.5 rounded-xl ring-1 px-3 py-2.5 cursor-pointer text-sm mb-2',
+                showRevsLogo
+                  ? 'ring-revs-500/50 bg-revs-500/10'
+                  : 'ring-white/10 bg-white/[0.04] hover:bg-white/[0.08]'
+              )}
+            >
+              <input
+                type="checkbox"
+                checked={showRevsLogo}
+                onChange={(e) => setShowRevsLogo(e.target.checked)}
+                data-testid="share-toggle-revs-logo"
+                className="accent-revs-500"
+              />
+              <div className="grid place-items-center h-7 w-7 rounded-md bg-white/90">
+                <RevsLogo size={22} />
+              </div>
+              <div className="leading-tight">
+                <div className="font-semibold">Revolution logo</div>
+                <div className="text-[11px] text-ink-400">Adds the club crest to the card</div>
+              </div>
+            </label>
             <div className="grid grid-cols-2 gap-2">
               {STICKERS.map((s) => (
                 <label
