@@ -366,6 +366,7 @@ export const UPCOMING_MATCHES: Match[] = [
     homeAway: 'home',
     competition: 'MLS Regular Season',
     note: 'Anchor #3 · Home finale. Messi pull. Media spike.',
+    featured: true,
   },
 ];
 

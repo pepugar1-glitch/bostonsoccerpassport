@@ -32,13 +32,16 @@ export default function MatchCountdown({ archetype }: Props) {
   const [now, setNow] = useState(() => new Date());
   const { t } = useTranslation();
 
-  // Recompute every render so a match that just passed during a long-lived
-  // session correctly rolls forward to the next one.
-  const nextMatch = UPCOMING_MATCHES
+  // Always lead with a `featured` home match when one is still in the future
+  // (e.g. the marquee Inter Miami / Messi fixture pulled into the deck);
+  // otherwise fall back to the next chronological home match.
+  const homeMatches = UPCOMING_MATCHES
     .filter((m) => m.homeAway === 'home')
     .map((m) => ({ m, when: parseISO(`${m.date}T19:30:00`) }))
-    .filter((x) => x.when.getTime() > now.getTime())
-    .sort((a, b) => a.when.getTime() - b.when.getTime())[0];
+    .filter((x) => x.when.getTime() > now.getTime());
+  const featured = homeMatches.find((x) => x.m.featured);
+  const nextMatch =
+    featured ?? homeMatches.sort((a, b) => a.when.getTime() - b.when.getTime())[0];
 
   useEffect(() => {
     const id = window.setInterval(() => setNow(new Date()), 1000);

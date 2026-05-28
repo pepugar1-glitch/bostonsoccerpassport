@@ -148,4 +148,5 @@ export interface Match {
   competition: string;
   note: string;
   ticketUrl?: string;
+  featured?: boolean;
 }
